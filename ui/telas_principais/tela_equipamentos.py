@@ -346,7 +346,6 @@ class TelaPrincipal(tk.Tk):
 
     def abrir_documentacao(self):
         webbrowser.open_new_tab("https://github.com/LuanSFMarques/CICLUS")
-        print("teste")
 
     def abrir_sond(self):
         webbrowser.open_new_tab("https://www.sond.com.br/ativos-laboratorio-lista/status/1/")
