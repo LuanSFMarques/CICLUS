@@ -26,6 +26,7 @@ tipos_item = [
     (6, "Volta de Calibração"),
     (7, "Volta de Concerto"),
     (8, "Descarte"),
+    (9, "Adquirido")
 ]
 
 tipos_setor = [
