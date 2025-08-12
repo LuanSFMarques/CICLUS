@@ -110,8 +110,8 @@ class TelaPrincipal(tk.Tk):
                 activeforeground="#5C4033", command=self.abrir_sond
         ).place(relx=1.0, x=-15, y=59, anchor="ne")
 
-        tk.Button(self, text="Gráficos", font=("Lucida Console", 10, "bold"),
-                bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
+        tk.Button(self, text="Gráficos", font=("Lucida Console", 10, "bold", "overstrike"),
+                bg="#3B3B3B", fg="#EEE6D9", relief="raised", bd=3,
                 padx=62, pady=2, activebackground="#DDD0C8",
                 activeforeground="#5C4033", command=self.abrir_graficos
         ).place(relx=1.0, x=-15, y=99, anchor="ne")
