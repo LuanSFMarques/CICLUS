@@ -2,4 +2,4 @@ __pycache__/
 CHECKLIST_CICLUS_V1.md
 app.log
 arquivos_ajuda
-data/database/ciclus.db
+data/database
