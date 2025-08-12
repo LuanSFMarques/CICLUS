@@ -235,7 +235,6 @@ class TelaCicloVida(tk.Toplevel):
 
         self.canvas_direito.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.scrollbar_direito.pack(side=tk.RIGHT, fill=tk.Y)
-        print(self.itens_ciclo)
 
         for item in self.itens_ciclo:
             frame_item = tk.Frame(self.scroll_frame_direito, bg="#E3DDD2")
