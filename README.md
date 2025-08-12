@@ -1,0 +1,2 @@
+# CICLUS v1.0
+Software funcional em sua base, nescessita de algoritmo automático de inserção de equipamentos (excel para sqlite)
