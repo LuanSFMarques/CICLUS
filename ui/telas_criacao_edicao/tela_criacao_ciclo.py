@@ -180,6 +180,8 @@ class TelaCriacaoCiclo(tk.Toplevel):
             escolha.transient(self)
             escolha.grab_set()
             self.wait_window(escolha)
+        else:
+            self.finalizar_criacao(dados)
 
 
     def finalizar_criacao(self, dados):
