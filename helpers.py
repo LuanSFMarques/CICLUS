@@ -1,13 +1,31 @@
-import sqlite3
+import pyodbc
 import logging
 import os
 
-DB_FILE = "data/database/ciclus.db"
+DB_FILE = "data/database/ciclus.db"  # This might not be necessary now, as we're using SQL Server
 LOG_FILE = "app.log"
 
-# Conexão com Banco de Dados
-def get_connection(db_file):
-    return sqlite3.connect(db_file)
+DRIVER_NAME = 'SQL Server'
+SERVER_NAME1 = 'Computador041'
+SERVER_NAME2 = '?'
+DATABASE_NAME = 'CICLUS'
+
+#uid=<username:;
+#pws=<password>;
+
+# Conexão com Banco de Dados SQL Server
+def get_connection():
+    # Create the connection string for SQL Server
+    try:
+        connection = pyodbc.connect(f'DRIVER={DRIVER_NAME};' +
+                                    f'Server={SERVER_NAME1};' +
+                                    f'Database={DATABASE_NAME};'+
+                                    'Trusted_Connection=True')
+        print("connected to database")
+        connection.autocommit=True
+    except pyodbc.Error as ex:
+        print("Connection failed", ex)
+    return connection
 
 if not logging.getLogger().hasHandlers():
     logging.basicConfig(
