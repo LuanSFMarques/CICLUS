@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from helpers import get_connection, log_msg
 
 EXCEL_DIR = "data/database/PlanilhaDeEquipamentosAtualizada_5.xlsx"
@@ -36,3 +37,7 @@ eq['SETOR'] = eq['SETOR'].replace({'EE1':0, 'EE2':1, 'SED':2, 'DOS':3, 'PRE':4, 
 eq = eq[eq['SETOR'] != '?']
 
 eq['Se encontra na Sond (ativos)'] = eq['Se encontra na Sond (ativos)'].replace({'SIM':0, 'NÃO':1})
+
+eq['CALIBRAR'] = eq['CALIBRAR'].map({'NÃO': 0, 'SIM': 1, '?': 2}).fillna(2)
+
+eq['Última'] = pd.to_datetime(eq['Última'], errors='coerce').dt.date
