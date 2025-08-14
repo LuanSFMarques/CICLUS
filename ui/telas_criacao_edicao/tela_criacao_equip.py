@@ -2,9 +2,9 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from datetime import datetime
 
-from controllers.equipamento_controller import criar_equipamento
+from controllers.equipamento_controller import criar_equipamento, obter_fabricante_id
 from data.tipos import tipos_eq, tipos_setor, tipos_status, tipos_status_calibr
-from helpers import log_msg
+from helpers import log_msg, get_connection  # adicionado get_connection
 
 
 class TelaCriacaoEquipamento(tk.Toplevel):
@@ -128,7 +128,6 @@ class TelaCriacaoEquipamento(tk.Toplevel):
                 text.pack(padx=pad_x, pady=(0, pad_y))
                 setattr(self, nome_atributo, text)
 
-        # Botões
         btn_frame = tk.Frame(scroll_frame, bg="#F5F1E9")
         btn_frame.pack(pady=25)
 
@@ -171,6 +170,7 @@ class TelaCriacaoEquipamento(tk.Toplevel):
         data_aquisicao_br = self.entry_data_aq.get().strip()
         ultima_calibracao_br = self.entry_ultima_cal.get().strip()
         periodicidade_raw = self.entry_periodicidade.get().strip()
+        fabricante_nome = self.entry_fabricante.get().strip()
 
         if not nome:
             messagebox.showerror("Erro", "Nome do equipamento é obrigatório!")
@@ -180,16 +180,8 @@ class TelaCriacaoEquipamento(tk.Toplevel):
             messagebox.showerror("Erro", "Nome do equipamento deve conter um '-' para gerar a sigla!")
             return
 
-        if not tipo:
-            messagebox.showerror("Erro", "Tipo do equipamento é obrigatório!")
-            return
-
-        if not setor:
-            messagebox.showerror("Erro", "Setor é obrigatório!")
-            return
-
-        if not status:
-            messagebox.showerror("Erro", "Status é obrigatório!")
+        if not tipo or not setor or not status:
+            messagebox.showerror("Erro", "Tipo, Setor e Status são obrigatórios!")
             return
 
         if not sond_id_raw.isdigit():
@@ -214,14 +206,14 @@ class TelaCriacaoEquipamento(tk.Toplevel):
 
         data_aquisicao = parse_data(data_aquisicao_br)
         if not data_aquisicao:
-            messagebox.showerror("Erro", "Data de aquisição inválida! Use o formato DD-MM-YYYY ou DD/MM/YYYY.")
+            messagebox.showerror("Erro", "Data de aquisição inválida! Use DD-MM-YYYY ou DD/MM/YYYY.")
             return
 
         ultima_calibracao = None
         if ultima_calibracao_br:
             ultima_calibracao = parse_data(ultima_calibracao_br)
             if not ultima_calibracao:
-                messagebox.showerror("Erro", "Última calibração inválida! Use o formato DD-MM-YYYY ou DD/MM/YYYY.")
+                messagebox.showerror("Erro", "Última calibração inválida! Use DD-MM-YYYY ou DD/MM/YYYY.")
                 return
 
         confirmacao = messagebox.askyesno("Confirmação", "Deseja realmente criar este equipamento?")
@@ -243,7 +235,7 @@ class TelaCriacaoEquipamento(tk.Toplevel):
             "ultima_calibracao": ultima_calibracao,
             "periodicidade": periodicidade,
             "status_calibracao_id": next((s[0] for s in tipos_status_calibr if s[1] == self.combo_status_calibr.get()), None),
-            "fabricante": self.entry_fabricante.get().strip(),
+            "fabricante_id": fabricante_nome,
             "modelo": self.entry_modelo.get().strip(),
             "modelo_tecnico": self.entry_modelo_tecnico.get().strip(),
             "numero_serie": self.entry_num_serie.get().strip(),
@@ -257,6 +249,7 @@ class TelaCriacaoEquipamento(tk.Toplevel):
             self.destroy()
         except Exception as e:
             messagebox.showerror("Erro", f"Falha ao criar equipamento:\n{e}")
+
 
 if __name__ == "__main__":
     root = tk.Tk()

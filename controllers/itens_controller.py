@@ -1,8 +1,7 @@
-from helpers import get_connection, DB_FILE
+from helpers import get_connection
 
 def obter_equipamento_por_id(equip_id):
-    conn = get_connection(DB_FILE)
-    conn.execute("PRAGMA foreign_keys = ON")
+    conn = get_connection()
     cursor = conn.cursor()
     try:
         cursor.execute("""
@@ -45,12 +44,7 @@ def obter_equipamento_por_id(equip_id):
         conn.close()
 
 def obter_itens_ciclo_vida_por_equipamento(equip_id):
-    """
-    Obtém todos os itens do ciclo de vida relacionados a um equipamento.
-    Retorna uma lista de dicionários (cada um representando um item).
-    """
-    conn = get_connection(DB_FILE)
-    conn.execute("PRAGMA foreign_keys = ON")
+    conn = get_connection()
     cursor = conn.cursor()
     try:
         cursor.execute("""
@@ -76,28 +70,11 @@ def obter_itens_ciclo_vida_por_equipamento(equip_id):
     finally:
         conn.close()
 
-obter_itens_ciclo_vida_por_equipamento(1)
-
 def criar_item_ciclo_vida(dados):
-    """
-    Insere um novo item no ciclo de vida do equipamento.
-
-    dados: dict com as chaves:
-      - equipamento_id (int)
-      - tipo_item_id (int)  # Agora obrigatório para usar o tipo correto
-      - descricao (str)
-      - data_evento (str, formato 'YYYY-MM-DD')
-      - responsavel (str, opcional)
-      - observacoes (str, opcional)
-    """
-    
-    conn = get_connection(DB_FILE)
-    conn.execute("PRAGMA foreign_keys = ON")
+    conn = get_connection()
     cursor = conn.cursor()
-
-
     try:
-        tipo_item_id = dados.get("tipo_item_id", 1)  # Usa o tipo passado ou 1 como default
+        tipo_item_id = dados.get("tipo_item_id", 1)
 
         cursor.execute("""
             SELECT status_id, setor_id
@@ -107,18 +84,14 @@ def criar_item_ciclo_vida(dados):
 
         row = cursor.fetchone()
         if not row:
-            raise ValueError(f"Equipamento ID {dados["equipamento_id"]} não encontrado.")
+            raise ValueError(f"Equipamento ID {dados['equipamento_id']} não encontrado.")
 
         status_atual, setor_atual = row
 
-        tipo_item_id = dados.get("tipo_item_id", 1)
-
-        # Montar info_especial dependendo do tipo de alteração
         if tipo_item_id == 1:  # Mudança de status
             novo_status = dados.get("novo_status")
             info_especial = f"Status: {status_atual} -> {novo_status}"
             
-            # Atualizar status do equipamento
             cursor.execute("""
                 UPDATE equipamentos
                 SET status_id = ?
@@ -129,7 +102,6 @@ def criar_item_ciclo_vida(dados):
             novo_setor = dados.get("novo_setor")
             info_especial = f"Setor: {setor_atual} -> {novo_setor}"
             
-            # Atualizar setor do equipamento
             cursor.execute("""
                 UPDATE equipamentos
                 SET setor_id = ?
@@ -152,14 +124,14 @@ def criar_item_ciclo_vida(dados):
 
         conn.commit()
     except Exception as e:
+        conn.rollback()
         print(f"Erro ao criar item do ciclo de vida: {e}")
         raise e
     finally:
         conn.close()
 
 def obter_item_ciclo_vida_por_id(item_id):
-    conn = get_connection(DB_FILE)
-    conn.execute("PRAGMA foreign_keys = ON")
+    conn = get_connection()
     cursor = conn.cursor()
     try:
         cursor.execute("""
@@ -184,10 +156,8 @@ def obter_item_ciclo_vida_por_id(item_id):
     finally:
         conn.close()
 
-
 def atualizar_item_ciclo_vida(item_id, tipo_item_id, descricao, data_evento):
-    conn = get_connection(DB_FILE)
-    conn.execute("PRAGMA foreign_keys = ON")
+    conn = get_connection()
     cursor = conn.cursor()
     try:
         cursor.execute("""
@@ -200,8 +170,7 @@ def atualizar_item_ciclo_vida(item_id, tipo_item_id, descricao, data_evento):
         conn.close()
 
 def excluir_item(item_id):
-    conn = get_connection(DB_FILE)
-    conn.execute("PRAGMA foreign_keys = ON")
+    conn = get_connection()
     cursor = conn.cursor()
     try:
         cursor.execute("DELETE FROM ciclo_vida WHERE id = ?", (item_id,))

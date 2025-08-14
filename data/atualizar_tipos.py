@@ -1,39 +1,41 @@
-from helpers import get_connection, DB_FILE
+from helpers import get_connection
 from data.tipos import tipos_eq, tipos_item, tipos_setor, tipos_status, tipos_status_calibr
 
-def atualizar_tipos(data):
-    conn = get_connection(data)
-    conn.execute("PRAGMA foreign_keys = ON")
+def atualizar_tipos():
+    conn = get_connection()
     cursor = conn.cursor()
 
     try:
-        cursor.execute("BEGIN")
+        # ---- Atualiza tipos_equipamento (inserir apenas se não existir) ----
+        for nome in tipos_eq:
+            cursor.execute("""
+                IF NOT EXISTS (SELECT 1 FROM tipos_equipamento WHERE nome = ?)
+                BEGIN
+                    INSERT INTO tipos_equipamento (nome) VALUES (?)
+                END
+            """, (nome, nome))
 
-        # Atualiza tipos_equipamento (sem ID fixo, só nome)
-        cursor.executemany(
-            "INSERT OR IGNORE INTO tipos_equipamento (nome) VALUES (?)",
-            [(nome,) for nome in tipos_eq]
-        )
-
-        # Função auxiliar para atualizar e limpar
+        # ---- Função auxiliar para inserir/atualizar e remover o que não existe mais ----
         def atualizar_tabela(nome_tabela, lista):
             # Atualiza ou insere
-            cursor.executemany(
-                f"""
-                INSERT INTO {nome_tabela} (id, nome)
-                VALUES (?, ?)
-                ON CONFLICT(id) DO UPDATE SET nome = excluded.nome
-                """,
-                lista
-            )
-            # Limpa os registros que não estão mais no código
-            ids_atuais = [t[0] for t in lista]
-            if ids_atuais:
-                placeholders = ",".join("?" for _ in ids_atuais)
-                cursor.execute(f"DELETE FROM {nome_tabela} WHERE id NOT IN ({placeholders})", ids_atuais)
-            else:
-                cursor.execute(f"DELETE FROM {nome_tabela}")  # Remove tudo se lista estiver vazia
+            for id_, nome in lista:
+                cursor.execute(f"""
+                    MERGE {nome_tabela} AS target
+                    USING (SELECT ? AS id, ? AS nome) AS source
+                    ON target.id = source.id
+                    WHEN MATCHED THEN
+                        UPDATE SET nome = source.nome
+                    WHEN NOT MATCHED THEN
+                        INSERT (id, nome) VALUES (source.id, source.nome);
+                """, (id_, nome))
 
+            # Remove registros que não estão mais na lista
+            if lista:
+                ids_atuais = [str(t[0]) for t in lista]
+                placeholders = ",".join(ids_atuais)
+                cursor.execute(f"DELETE FROM {nome_tabela} WHERE id NOT IN ({placeholders})")
+            else:
+                cursor.execute(f"DELETE FROM {nome_tabela}")
 
         atualizar_tabela("tipos_item", tipos_item)
         atualizar_tabela("tipos_setor", tipos_setor)
@@ -44,7 +46,10 @@ def atualizar_tipos(data):
         print("Atualização de tipos concluída com sucesso.")
 
     except Exception as e:
-        conn
+        conn.rollback()
+        print(f"Erro ao atualizar tipos: {e}")
+    finally:
+        conn.close()
 
 if __name__ == "__main__":
-    atualizar_tipos(DB_FILE)
+    atualizar_tipos()
