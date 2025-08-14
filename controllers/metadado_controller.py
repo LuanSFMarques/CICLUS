@@ -8,21 +8,10 @@ def atualizar_status(equip_id, status_id):
     cursor = conn.cursor()
 
     try:
-        cursor.execute(
-            """
-            UPDATE equipamentos
-            SET 
-                status_id = ?
-            WHERE id = ?
-            """, (status_id, equip_id)
-        )
-        if cursor.rowcount == 0:
-            raise ValueError("Erro 'ROWCOUNT'")
         conn.commit()
-
     except Exception as e:
-        print(f"Erro ao atualizar metadado 'status': {e}")
-        return []
+        conn.rollback()
+        raise e
     finally:
         conn.close()
 

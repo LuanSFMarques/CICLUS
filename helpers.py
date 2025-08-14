@@ -4,6 +4,7 @@ import os
 
 DB_FILE = "data/database/ciclus.db"
 LOG_FILE = "app.log"
+EXCEL_DIR = "data/database/PlanilhaDeEquipamentosAtualizada_5.xlsx"
 
 # Conexão com Banco de Dados
 def get_connection(db_file):
