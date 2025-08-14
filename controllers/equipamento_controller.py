@@ -5,16 +5,26 @@ def criar_equipamento(equipamento_data: dict):
     conn = get_connection()
     cursor = conn.cursor()
     try:
-        # 1️⃣ Obtem nome e ID do fabricante
-        fab_nome, fab_id = obter_fabricante_id(equipamento_data["fabricante_id"].strip())
+        # Obtem nome e ID do fabricante
+        fab_nome, fab_id = obter_fabricante_id(equipamento_data["fabricante_id"])
+        
+        # Se não existir, insere e pega o ID com OUTPUT INSERTED.id
+        if fab_id is None:
+            if not fab_nome:
+                raise ValueError("Nome do fabricante não pode ser vazio.")
+            
+            cursor.execute("""
+                INSERT INTO fabricante (nome)
+                OUTPUT INSERTED.id
+                VALUES (?)
+            """, (fab_nome,))
+            
+            result = cursor.fetchone()
+            if result is None or result[0] is None:
+                raise ValueError("Falha ao obter o ID do fabricante inserido.")
+            fab_id = int(result[0])
 
-        # 2️⃣ Se não existir, insere e pega o ID
-        if fab_id is None and fab_nome:
-            cursor.execute("INSERT INTO fabricante (nome) VALUES (?)", (fab_nome,))
-            cursor.execute("SELECT SCOPE_IDENTITY()")  # SQL Server
-            fab_id = int(cursor.fetchone()[0])
-
-        # 3️⃣ Insere o equipamento usando o ID do fabricante
+        # Insere o equipamento usando o ID do fabricante
         cursor.execute('''
             INSERT INTO equipamentos (
                 nome_eq, tipo_eq_id, sigla_eq, setor_id, status_id,
@@ -45,6 +55,7 @@ def criar_equipamento(equipamento_data: dict):
         raise e
     finally:
         conn.close()
+
 
 # Listar todos os equipamentos com seus tipos, setores, status, etc
 def listar_equipamentos_resumido():

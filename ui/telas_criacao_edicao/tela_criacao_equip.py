@@ -170,7 +170,12 @@ class TelaCriacaoEquipamento(tk.Toplevel):
         data_aquisicao_br = self.entry_data_aq.get().strip()
         ultima_calibracao_br = self.entry_ultima_cal.get().strip()
         periodicidade_raw = self.entry_periodicidade.get().strip()
-        fabricante_nome = self.entry_fabricante.get().strip()
+        fabricante_nome = self.entry_fabricante.get()
+        if not fabricante_nome or not fabricante_nome.strip():
+            messagebox.showerror("Erro", "Nome do fabricante é obrigatório!")
+            return
+        fabricante_nome = fabricante_nome.strip()
+
 
         if not nome:
             messagebox.showerror("Erro", "Nome do equipamento é obrigatório!")
@@ -249,6 +254,7 @@ class TelaCriacaoEquipamento(tk.Toplevel):
             self.destroy()
         except Exception as e:
             messagebox.showerror("Erro", f"Falha ao criar equipamento:\n{e}")
+            print(f"Falha ao criar equipamento:\n{e}")
 
 
 if __name__ == "__main__":
