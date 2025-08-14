@@ -1,4 +1,4 @@
-from helpers import get_connection, DB_FILE
+from helpers import get_connection, DB_FILE, log_msg
 
 def obter_equipamento_por_id(equip_id):
     conn = get_connection(DB_FILE)
@@ -151,6 +151,7 @@ def criar_item_ciclo_vida(dados):
         ))
 
         conn.commit()
+        log_msg(f"Item de Ciclo Criado para eq_id: {dados["equipamento_id"]}")
     except Exception as e:
         print(f"Erro ao criar item do ciclo de vida: {e}")
         raise e
@@ -196,6 +197,7 @@ def atualizar_item_ciclo_vida(item_id, tipo_item_id, descricao, data_evento):
             WHERE id = ?
         """, (tipo_item_id, descricao, data_evento, item_id))
         conn.commit()
+        log_msg(f"Item de Ciclo Atualizado para item_id: {item_id}")
     finally:
         conn.close()
 
@@ -210,6 +212,8 @@ def excluir_item(item_id):
             raise ValueError(f"Nenhum item com ID {item_id} foi encontrado para exclusão.")
 
         conn.commit()
+        log_msg(f"Item de Ciclo Excluido para item_id: {item_id}")
+        
     except Exception as e:
         conn.rollback()
         raise e

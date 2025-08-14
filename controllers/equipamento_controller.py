@@ -1,4 +1,4 @@
-from helpers import get_connection, DB_FILE
+from helpers import get_connection, DB_FILE, log_msg
 
 # Criar novo equipamento
 def criar_equipamento(equipamento_data: dict):
@@ -30,6 +30,7 @@ def criar_equipamento(equipamento_data: dict):
             equipamento_data["extra_info"]
         ))
         conn.commit()
+        log_msg(f"Equipamento Cadastrado: {equipamento_data["nome_eq"]}")
     except Exception as e:
         conn.rollback()
         raise e
@@ -80,51 +81,6 @@ def listar_equipamentos_resumido():
     finally:
         conn.close()
 
-'''
-def listar_equipamento_unico(id):
-    conn = get_connection(DB_FILE)
-    conn.execute("PRAGMA foreign_keys = ON")
-    cursor = conn.cursor()
-    try:
-        cursor.execute(
-            SELECT 
-                e.id,
-                e.nome_eq,
-                te.nome as tipo,
-                ts.nome as setor,
-                st.nome as status,
-                sc.nome as status_calibr,
-                e.sond_id
-            FROM equipamentos e
-            LEFT JOIN tipos_equipamento te ON e.tipo_eq_id = te.id
-            LEFT JOIN tipos_setor ts ON e.setor_id = ts.id
-            LEFT JOIN tipos_status st ON e.status_id = st.id
-            LEFT JOIN tipos_status_calibr sc ON e.status_calibracao_id = sc.id
-            WHERE e.id = ?
-        , (id,))
-
-        row = cursor.fetchone()
-
-        if row:
-            equipamento = {
-                "id": row[0],
-                "nome_eq": row[1],
-                "tipo": row[2] or "—",
-                "setor": row[3] or "—",
-                "status": row[4] or "INCERTO",
-                "status_calibr": row[5] or "I",
-                "ids": row[6] or 0
-            }
-            return equipamento
-        else:
-            return None  # Equipamento não encontrado
-
-    except Exception as e:
-        raise e
-    finally:
-        conn.close()
-'''
-
 def atualizar_equipamento(equip_id, novos_dados: dict):
     conn = get_connection(DB_FILE)
     conn.execute("PRAGMA foreign_keys = ON")
@@ -174,6 +130,7 @@ def atualizar_equipamento(equip_id, novos_dados: dict):
             raise ValueError("Equipamento não encontrado para atualizar.")
 
         conn.commit()
+        log_msg(f"Equipamento Atualizado: {novos_dados["nome_eq"]}")
     except Exception as e:
         conn.rollback()
         raise e
@@ -233,6 +190,7 @@ def excluir_equipamento(equip_id):
             raise ValueError(f"Nenhum equipamento com ID {equip_id} foi encontrado para exclusão.")
 
         conn.commit()
+        log_msg(f"Equipamento Deletado, IDS: {equip_id}")
     except Exception as e:
         conn.rollback()
         raise e

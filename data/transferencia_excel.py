@@ -54,36 +54,39 @@ def transferir_excel_p_sqlite(excel_file, db_file):
 
             nome_eq = str(eq_linha['Equipamento']).strip()
             sigla_eq = nome_eq.split("-", 1)[0].strip() if "-" in nome_eq else nome_eq
-
-            cursor.execute(
-                '''
-                INSERT INTO equipamentos (
-                    nome_eq, tipo_eq_id, sigla_eq, setor_id, status_id,
-                    sond_id, data_aquisicao, ultima_calibracao, periodicidade,
-                    status_calibracao_id, fabricante, modelo, modelo_tecnico, numero_serie, extra_info
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                ''', (
-                    nome_eq,
-                    None,
-                    sigla_eq,
-                    eq_linha['SETOR'],
-                    eq_linha['Se encontra na Sond (ativos)'],
-                    sond_id,
-                    eq_linha['Data Aquisicao'],
-                    eq_linha['Última'],
-                    eq_linha['Periodicidade (MESES)'],
-                    eq_linha['CALIBRAR'],
-                    eq_linha['Fabricante'],
-                    None,
-                    eq_linha['Modelo'],
-                    eq_linha['N Série'],
-                    eq_linha['Descrição']
+            try:
+                cursor.execute(
+                    '''
+                    INSERT INTO equipamentos (
+                        nome_eq, tipo_eq_id, sigla_eq, setor_id, status_id,
+                        sond_id, data_aquisicao, ultima_calibracao, periodicidade,
+                        status_calibracao_id, fabricante, modelo, modelo_tecnico, numero_serie, extra_info
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    ''', (
+                        nome_eq,
+                        None,
+                        sigla_eq,
+                        eq_linha['SETOR'],
+                        eq_linha['Se encontra na Sond (ativos)'],
+                        sond_id,
+                        eq_linha['Data Aquisicao'],
+                        eq_linha['Última'],
+                        eq_linha['Periodicidade (MESES)'],
+                        eq_linha['CALIBRAR'],
+                        eq_linha['Fabricante'],
+                        None,
+                        eq_linha['Modelo'],
+                        eq_linha['N Série'],
+                        eq_linha['Descrição']
+                    )
                 )
-            )
-            novos_registros += 1
+                novos_registros += 1
+                log_msg(f"Equipamento Criado: {nome_eq}")
+            except Exception as e:
+                print(e)
 
         conn.commit()
-        print(f"✅ Importação concluída: {novos_registros} novos registros inseridos.")
+        print(f"Importação concluída: {novos_registros} novos registros inseridos.")
 
     except Exception as e:
         conn.rollback()
