@@ -2,12 +2,7 @@ import tkinter as tk
 import webbrowser
 from tkinter import messagebox, ttk
 from datetime import datetime
-
-from controllers.itens_controller import (
-    obter_equipamento_por_id,
-    obter_itens_ciclo_vida_por_equipamento,
-    excluir_item,
-)
+from controllers.itens_controller import obter_equipamento_por_id, obter_itens_ciclo_vida_por_equipamento, excluir_item
 from ui.telas_criacao_edicao.tela_criacao_ciclo import TelaCriacaoCiclo
 from ui.telas_principais.tela_desc_item import TelaDescricaoItem
 from ui.telas_criacao_edicao.tela_edicao_ciclo import TelaEdicaoCiclo
@@ -83,37 +78,51 @@ class TelaCicloVida(tk.Toplevel):
         self.frame_direito = tk.Frame(container, bg="#E3DDD2", bd=1, relief="sunken")
         self.frame_direito.grid(row=0, column=1, sticky="nsew", padx=(5, 0), pady=10)
 
-        # Botões
-        btn_adicionar_item = tk.Button(
-            self,
-            text="Adicionar Item ao Ciclo de Vida",
-            bg="#C85A17",
-            fg="#E3DDD2",
-            font=("Lucida Console", 12, "bold"),
-            command=self.abrir_criacao_item_ciclo,
-            relief="raised",
-            bd=3,
-            activebackground="#E38B2B",
-            activeforeground="white",
-            padx=25,
-            pady=10,
-        )
-        btn_adicionar_item.pack(pady=8)
+        # Container para os botões
+        button_frame = tk.Frame(self, bg="#F5F1E9")
+        button_frame.pack(pady=10, padx=10)
 
-        btn_abrir_sond = tk.Button(
-            self,
-            text="Abrir Equipamento na Sond",
-            bg="#C85A17",
-            fg="#E3DDD2",
-            font=("Lucida Console", 11, "bold"),
-            command=lambda equipamento=equipamento: self.abrir_item_sond(equipamento["nome_eq"], equipamento["ids"]),
-            relief="raised",
-            bd=3,
-            activebackground="#E38B2B",
-            activeforeground="white",
-            padx=15,
+        for col in range(3):
+            button_frame.grid_columnconfigure(col, weight=1, uniform="botoes")
+
+        btn_style = {
+            "bg": "#C85A17",
+            "fg": "#E3DDD2",
+            "font": ("Lucida Console", 10, "bold"),
+            "relief": "raised",
+            "bd": 3,
+            "activebackground": "#E38B2B",
+            "activeforeground": "white",
+            "width": 41,  # força mesma largura em caracteres
+            "height": 2   # força mesma altura em linhas de texto
+        }
+
+        # Adicionar Item ao Ciclo de Vida
+        btn_adicionar_item = tk.Button(
+            button_frame,
+            text="Adicionar Item ao Ciclo de Vida",
+            command=self.abrir_criacao_item_ciclo,
+            **btn_style
         )
-        btn_abrir_sond.pack(pady=(0, 12))
+        btn_adicionar_item.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
+
+        # Abrir Equipamento na Sond
+        btn_abrir_sond = tk.Button(
+            button_frame,
+            text="Abrir Equipamento na Sond",
+            command=lambda equipamento=equipamento: self.abrir_item_sond(equipamento["nome_eq"], equipamento["ids"]),
+            **btn_style
+        )
+        btn_abrir_sond.grid(row=0, column=1, padx=5, pady=5, sticky="nsew")
+
+        # Criar Excel do Equipamento
+        btn_para_excel = tk.Button(
+            button_frame,
+            text="Criar Excel do Equipamento",
+            command=self.sqlite_para_excel,
+            **btn_style
+        )
+        btn_para_excel.grid(row=0, column=2, padx=5, pady=5, sticky="nsew")
 
         # Carregar dados
         self.dados_equipamento = obter_equipamento_por_id(self.equip_id)
@@ -125,7 +134,6 @@ class TelaCicloVida(tk.Toplevel):
         # Ativar scroll funcional
         self._add_scroll_bindings(self.canvas_esquerdo, self.frame_esquerdo_container)
         self._add_scroll_bindings(self.canvas_direito, self.frame_direito)
-
 
     # ==================== SCROLL FUNCIONAL PARA QUALQUER WIDGET ====================
     def _add_scroll_bindings(self, canvas, frame_container):
@@ -142,7 +150,6 @@ class TelaCicloVida(tk.Toplevel):
                 bind_children(child)
 
         bind_children(frame_container)
-
 
     # ==================== FUNÇÕES DE DADOS ====================
     def abrir_criacao_item_ciclo(self):
@@ -211,9 +218,6 @@ class TelaCicloVida(tk.Toplevel):
                 wraplength=500,
             )
             lbl_valor.pack(fill=tk.X, anchor="w")
-
-        self.scroll_frame_esquerdo.update_idletasks()
-        self.canvas_esquerdo.configure(scrollregion=self.canvas_esquerdo.bbox("all"))
 
     def exibir_lista_itens(self):
         for widget in self.frame_direito.winfo_children():
@@ -304,11 +308,10 @@ class TelaCicloVida(tk.Toplevel):
             btn_editar.grid(row=0, column=2, padx=(5, 2), pady=2, sticky="nsew")
 
             # Botão Excluir
-            btn_excluir = tk.Button(frame_item, text="✘", font=("Courier New", 10, "bold"),
+            btn_excluir = tk.Button(frame_item, text="✘", font=("Courier New", 12, "bold"),
                                     bg="#C94C4C", fg="white", relief="raised", bd=2,
                                     command=lambda item=item: self.excluir_item(item['id']))
             btn_excluir.grid(row=0, column=3, padx=(2, 0), pady=2, sticky="nsew")
-
 
     def carregar_itens_ciclo(self):
         self.itens_ciclo = obter_itens_ciclo_vida_por_equipamento(self.equip_id)
@@ -333,3 +336,6 @@ class TelaCicloVida(tk.Toplevel):
         if resposta:
             excluir_item(item_id)
             self.carregar_itens_ciclo()
+
+    def sqlite_para_excel(self):
+        print("teste")

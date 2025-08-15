@@ -12,8 +12,8 @@ tipos_eq = [
     "Monitor", "Mouse", "Paquímetro", "Parafusadeira", "Peneira", "Penetrômetro",
     "Perfuratriz Extratora", "Peso Adensamento", "Peso Cisalhamento", "Peso Padrão", "Picnômetro",
     "Prensa", "Proveta", "Quarteador", "Relógio Comparador", "Relógio Manômetro", "Relógio Vacuômetro",
-    "Rompedor", "Sinalização", "Sonda", "Soquete", "Teclado", "Termo Higrômetro", "Termômetro",
-    "Tripé", "Vane Test"
+    "Rompedor", "Sinalização", "Sonda", "Soquete", "Tanque", "Teclado", "Termo Higrômetro", "Termômetro",
+    "Tripé", "Vane Test", "Test"
 ]
 
 tipos_item = [
