@@ -19,7 +19,7 @@ class TelaCicloVida(tk.Toplevel):
         self.equipamento = equipamento
         self.equip_id = equipamento["id"]
 
-        # Título estilizado
+        # Título
         frame_titulo = tk.Frame(self, bg="#F5F1E9")
         frame_titulo.pack(pady=15)
 
@@ -31,7 +31,7 @@ class TelaCicloVida(tk.Toplevel):
             text=f"Ciclo de Vida do Equipamento | {equipamento['nome_eq']}",
             font=("Courier New", 20, "bold"),
             bg="#EEE6D9",
-            fg="#333333"
+            fg="#333333",
         )
         titulo.pack(padx=10, pady=5)
 
@@ -43,17 +43,24 @@ class TelaCicloVida(tk.Toplevel):
         container.columnconfigure(1, weight=2, uniform="col")
         container.rowconfigure(0, weight=1)
 
-        # Esquerda - Dados do equipamento com scroll
-        self.frame_esquerdo_container = tk.Frame(container, bg="#EDE6D6", bd=1, relief="sunken")
+        # Frame esquerdo com scroll
+        self.frame_esquerdo_container = tk.Frame(
+            container, bg="#EDE6D6", bd=1, relief="sunken", height=600
+        )
+        self.frame_esquerdo_container.grid_propagate(False)
         self.frame_esquerdo_container.grid(row=0, column=0, sticky="nsew", padx=(0, 5), pady=10)
 
-        self.canvas_esquerdo = tk.Canvas(self.frame_esquerdo_container, bg="#EDE6D6", highlightthickness=0)
-        self.scrollbar_esquerdo = ttk.Scrollbar(self.frame_esquerdo_container, orient="vertical", command=self.canvas_esquerdo.yview)
+        self.canvas_esquerdo = tk.Canvas(
+            self.frame_esquerdo_container, bg="#EDE6D6", highlightthickness=0
+        )
+        self.scrollbar_esquerdo = ttk.Scrollbar(
+            self.frame_esquerdo_container, orient="vertical", command=self.canvas_esquerdo.yview
+        )
         self.scroll_frame_esquerdo = tk.Frame(self.canvas_esquerdo, bg="#EDE6D6")
 
         self.scroll_frame_esquerdo.bind(
             "<Configure>",
-            lambda e: self.canvas_esquerdo.configure(scrollregion=self.canvas_esquerdo.bbox("all"))
+            lambda e: self.canvas_esquerdo.configure(scrollregion=self.canvas_esquerdo.bbox("all")),
         )
 
         window_id_esquerdo = self.canvas_esquerdo.create_window((0, 0), window=self.scroll_frame_esquerdo, anchor="nw")
@@ -146,7 +153,9 @@ class TelaCicloVida(tk.Toplevel):
 
     # ==================== FUNÇÕES DE DADOS ====================
     def abrir_criacao_item_ciclo(self):
-        nova_janela = TelaCriacaoCiclo(self, equipamento_id=self.equipamento["id"], callback_atualizar=self.carregar_itens_ciclo)
+        nova_janela = TelaCriacaoCiclo(
+            self, equipamento_id=self.equipamento["id"], callback_atualizar=self.carregar_itens_ciclo
+        )
         nova_janela.grab_set()
 
     def exibir_dados_equipamento(self):
@@ -154,8 +163,13 @@ class TelaCicloVida(tk.Toplevel):
             widget.destroy()
 
         if not self.dados_equipamento:
-            lbl = tk.Label(self.scroll_frame_esquerdo, text="Equipamento não encontrado.",
-                        font=("Courier New", 14), bg="#EDE6D6", fg="red")
+            lbl = tk.Label(
+                self.scroll_frame_esquerdo,
+                text="Equipamento não encontrado.",
+                font=("Courier New", 14),
+                bg="#EDE6D6",
+                fg="red",
+            )
             lbl.pack(pady=20)
             return
 
@@ -182,23 +196,40 @@ class TelaCicloVida(tk.Toplevel):
             frame_linha = tk.Frame(self.scroll_frame_esquerdo, bg="#EDE6D6")
             frame_linha.pack(fill=tk.X, padx=15, pady=5)
 
-            lbl_nome = tk.Label(frame_linha, text=f"{label_text}:", font=("Courier New", 10, "bold"),
-                                bg="#EDE6D6", anchor="w")
+            lbl_nome = tk.Label(
+                frame_linha,
+                text=f"{label_text}:",
+                font=("Courier New", 10, "bold"),
+                bg="#EDE6D6",
+                anchor="w",
+            )
             lbl_nome.pack(fill=tk.X, anchor="w")
 
             linha = tk.Frame(frame_linha, bg="#B5AC99", height=1)
             linha.pack(fill=tk.X, pady=(0, 2))
 
-            lbl_valor = tk.Label(frame_linha, text=str(valor), font=("Courier New", 10),
-                                bg="#EDE6D6", anchor="w", justify="left", wraplength=500)
+            lbl_valor = tk.Label(
+                frame_linha,
+                text=str(valor),
+                font=("Courier New", 10),
+                bg="#EDE6D6",
+                anchor="w",
+                justify="left",
+                wraplength=500,
+            )
             lbl_valor.pack(fill=tk.X, anchor="w")
 
     def exibir_lista_itens(self):
         for widget in self.frame_direito.winfo_children():
             widget.destroy()
 
-        titulo = tk.Label(self.frame_direito, text="Itens do Ciclo de Vida",
-                            font=("Courier New", 16, "bold"), bg="#E3DDD2", fg="#333333")
+        titulo = tk.Label(
+            self.frame_direito,
+            text="Itens do Ciclo de Vida",
+            font=("Courier New", 16, "bold"),
+            bg="#E3DDD2",
+            fg="#333333",
+        )
         titulo.pack(pady=10)
 
         frame_lista = tk.Frame(self.frame_direito, bg="#E3DDD2")
@@ -210,7 +241,7 @@ class TelaCicloVida(tk.Toplevel):
 
         self.scroll_frame_direito.bind(
             "<Configure>",
-            lambda e: self.canvas_direito.configure(scrollregion=self.canvas_direito.bbox("all"))
+            lambda e: self.canvas_direito.configure(scrollregion=self.canvas_direito.bbox("all")),
         )
 
         window_id_direito = self.canvas_direito.create_window((0, 0), window=self.scroll_frame_direito, anchor="nw")
@@ -249,19 +280,24 @@ class TelaCicloVida(tk.Toplevel):
             lbl_tipo.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
             lbl_tipo.bind("<Button-1>", ao_clicar)
 
-            # Data
             frame_data = tk.Frame(frame_item, bg="#C7C1A1", bd=1, relief="ridge")
             frame_data.grid(row=0, column=1, sticky="nsew", padx=(2, 2))
             frame_data.bind("<Button-1>", ao_clicar)
 
             try:
-                data_dt = datetime.strptime(item['data'], "%Y-%m-%d")
+                data_dt = datetime.strptime(item["data"], "%Y-%m-%d")
                 data_brasil = data_dt.strftime("%d-%m-%Y")
             except Exception:
-                data_brasil = item.get('data', '')
+                data_brasil = item.get("data", "")
 
-            lbl_data = tk.Label(frame_data, text=data_brasil, font=("Courier New", 12, "bold"),
-                                bg="#C7C1A1", anchor="center", justify="center")
+            lbl_data = tk.Label(
+                frame_data,
+                text=data_brasil,
+                font=("Courier New", 12, "bold"),
+                bg="#C7C1A1",
+                anchor="center",
+                justify="center",
+            )
             lbl_data.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
             lbl_data.bind("<Button-1>", ao_clicar)
 
@@ -288,14 +324,14 @@ class TelaCicloVida(tk.Toplevel):
         webbrowser.open_new_tab(f"https://www.sond.com.br/ativos/perfil/{nome_equip}/{sond_id}/")
 
     def excluir_item(self, item_id):
-        item = next((i for i in self.itens_ciclo if i['id'] == item_id), None)
+        item = next((item for item in self.itens_ciclo if item["id"] == item_id), None)
         if not item:
-            messagebox.showerror("Erro", "Item não encontrado para exclusão.")
+            messagebox.showwarning("Aviso", "Item não encontrado.")
             return
 
         resposta = messagebox.askyesno(
             "Confirmação",
-            f"Tem certeza que deseja excluir o item '{item['tipo_item']}' do ciclo de vida?"
+            f"Deseja excluir o item do ciclo de vida?\n\nTipo: {item.get('tipo_item', '')}\nData: {item.get('data', '')}",
         )
         if resposta:
             excluir_item(item_id)

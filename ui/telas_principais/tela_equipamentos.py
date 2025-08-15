@@ -347,7 +347,7 @@ class TelaPrincipal(tk.Tk):
         webbrowser.open_new_tab("https://www.sond.com.br/ativos-laboratorio-lista/status/1/")
 
     def abrir_graficos(self):
-        webbrowser.open_new_tab("https://github.com/LuanSFMarques")
+        messagebox.showinfo("Gráficos", "Função de gráficos será implementada em breve.")
 
     def abrir_plano_calibr(self):
         TelaPlanoDeCalibracao()
