@@ -122,6 +122,12 @@ class TelaPrincipal(tk.Tk):
                 activeforeground="#5C4033", command=self.abrir_plano_calibr
         ).place(relx=1.0, x=-15, y=139, anchor="ne")
 
+        tk.Button(self, text="Criar Excel", font=("Lucida Console", 10, "bold"),
+          bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
+          padx=44, pady=2, activebackground="#DDD0C8",
+          activeforeground="#5C4033", command=self.sqlite_para_excel
+        ).place(relx=1.0, x=-1162, y=625)
+
         tk.Button(self, text="Atualizar Status", font=("Lucida Console", 10, "bold"),
           bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
           padx=44, pady=2, activebackground="#DDD0C8",
@@ -355,6 +361,9 @@ class TelaPrincipal(tk.Tk):
 
     def abrir_plano_calibr(self):
         TelaPlanoDeCalibracao()
+
+    def sqlite_para_excel(self):
+        ...
 
 if __name__ == "__main__":
     app = TelaPrincipal()
