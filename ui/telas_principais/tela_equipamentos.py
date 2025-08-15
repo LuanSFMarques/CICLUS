@@ -148,8 +148,8 @@ class TelaPrincipal(tk.Tk):
         self.canvas.pack(side="left", fill="both", expand=True)
         self.scrollbar.pack(side="right", fill="y")
 
-        self.canvas.bind("<Enter>", self._bind_to_mousewheel)
-        self.canvas.bind("<Leave>", self._unbind_from_mousewheel)
+        container.bind("<Enter>", self._bind_to_mousewheel)
+        container.bind("<Leave>", self._unbind_from_mousewheel)
 
         self.paginacao_frame = tk.Frame(self, bg="#F5F1E9")
         self.paginacao_frame.pack(pady=10)

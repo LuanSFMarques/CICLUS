@@ -8,6 +8,7 @@ from ui.telas_criacao_edicao.tela_criacao_ciclo import TelaCriacaoCiclo
 from ui.telas_principais.tela_desc_item import TelaDescricaoItem
 from ui.telas_criacao_edicao.tela_edicao_ciclo import TelaEdicaoCiclo
 
+
 class TelaCicloVida(tk.Toplevel):
     def __init__(self, master, equipamento):
         super().__init__(master)
@@ -67,9 +68,11 @@ class TelaCicloVida(tk.Toplevel):
         self.canvas_esquerdo.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.scrollbar_esquerdo.pack(side=tk.RIGHT, fill=tk.Y)
 
+        # Direita - Itens do ciclo
         self.frame_direito = tk.Frame(container, bg="#E3DDD2", bd=1, relief="sunken")
         self.frame_direito.grid(row=0, column=1, sticky="nsew", padx=(5, 0), pady=10)
 
+        # Botões
         btn_adicionar_item = tk.Button(
             self,
             text="Adicionar Item ao Ciclo de Vida",
@@ -101,59 +104,36 @@ class TelaCicloVida(tk.Toplevel):
         )
         btn_abrir_sond.pack(pady=(0,12))
 
+        # Carregar dados
         self.dados_equipamento = obter_equipamento_por_id(self.equip_id)
         self.exibir_dados_equipamento()
 
         self.itens_ciclo = obter_itens_ciclo_vida_por_equipamento(self.equip_id)
         self.exibir_lista_itens()
 
-        self.frame_esquerdo_container.bind("<Enter>", self._bind_scroll_events_esquerdo)
-        self.frame_esquerdo_container.bind("<Leave>", self._unbind_scroll_events_esquerdo)
-
-        self.frame_direito.bind("<Enter>", self._bind_scroll_events_direito)
-        self.frame_direito.bind("<Leave>", self._unbind_scroll_events_direito)
+        # Ativar scroll funcional
+        self._add_scroll_bindings(self.canvas_esquerdo, self.frame_esquerdo_container)
+        self._add_scroll_bindings(self.canvas_direito, self.frame_direito)
 
 
-    # SCROLL ESQUERDO:
-    def _on_mousewheel_windows_esquerdo(self, event):
-        self.canvas_esquerdo.yview_scroll(int(-1 * (event.delta / 120)), "units")
+    # ==================== SCROLL FUNCIONAL PARA QUALQUER WIDGET ====================
+    def _add_scroll_bindings(self, canvas, frame_container):
+        """
+        Permite scrollar o canvas quando o mouse está sobre qualquer widget dentro do frame_container
+        """
+        def _on_mousewheel(event):
+            canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
-    def _on_mousewheel_linux_esquerdo(self, event):
-        if event.num == 4:
-            self.canvas_esquerdo.yview_scroll(-1, "units")
-        elif event.num == 5:
-            self.canvas_esquerdo.yview_scroll(1, "units")
+        def bind_children(widget):
+            widget.bind("<Enter>", lambda e: canvas.bind_all("<MouseWheel>", _on_mousewheel))
+            widget.bind("<Leave>", lambda e: canvas.unbind_all("<MouseWheel>"))
+            for child in widget.winfo_children():
+                bind_children(child)
 
-    def _bind_scroll_events_esquerdo(self, event=None):
-        self.canvas_esquerdo.bind_all("<MouseWheel>", self._on_mousewheel_windows_esquerdo)
-        self.canvas_esquerdo.bind_all("<Button-4>", self._on_mousewheel_linux_esquerdo)
-        self.canvas_esquerdo.bind_all("<Button-5>", self._on_mousewheel_linux_esquerdo)
+        bind_children(frame_container)
 
-    def _unbind_scroll_events_esquerdo(self, event=None):
-        self.canvas_esquerdo.unbind_all("<MouseWheel>")
-        self.canvas_esquerdo.unbind_all("<Button-4>")
-        self.canvas_esquerdo.unbind_all("<Button-5>")
 
-    # SCROLL DIREITO:
-    def _on_mousewheel_windows_direito(self, event):
-        self.canvas_direito.yview_scroll(int(-1 * (event.delta / 120)), "units")
-
-    def _on_mousewheel_linux_direito(self, event):
-        if event.num == 4:
-            self.canvas_direito.yview_scroll(-1, "units")
-        elif event.num == 5:
-            self.canvas_direito.yview_scroll(1, "units")
-
-    def _bind_scroll_events_direito(self, event=None):
-        self.canvas_direito.bind_all("<MouseWheel>", self._on_mousewheel_windows_direito)
-        self.canvas_direito.bind_all("<Button-4>", self._on_mousewheel_linux_direito)
-        self.canvas_direito.bind_all("<Button-5>", self._on_mousewheel_linux_direito)
-
-    def _unbind_scroll_events_direito(self, event=None):
-        self.canvas_direito.unbind_all("<MouseWheel>")
-        self.canvas_direito.unbind_all("<Button-4>")
-        self.canvas_direito.unbind_all("<Button-5>")
-
+    # ==================== FUNÇÕES DE DADOS ====================
     def abrir_criacao_item_ciclo(self):
         nova_janela = TelaCriacaoCiclo(self, equipamento_id=self.equipamento["id"], callback_atualizar=self.carregar_itens_ciclo)
         nova_janela.grab_set()
@@ -183,7 +163,7 @@ class TelaCicloVida(tk.Toplevel):
             ("Status Calibração", "status_calibr"),
             ("Sigla", "sigla_eq"),
             ("Extra Info", "extra_info"),
-            ("Id no Banco de Dados", "id"),  # <-- campo adicionado aqui, por último
+            ("Id no Banco de Dados", "id"),
         ]
 
         for label_text, key in campos:
@@ -204,7 +184,6 @@ class TelaCicloVida(tk.Toplevel):
 
 
     def exibir_lista_itens(self):
-        # Limpa frame direito para reconstruir
         for widget in self.frame_direito.winfo_children():
             widget.destroy()
 
@@ -239,7 +218,6 @@ class TelaCicloVida(tk.Toplevel):
             frame_item = tk.Frame(self.scroll_frame_direito, bg="#E3DDD2")
             frame_item.pack(fill=tk.X, pady=4, padx=5)
 
-            # Define 4 colunas agora: tipo, data, editar, excluir
             frame_item.columnconfigure(0, weight=5, uniform="col")
             frame_item.columnconfigure(1, weight=2, uniform="col")
             frame_item.columnconfigure(2, weight=2, uniform="col")
@@ -248,26 +226,16 @@ class TelaCicloVida(tk.Toplevel):
             def ao_clicar(event, item=item):
                 TelaDescricaoItem(self, self.equipamento["nome_eq"], item)
 
-            if item.get('valor', '') == None:
-                valor = f"{item.get('valor', '')}"
-            else:
-                valor = f"R${item.get('valor', '')}"
+            valor = f"R${item.get('valor', '')}" if item.get('valor') else f"{item.get('valor', '')}"
+            texto_tipo = f"{item.get('tipo_item', '')}\n{item.get('fornecedor', '')}\n{valor}"
 
             # Tipo + fornecedor + valor
-            texto_tipo = f"{item.get('tipo_item', '')}\n{item.get('fornecedor', '')}\n{valor}"
             frame_tipo = tk.Frame(frame_item, bg="#C7C1A1", bd=1, relief="ridge")
             frame_tipo.grid(row=0, column=0, sticky="nsew", padx=(0, 2))
             frame_tipo.bind("<Button-1>", ao_clicar)
 
-            lbl_tipo = tk.Label(
-                frame_tipo,
-                text=texto_tipo,
-                font=("Courier New", 10, "bold"),  # fonte menor para caber
-                bg="#C7C1A1",
-                anchor="w",
-                justify="left",
-                wraplength=300
-            )
+            lbl_tipo = tk.Label(frame_tipo, text=texto_tipo, font=("Courier New", 10, "bold"),
+                                bg="#C7C1A1", anchor="w", justify="left", wraplength=300)
             lbl_tipo.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
             lbl_tipo.bind("<Button-1>", ao_clicar)
 
@@ -288,32 +256,16 @@ class TelaCicloVida(tk.Toplevel):
             lbl_data.bind("<Button-1>", ao_clicar)
 
             # Botão Editar
-            btn_editar = tk.Button(
-                frame_item,
-                text="Editar",
-                font=("Courier New", 10, "bold"),
-                bg="#A6A38D",
-                fg="black",
-                relief="raised",
-                bd=2,
-                command=lambda item=item: self.abrir_edicao_item(item['id'])
-            )
+            btn_editar = tk.Button(frame_item, text="Editar", font=("Courier New", 10, "bold"),
+                                   bg="#A6A38D", fg="black", relief="raised", bd=2,
+                                   command=lambda item=item: self.abrir_edicao_item(item['id']))
             btn_editar.grid(row=0, column=2, padx=(5, 2), pady=2, sticky="nsew")
 
             # Botão Excluir
-            btn_excluir = tk.Button(
-                frame_item,
-                text="✘",  # ícone ou "Excluir"
-                font=("Courier New", 10, "bold"),
-                bg="#C94C4C",
-                fg="white",
-                relief="raised",
-                bd=2,
-                command=lambda item=item: self.excluir_item(item['id'])
-            )
+            btn_excluir = tk.Button(frame_item, text="✘", font=("Courier New", 10, "bold"),
+                                    bg="#C94C4C", fg="white", relief="raised", bd=2,
+                                    command=lambda item=item: self.excluir_item(item['id']))
             btn_excluir.grid(row=0, column=3, padx=(2, 0), pady=2, sticky="nsew")
-
-
 
 
     def carregar_itens_ciclo(self):
@@ -323,7 +275,7 @@ class TelaCicloVida(tk.Toplevel):
     def abrir_edicao_item(self, item_id):
         TelaEdicaoCiclo(self, item_id, callback=self.carregar_itens_ciclo)
 
-    def abrir_item_sond(self, nome_equip,sond_id):
+    def abrir_item_sond(self, nome_equip, sond_id):
         webbrowser.open_new_tab(f"https://www.sond.com.br/ativos/perfil/{nome_equip}/{sond_id}/")
 
     def excluir_item(self, item_id):
