@@ -167,9 +167,6 @@ class TelaPrincipal(tk.Tk):
         except Exception as e:
             print(f"Erro ao carregar logo de suporte: {e}")
 
-
-
-
     def adicionar_item(self, item):
         bg_status = STATUS_COR.get(item.get("status", "INCERTO").strip().upper(), "#CCCCCC")
 
