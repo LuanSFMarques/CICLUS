@@ -77,6 +77,8 @@ def init_db(data):
             descricao TEXT,
             info_especial TEXT,
             data DATE,
+            fornecedor TEXT,
+            valor REAL,
 
             FOREIGN KEY(equipamento_id) REFERENCES equipamentos(id) ON DELETE CASCADE,
             FOREIGN KEY(tipo_item_id) REFERENCES tipos_item(id)
@@ -128,4 +130,4 @@ def init_db(data):
     print("Finalizado")
 
 if __name__ == "__main__":
-    init_db()
+    init_db(DB_FILE)

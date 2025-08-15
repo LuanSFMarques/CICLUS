@@ -61,7 +61,9 @@ def obter_itens_ciclo_vida_por_equipamento(equip_id):
                 ti.nome AS tipo_item,
                 cv.descricao,
                 cv.info_especial,
-                cv.data
+                cv.data,
+                cv.fornecedor,
+                cv.valor
             FROM ciclo_vida cv
             JOIN tipos_item ti ON cv.tipo_item_id = ti.id
             WHERE cv.equipamento_id = ?
@@ -85,74 +87,67 @@ def criar_item_ciclo_vida(dados):
 
     dados: dict com as chaves:
       - equipamento_id (int)
-      - tipo_item_id (int)  # Agora obrigatório para usar o tipo correto
+      - tipo_item_id (int)
       - descricao (str)
       - data_evento (str, formato 'YYYY-MM-DD')
-      - responsavel (str, opcional)
-      - observacoes (str, opcional)
+      - fornecedor (str, opcional)
+      - valor (float, opcional)
+      - novo_status / novo_setor (para tipos 1 e 2)
     """
-    
     conn = get_connection(DB_FILE)
     conn.execute("PRAGMA foreign_keys = ON")
     cursor = conn.cursor()
 
-
     try:
-        tipo_item_id = dados.get("tipo_item_id", 1)  # Usa o tipo passado ou 1 como default
+        tipo_item_id = dados.get("tipo_item_id", 1)
 
         cursor.execute("""
             SELECT status_id, setor_id
             FROM equipamentos
             WHERE id = ?
         """, (dados["equipamento_id"],))
-
         row = cursor.fetchone()
         if not row:
-            raise ValueError(f"Equipamento ID {dados["equipamento_id"]} não encontrado.")
+            raise ValueError(f"Equipamento ID {dados['equipamento_id']} não encontrado.")
 
         status_atual, setor_atual = row
-
-        tipo_item_id = dados.get("tipo_item_id", 1)
 
         # Montar info_especial dependendo do tipo de alteração
         if tipo_item_id == 1:  # Mudança de status
             novo_status = dados.get("novo_status")
             info_especial = f"Status: {status_atual} -> {novo_status}"
-            
-            # Atualizar status do equipamento
             cursor.execute("""
                 UPDATE equipamentos
                 SET status_id = ?
                 WHERE id = ?
             """, (novo_status, dados["equipamento_id"]))
-
         elif tipo_item_id == 2:  # Mudança de setor
             novo_setor = dados.get("novo_setor")
             info_especial = f"Setor: {setor_atual} -> {novo_setor}"
-            
-            # Atualizar setor do equipamento
             cursor.execute("""
                 UPDATE equipamentos
                 SET setor_id = ?
                 WHERE id = ?
             """, (novo_setor, dados["equipamento_id"]))
-
         else:
             info_especial = "-"
 
+        # Inserir item no ciclo de vida, incluindo fornecedor e valor
         cursor.execute("""
-            INSERT INTO ciclo_vida (equipamento_id, tipo_item_id, descricao, info_especial, data)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO ciclo_vida (equipamento_id, tipo_item_id, descricao, info_especial, data, fornecedor, valor)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         """, (
             dados["equipamento_id"],
-            dados['tipo_item_id'],
+            tipo_item_id,
             dados["descricao"],
             info_especial,
             dados["data_evento"],
+            dados.get("fornecedor"),
+            dados.get("valor")
         ))
 
         conn.commit()
-        log_msg(f"Item de Ciclo Criado para eq_id: {dados["equipamento_id"]}")
+        log_msg(f"Item de Ciclo Criado para eq_id: {dados['equipamento_id']}")
     except Exception as e:
         print(f"Erro ao criar item do ciclo de vida: {e}")
         raise e
@@ -171,7 +166,9 @@ def obter_item_ciclo_vida_por_id(item_id):
                 cv.tipo_item_id,
                 ti.nome AS tipo_item,
                 cv.descricao,
-                cv.data
+                cv.data,
+                cv.fornecedor,
+                cv.valor
             FROM ciclo_vida cv
             JOIN tipos_item ti ON cv.tipo_item_id = ti.id
             WHERE cv.id = ?
@@ -187,16 +184,17 @@ def obter_item_ciclo_vida_por_id(item_id):
         conn.close()
 
 
-def atualizar_item_ciclo_vida(item_id, tipo_item_id, descricao, data_evento):
+def atualizar_item_ciclo_vida(item_id, tipo_item_id, descricao, data_evento, fornecedor, valor):
     conn = get_connection(DB_FILE)
     conn.execute("PRAGMA foreign_keys = ON")
     cursor = conn.cursor()
     try:
         cursor.execute("""
-            UPDATE ciclo_vida
-            SET tipo_item_id = ?, descricao = ?, data = ?
-            WHERE id = ?
-        """, (tipo_item_id, descricao, data_evento, item_id))
+        UPDATE ciclo_vida
+        SET tipo_item_id = ?, descricao = ?, data = ?, fornecedor = ?, valor = ?
+        WHERE id = ?
+    """, (tipo_item_id, descricao, data_evento, fornecedor, valor, item_id))
+
         conn.commit()
         log_msg(f"Item de Ciclo Atualizado para item_id: {item_id}")
     finally:

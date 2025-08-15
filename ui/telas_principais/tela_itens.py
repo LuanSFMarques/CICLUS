@@ -212,7 +212,6 @@ class TelaCicloVida(tk.Toplevel):
                             font=("Courier New", 16, "bold"), bg="#E3DDD2", fg="#333333")
         titulo.pack(pady=10)
 
-        
         frame_lista = tk.Frame(self.frame_direito, bg="#E3DDD2")
         frame_lista.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
@@ -249,13 +248,26 @@ class TelaCicloVida(tk.Toplevel):
             def ao_clicar(event, item=item):
                 TelaDescricaoItem(self, self.equipamento["nome_eq"], item)
 
-            # Tipo
+            if item.get('valor', '') == None:
+                valor = f"{item.get('valor', '')}"
+            else:
+                valor = f"R${item.get('valor', '')}"
+
+            # Tipo + fornecedor + valor
+            texto_tipo = f"{item.get('tipo_item', '')}\n{item.get('fornecedor', '')}\n{valor}"
             frame_tipo = tk.Frame(frame_item, bg="#C7C1A1", bd=1, relief="ridge")
             frame_tipo.grid(row=0, column=0, sticky="nsew", padx=(0, 2))
             frame_tipo.bind("<Button-1>", ao_clicar)
 
-            lbl_tipo = tk.Label(frame_tipo, text=item['tipo_item'], font=("Courier New", 12, "bold"),
-                                bg="#C7C1A1", anchor="w", justify="left")
+            lbl_tipo = tk.Label(
+                frame_tipo,
+                text=texto_tipo,
+                font=("Courier New", 10, "bold"),  # fonte menor para caber
+                bg="#C7C1A1",
+                anchor="w",
+                justify="left",
+                wraplength=300
+            )
             lbl_tipo.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
             lbl_tipo.bind("<Button-1>", ao_clicar)
 
@@ -268,7 +280,7 @@ class TelaCicloVida(tk.Toplevel):
                 data_dt = datetime.strptime(item['data'], "%Y-%m-%d")
                 data_brasil = data_dt.strftime("%d-%m-%Y")
             except Exception:
-                data_brasil = item['data']
+                data_brasil = item.get('data', '')
 
             lbl_data = tk.Label(frame_data, text=data_brasil, font=("Courier New", 12, "bold"),
                                 bg="#C7C1A1", anchor="center", justify="center")
@@ -300,6 +312,7 @@ class TelaCicloVida(tk.Toplevel):
                 command=lambda item=item: self.excluir_item(item['id'])
             )
             btn_excluir.grid(row=0, column=3, padx=(2, 0), pady=2, sticky="nsew")
+
 
 
 

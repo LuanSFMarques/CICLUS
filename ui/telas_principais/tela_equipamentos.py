@@ -122,13 +122,7 @@ class TelaPrincipal(tk.Tk):
                 activeforeground="#5C4033", command=self.abrir_plano_calibr
         ).place(relx=1.0, x=-15, y=139, anchor="ne")
 
-        tk.Button(self, text="Criar Excel", font=("Lucida Console", 10, "bold"),
-          bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
-          padx=44, pady=2, activebackground="#DDD0C8",
-          activeforeground="#5C4033", command=self.sqlite_para_excel
-        ).place(relx=1.0, x=-1162, y=625)
-
-        tk.Button(self, text="Atualizar Status", font=("Lucida Console", 10, "bold"),
+        tk.Button(self, text="Atualizar", font=("Lucida Console", 10, "bold"),
           bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
           padx=44, pady=2, activebackground="#DDD0C8",
           activeforeground="#5C4033", command=self.atualizar_status_e_recarregar
@@ -341,7 +335,6 @@ class TelaPrincipal(tk.Tk):
         self.dados_originais = listar_equipamentos_resumido()
         self.dados_processados = self.preprocessar_dados(self.dados_originais)
         self.filtrar_lista()
-        messagebox.showinfo("Atualização", "Status de calibração atualizados com sucesso.")
 
 
     def abrir_tela_itens(self, equipamento):
