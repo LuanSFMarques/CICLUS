@@ -1,7 +1,8 @@
-from helpers import get_connection, DB_FILE, log_msg
+from helpers import log_msg
+import data.db
 
 def obter_equipamento_por_id(equip_id):
-    conn = get_connection(DB_FILE)
+    conn = data.db.get_connection()
     conn.execute("PRAGMA foreign_keys = ON")
     cursor = conn.cursor()
     try:
@@ -49,7 +50,7 @@ def obter_itens_ciclo_vida_por_equipamento(equip_id):
     Obtém todos os itens do ciclo de vida relacionados a um equipamento.
     Retorna uma lista de dicionários (cada um representando um item).
     """
-    conn = get_connection(DB_FILE)
+    conn = data.db.get_connection()
     conn.execute("PRAGMA foreign_keys = ON")
     cursor = conn.cursor()
     try:
@@ -91,7 +92,7 @@ def criar_item_ciclo_vida(dados):
       - observacoes (str, opcional)
     """
     
-    conn = get_connection(DB_FILE)
+    conn = data.db.get_connection()
     conn.execute("PRAGMA foreign_keys = ON")
     cursor = conn.cursor()
 
@@ -159,7 +160,7 @@ def criar_item_ciclo_vida(dados):
         conn.close()
 
 def obter_item_ciclo_vida_por_id(item_id):
-    conn = get_connection(DB_FILE)
+    conn = data.db.get_connection()
     conn.execute("PRAGMA foreign_keys = ON")
     cursor = conn.cursor()
     try:
@@ -187,7 +188,7 @@ def obter_item_ciclo_vida_por_id(item_id):
 
 
 def atualizar_item_ciclo_vida(item_id, tipo_item_id, descricao, data_evento):
-    conn = get_connection(DB_FILE)
+    conn = data.db.get_connection()
     conn.execute("PRAGMA foreign_keys = ON")
     cursor = conn.cursor()
     try:
@@ -202,7 +203,7 @@ def atualizar_item_ciclo_vida(item_id, tipo_item_id, descricao, data_evento):
         conn.close()
 
 def excluir_item(item_id):
-    conn = get_connection(DB_FILE)
+    conn = data.db.get_connection()
     conn.execute("PRAGMA foreign_keys = ON")
     cursor = conn.cursor()
     try:
@@ -213,7 +214,7 @@ def excluir_item(item_id):
 
         conn.commit()
         log_msg(f"Item de Ciclo Excluido para item_id: {item_id}")
-        
+
     except Exception as e:
         conn.rollback()
         raise e
