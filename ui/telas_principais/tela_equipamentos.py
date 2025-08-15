@@ -275,7 +275,7 @@ class TelaPrincipal(tk.Tk):
         total_itens = len(self.resultados_filtrados)
         total_paginas = max(1, (total_itens + ITENS_POR_PAGINA - 1) // ITENS_POR_PAGINA)
 
-        max_botoes = 10
+        max_botoes = 20
         inicio = max(1, self.pagina_atual - max_botoes // 2)
         fim = min(total_paginas, inicio + max_botoes - 1)
         if fim - inicio < max_botoes:
