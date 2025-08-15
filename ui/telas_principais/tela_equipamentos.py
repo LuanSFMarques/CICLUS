@@ -126,7 +126,7 @@ class TelaPrincipal(tk.Tk):
           bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
           padx=44, pady=2, activebackground="#DDD0C8",
           activeforeground="#5C4033", command=self.atualizar_status_e_recarregar
-        ).place(relx=1.0, x=-940, y=658, anchor="ne")
+        ).place(relx=1.0, x=-1005, y=658, anchor="ne")
 
         self.var_busca = tk.StringVar()
         entry_busca = tk.Entry(self, textvariable=self.var_busca, font=("Lucida Console", 12),
@@ -155,7 +155,7 @@ class TelaPrincipal(tk.Tk):
         self.paginacao_frame.pack(pady=10)
 
         tk.Button(self, text="Criar novo equipamento", bg="#C85A17", fg="#EEE6D9",
-                  font=("Lucida Console", 14, "bold"), relief="raised", bd=4,
+                  font=("Lucida Console", 12, "bold"), relief="raised", bd=4,
                   activebackground="#E38B2B", activeforeground="white",
                   command=self.abrir_criacao).pack(pady=15)
         try:
@@ -354,9 +354,6 @@ class TelaPrincipal(tk.Tk):
 
     def abrir_plano_calibr(self):
         TelaPlanoDeCalibracao()
-
-    def sqlite_para_excel(self):
-        ...
 
 if __name__ == "__main__":
     app = TelaPrincipal()
