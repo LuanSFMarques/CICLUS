@@ -126,7 +126,7 @@ class TelaPrincipal(tk.Tk):
           bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
           padx=44, pady=2, activebackground="#DDD0C8",
           activeforeground="#5C4033", command=self.atualizar_status_e_recarregar
-        ).place(relx=1.0, x=-940, y=658, anchor="ne")
+        ).place(relx=1.0, x=-1000, y=658, anchor="ne")
 
         self.var_busca = tk.StringVar()
         entry_busca = tk.Entry(self, textvariable=self.var_busca, font=("Lucida Console", 12),
@@ -148,8 +148,8 @@ class TelaPrincipal(tk.Tk):
         self.canvas.pack(side="left", fill="both", expand=True)
         self.scrollbar.pack(side="right", fill="y")
 
-        self.canvas.bind("<Enter>", self._bind_to_mousewheel)
-        self.canvas.bind("<Leave>", self._unbind_from_mousewheel)
+        container.bind("<Enter>", self._bind_to_mousewheel)
+        container.bind("<Leave>", self._unbind_from_mousewheel)
 
         self.paginacao_frame = tk.Frame(self, bg="#F5F1E9")
         self.paginacao_frame.pack(pady=10)
@@ -350,7 +350,7 @@ class TelaPrincipal(tk.Tk):
         webbrowser.open_new_tab("https://www.sond.com.br/ativos-laboratorio-lista/status/1/")
 
     def abrir_graficos(self):
-        webbrowser.open_new_tab("https://github.com/LuanSFMarques")
+        messagebox.showinfo("Gráficos", "Função de gráficos será implementada em breve.")
 
     def abrir_plano_calibr(self):
         TelaPlanoDeCalibracao()
