@@ -1,9 +1,9 @@
 import sqlite3
-import data.db
+from helpers import get_connection, DB_FILE
 from data.tipos import tipos_eq, tipos_item, tipos_setor, tipos_status, tipos_status_calibr
 
 def init_db(data):
-    conn = data.db.get_connection()
+    conn = get_connection(DB_FILE)
     cursor = conn.cursor()
     cursor.execute("PRAGMA journal_mode=WAL")
     cursor.execute("PRAGMA synchronous = NORMAL")

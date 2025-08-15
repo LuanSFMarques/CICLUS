@@ -1,8 +1,7 @@
 import pandas as pd
 import numpy as np
 import sqlite3
-from helpers import log_msg, EXCEL_DIR
-import data.db
+from helpers import log_msg, EXCEL_DIR, get_connection, DB_FILE
 
 # Evita FutureWarning global do Pandas sobre downcasting
 pd.set_option('future.no_silent_downcasting', True)
@@ -11,7 +10,7 @@ pd.set_option('future.no_silent_downcasting', True)
 sqlite3.register_adapter(pd.Timestamp, lambda ts: ts.date() if not pd.isna(ts) else None)
 sqlite3.register_adapter(pd.NaT.__class__, lambda _: None)
 
-def transferir_excel_p_sqlite(excel_file):
+def transferir_excel_p_sqlite(excel_file, db_file):
     eq = pd.read_excel(excel_file)
 
     # Filtrar linhas válidas
@@ -37,7 +36,7 @@ def transferir_excel_p_sqlite(excel_file):
     eq['Última'] = pd.to_datetime(eq['Última'], errors='coerce').dt.date
     eq['Data Aquisicao'] = pd.to_datetime(eq['Data Aquisicao'], errors='coerce').dt.date
 
-    conn = data.db.get_connection()
+    conn = get_connection(db_file)
     conn.execute("PRAGMA foreign_keys = ON")
     cursor = conn.cursor()
 
@@ -126,4 +125,4 @@ def transferir_excel_p_sqlite(excel_file):
         conn.close()
 
 # Executa
-transferir_excel_p_sqlite(EXCEL_DIR)
+transferir_excel_p_sqlite(EXCEL_DIR, DB_FILE)

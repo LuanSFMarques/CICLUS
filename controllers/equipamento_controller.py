@@ -1,9 +1,9 @@
 from helpers import log_msg
-import data.db
+from helpers import get_connection, DB_FILE
 
 # Criar novo equipamento
 def criar_equipamento(equipamento_data: dict):
-    conn = data.db.get_connection()
+    conn = get_connection(DB_FILE)
     conn.execute("PRAGMA foreign_keys = ON")
     cursor = conn.cursor()
     try:
@@ -40,7 +40,7 @@ def criar_equipamento(equipamento_data: dict):
 
 # Listar todos os equipamentos com seus tipos, setores, status, etc
 def listar_equipamentos_resumido():
-    conn = data.db.get_connection()
+    conn = get_connection(DB_FILE)
     conn.execute("PRAGMA foreign_keys = ON")
     cursor = conn.cursor()
     try:
@@ -83,7 +83,7 @@ def listar_equipamentos_resumido():
         conn.close()
 
 def atualizar_equipamento(equip_id, novos_dados: dict):
-    conn = data.db.get_connection()
+    conn = get_connection(DB_FILE)
     conn.execute("PRAGMA foreign_keys = ON")
     cursor = conn.cursor()
 
@@ -141,7 +141,7 @@ def atualizar_equipamento(equip_id, novos_dados: dict):
 
 
 def obter_equipamento_cru(equip_id):
-    conn = data.db.get_connection()
+    conn = get_connection(DB_FILE)
     conn.execute("PRAGMA foreign_keys = ON")
     cursor = conn.cursor()
     try:
@@ -181,7 +181,7 @@ def obter_equipamento_cru(equip_id):
         conn.close()
 
 def excluir_equipamento(equip_id):
-    conn = data.db.get_connection()
+    conn = get_connection(DB_FILE)
     conn.execute("PRAGMA foreign_keys = ON")
     cursor = conn.cursor()
     try:
@@ -206,7 +206,7 @@ def info_para_plano_calibr():
     - ultima_calibracao (str 'YYYY-MM-DD')
     - periodicidade (em meses)
     """
-    conn = data.db.get_connection()
+    conn = get_connection(DB_FILE)
     conn.execute("PRAGMA foreign_keys = ON")
     cursor = conn.cursor()
 
