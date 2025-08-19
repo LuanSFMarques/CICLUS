@@ -20,7 +20,7 @@ tipos_item = [
     (0, "Cadastrado no Ciclus"),
     (1, "Mudança de Status"),
     (2, "Troca de Setor"),
-    (3, "Quebrado / Para Concerto"),
+    (3, "Quebrado / Para Conserto"),
     (4, "Enviado para Calibração"),
     (5, "Enviado para Conserto"),
     (6, "Volta de Calibração"),
