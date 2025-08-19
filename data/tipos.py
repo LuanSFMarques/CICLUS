@@ -13,7 +13,7 @@ tipos_eq = [
     "Perfuratriz Extratora", "Peso Adensamento", "Peso Cisalhamento", "Peso Padrão", "Picnômetro",
     "Prensa", "Proveta", "Quarteador", "Relógio Comparador", "Relógio Manômetro", "Relógio Vacuômetro",
     "Rompedor", "Sinalização", "Sonda", "Soquete", "Tanque", "Teclado", "Termo Higrômetro", "Termômetro",
-    "Tripé", "Vane Test", "Test"
+    "Tripé", "Vane Test"
 ]
 
 tipos_item = [
@@ -38,6 +38,7 @@ tipos_setor = [
     (5, "EST"),
     (6, "COM"),
     (7, "UFA"),
+    (8, "NEN") # NENHUM
 ]
 
 tipos_status_calibr = [
