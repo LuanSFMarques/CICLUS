@@ -175,7 +175,6 @@ class TelaCriacaoCiclo(tk.Toplevel):
             valor = None
         else:
             try:
-                # Verifica se é um número válido com até 2 casas decimais
                 valor_float = float(valor_str)
                 if round(valor_float, 2) != valor_float:
                     raise ValueError
@@ -184,7 +183,6 @@ class TelaCriacaoCiclo(tk.Toplevel):
                 messagebox.showerror("Valor inválido", "Digite um valor válido (ex: 123 ou 123.45 com até 2 casas decimais).")
                 self.entry_valor.focus_set()
                 return
-
 
         fornecedor = self.entry_fornecedor.get().strip()
         if fornecedor == "":
@@ -199,7 +197,59 @@ class TelaCriacaoCiclo(tk.Toplevel):
             "valor": valor
         }
 
+        # 🔹 Coletar info extra para tipo 1 ou 2
+        if tipo_id == 1:  # mudança de status
+            escolha = self.selecionar_opcao("Selecione o novo Status", tipos_status)
+            if escolha is None:
+                return
+            dados["novo_status"] = escolha
+        elif tipo_id == 2:  # troca de setor
+            escolha = self.selecionar_opcao("Selecione o novo Setor", tipos_setor)
+            if escolha is None:
+                return
+            dados["novo_setor"] = escolha
+
         self.finalizar_criacao(dados)
+
+    def selecionar_opcao(self, titulo, opcoes):
+        """Abre uma janela simples com combobox para escolha."""
+        dialog = tk.Toplevel(self)
+        dialog.title(titulo)
+        dialog.grab_set()
+        dialog.configure(bg="#F5F1E9")
+
+        largura = 300
+        altura = 150
+
+        # Pega posição da janela pai (self)
+        parent_x = self.winfo_x()
+        parent_y = self.winfo_y()
+
+        # Define a posição relativa no mesmo monitor
+        pos_x = parent_x + 50
+        pos_y = parent_y + 50
+
+        dialog.geometry(f"{largura}x{altura}+{pos_x}+{pos_y}")
+
+        tk.Label(dialog, text=titulo, bg="#F5F1E9", font=("Courier New", 11, "bold")).pack(pady=10)
+
+        combo = ttk.Combobox(dialog, values=[desc for _, desc in opcoes], state="readonly", font=("Courier New", 11))
+        combo.pack(pady=5)
+        combo.current(0)
+
+        escolha = {"valor": None}
+
+        def confirmar():
+            idx = combo.current()
+            escolha["valor"] = opcoes[idx][0]
+            dialog.destroy()
+
+        btn = tk.Button(dialog, text="Confirmar", command=confirmar, bg="#C85A17", fg="white", width=12)
+        btn.pack(pady=10)
+
+        dialog.wait_window()
+        return escolha["valor"]
+
 
     def finalizar_criacao(self, dados):
         confirmacao = messagebox.askyesno("Confirmação", "Deseja realmente criar este item do ciclo de vida?")
