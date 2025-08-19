@@ -22,9 +22,9 @@ tipos_item = [
     (2, "Troca de Setor"),
     (3, "Quebrado / Para Concerto"),
     (4, "Enviado para Calibração"),
-    (5, "Enviado para Concerto"),
+    (5, "Enviado para Conserto"),
     (6, "Volta de Calibração"),
-    (7, "Volta de Concerto"),
+    (7, "Volta de Conserto"),
     (8, "Descarte"),
     (9, "Adquirido")
 ]

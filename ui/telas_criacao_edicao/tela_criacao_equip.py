@@ -200,10 +200,6 @@ class TelaCriacaoEquipamento(tk.Toplevel):
             messagebox.showerror("Erro", "Periodicidade deve ser um número válido!")
             return
 
-        if not data_aquisicao_br:
-            messagebox.showerror("Erro", "Data de aquisição é obrigatória!")
-            return
-
         def parse_data(data_str):
             for formato in ("%d-%m-%Y", "%d/%m/%Y"):
                 try:
@@ -212,10 +208,13 @@ class TelaCriacaoEquipamento(tk.Toplevel):
                     continue
             return None
 
-        data_aquisicao = parse_data(data_aquisicao_br)
-        if not data_aquisicao:
-            messagebox.showerror("Erro", "Data de aquisição inválida! Use o formato DD-MM-YYYY ou DD/MM/YYYY.")
-            return
+        # Data de aquisição agora é OPCIONAL
+        data_aquisicao = None
+        if data_aquisicao_br:
+            data_aquisicao = parse_data(data_aquisicao_br)
+            if not data_aquisicao:
+                messagebox.showerror("Erro", "Data de aquisição inválida! Use o formato DD-MM-YYYY ou DD/MM/YYYY.")
+                return
 
         ultima_calibracao = None
         if ultima_calibracao_br:
@@ -257,6 +256,7 @@ class TelaCriacaoEquipamento(tk.Toplevel):
             self.destroy()
         except Exception as e:
             messagebox.showerror("Erro", f"Falha ao criar equipamento:\n{e}")
+
 
 if __name__ == "__main__":
     root = tk.Tk()
