@@ -124,7 +124,7 @@ A interface foi projetada para ser clara e funcional, com uma estética retrô e
 ### Criação de Equipamentos
 Formulário para registro de novos equipamentos, com campos obrigatórios e opcionais.
 
-<img src="assets/images/ciclus_tela_criacao_equip.png" width="80%">
+<img src="assets/images/ciclus_tela_criacao_equip.png" width="60%">
 
 ### Itens do Ciclo de Vida
 Lista cronológica dos eventos relacionados a cada equipamento.
@@ -135,7 +135,7 @@ Lista cronológica dos eventos relacionados a cada equipamento.
 - Data automática inserida caso o campo fique vazio.
 - Atualização automática de status ou setor ao criar itens específicos.
 
-<img src="assets/images/ciclus_tela_criacao_item.png" width="80%">
+<img src="assets/images/ciclus_tela_criacao_item.png" width="70%">
 
 ### Descrição de Itens
 Detalhes adicionais sobre cada ocorrência no histórico.
