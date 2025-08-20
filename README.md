@@ -6,6 +6,20 @@
 
 O software adota o mesmo padrão de identificação e categorização utilizado na aplicação principal da empresa, [**Sond**](https://www.sond.com.br), garantindo consistência e integração com os processos já existentes.
 
+## 📖 Sumário
+
+- [Funcionalidades Principais](#funcionalidades-principais)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Como Usar](#como-usar)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Armazenamento de Dados (Model)](#armazenamento-de-dados-model)
+- [Controle de Dados (Controllers)](#controle-de-dados-controllers)
+- [Interface Gráfica](#interface-gráfica)
+- [Fluxo Geral (UI / CONTROLLERS / DATA)](#fluxo-geral-ui--controllers--data)
+- [Atualizações](#atualizações)
+- [Licença](#licença)
+- [Contato](#contato)
+
 ## Funcionalidades Principais
 
 *CICLUS* oferece controle completo do ciclo de vida de equipamentos laboratoriais, permitindo:
@@ -48,7 +62,7 @@ ou
 py main.py
 ```
 
-## 📂 Estrutura do Projeto
+## Estrutura do Projeto
 
 O projeto segue a arquitetura MVC (Model-View-Controller):
 - Model (Data): armazenamento em SQLite3.
@@ -89,7 +103,7 @@ helpers.py
 main.py
 ```
 
-## 🗄 Armazenamento de Dados (Model)
+## Armazenamento de Dados (Model)
 A base de dados em SQLite é simples e otimizada para manter o histórico de cada equipamento.
 - A tabela equipamentos é a principal e conecta-se a outras por foreign keys.
 - Cada equipamento possui um conjunto ilimitado de itens no ciclo de vida.
@@ -97,14 +111,14 @@ A base de dados em SQLite é simples e otimizada para manter o histórico de cad
 
 <img src="assets/images/ciclus_diagrama.png" width="80%">
 
-## 🔧 Controle de Dados (Controllers)
+## Controle de Dados (Controllers)
 Os controllers centralizam as funções de manipulação e consulta:
 - equipamento_controller.py → busca, criação, edição e exclusão de equipamentos.
 - itens_controller.py → gerenciamento do histórico de itens dos equipamentos.
 
 Todas as funções incluem tratamento de erros com try/except, garantindo robustez e clareza nas operações.
 
-## 🖥 Interface Gráfica
+## Interface Gráfica
 
 A interface foi projetada para ser clara e funcional, com uma estética retrô e uso de cores para facilitar a navegação.
 
@@ -142,7 +156,7 @@ Detalhes adicionais sobre cada ocorrência no histórico.
 
 <img src="assets/images/ciclus_tela_descricao.png" width="75%">
 
-## 🔄 Fluxo Geral (UI / CONTROLLERS / DATA)
+## Fluxo Geral (UI / CONTROLLERS / DATA)
 
 O fluxo segue o padrão MVC:
 - O usuário interage pela interface (UI).
@@ -151,15 +165,15 @@ O fluxo segue o padrão MVC:
 
 Exemplo: ao criar um equipamento, o equipamento_controller.py recebe os dados, conecta-se ao banco e executa a query correspondente.
 
-## 🆕 Atualizações
+## Atualizações
 Atualizações pendentes para as próximas versões do software podem ser encontradas a baixo:
 
 [ROADMAP](roadmap.md)
 
-## 📜 Licença
+## Licença
 ...
 
-## 👤 Contato
+## Contato
 Luan de Souza Ferreira Marques
 
 luansfmarques@gmail.com
