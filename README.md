@@ -151,6 +151,12 @@ O fluxo segue o padrão MVC:
 
 Exemplo: ao criar um equipamento, o equipamento_controller.py recebe os dados, conecta-se ao banco e executa a query correspondente.
 
+## Atualizações (v1.1)
+- Bugs visuais e de sistema.
+- Alerta inicial do número de equipamentos para calibrar ao iniciar o programa.
+- README.md com identificação de capítulos.
+- Redesign da aba de Plano de Calibração.
+
 ## 📜 Licença
 ...
 
