@@ -95,7 +95,7 @@ A base de dados em SQLite é simples e otimizada para manter o histórico de cad
 - Cada equipamento possui um conjunto ilimitado de itens no ciclo de vida.
 - A leveza do SQLite garante fácil manutenção e boa performance.
 
-![Diagrama db Ciclus](assets/images/ciclus_diagrama.png)
+<img src="assets/images/ciclus_diagrama.png" width="80%">
 
 ## 🔧 Controle de Dados (Controllers)
 Os controllers centralizam as funções de manipulação e consulta:
@@ -119,28 +119,28 @@ A interface foi projetada para ser clara e funcional, com uma estética retrô e
     - Cinza → Incerto
     - Azul → Especial
 
-![Tela de Criação de Equipamentos](assets/images/ciclus_tela_equipamentos.png)
+<img src="assets/images/ciclus_tela_equipamentos.png" width="80%">
 
 ### Criação de Equipamentos
 Formulário para registro de novos equipamentos, com campos obrigatórios e opcionais.
 
-![Tela de Criação de Equipamentos](assets/images/ciclus_tela_criacao_equip.png)
+<img src="assets/images/ciclus_tela_criacao_equip.png" width="80%">
 
 ### Itens do Ciclo de Vida
 Lista cronológica dos eventos relacionados a cada equipamento.
 
-![Tela de Criação de Equipamentos](assets/images/ciclus_tela_itens.png)
+<img src="assets/images/ciclus_tela_itens.png" width="80%">
 
 ### Criação de Itens
 - Data automática inserida caso o campo fique vazio.
 - Atualização automática de status ou setor ao criar itens específicos.
 
-![Tela de Criação de Equipamentos](assets/images/ciclus_tela_criacao_item.png)
+<img src="assets/images/ciclus_tela_criacao_item.png" width="80%">
 
 ### Descrição de Itens
 Detalhes adicionais sobre cada ocorrência no histórico.
 
-![Tela de Criação de Equipamentos](assets/images/ciclus_tela_descricao.png)
+<img src="assets/images/ciclus_tela_descricao.png" width="80%">
 
 ## 🔄 Fluxo Geral (UI / CONTROLLERS / DATA)
 
