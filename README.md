@@ -29,6 +29,8 @@ O software adota o mesmo padrão de identificação e categorização utilizado 
 - Realizar buscas avançadas por múltiplos critérios para localizar equipamentos específicos.
 - Acompanhar o histórico de cada equipamento com visão clara e organizada.
 - Atualizar automaticamente informações relevantes ao adicionar novos registros, simplificando a manutenção dos dados.
+- Exportar todos os dados dos equipamentos e seus itens diretamente para arquivos Excel, facilitando a análise e compartilhamento das informações.
+
 
 
 ## Tecnologias Utilizadas
@@ -80,7 +82,9 @@ controllers\
 data\
     database\
         ciclus.db
-        PlanilhaDeEquipamentosAtualizada_t.xlsx
+        PlanilhaDeEquipamentosAtualizada_5.xlsx
+    excel_output\
+        equipamentos_itens.xlsx
     atualizar_calibracao.py
     atualizar_tipos.py
     excel_para_sqlite.py
