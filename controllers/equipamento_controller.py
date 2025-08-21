@@ -237,28 +237,41 @@ def info_para_plano_calibr():
 
 def quantidade_calibr():
     """
-    Retorna uma tupla: (total_equipamentos_relevantes, quantidade_para_calibrar)
-    Considera apenas status_calibracao_id 0 ou 1.
+    Retorna uma tupla:
+    (total_equipamentos, calibrados, nao_calibrados, incertos, especiais)
+
+    - total_equipamentos: todos os equipamentos com status 0,1,2,3
+    - calibrados: status_calibracao_id = 0
+    - nao_calibrados: status_calibracao_id = 1
+    - incertos: status_calibracao_id = 2
+    - especiais: status_calibracao_id = 3
     """
     conn = get_connection(DB_FILE)
     conn.execute("PRAGMA foreign_keys = ON")
     cursor = conn.cursor()
     try:
-        # Consulta contando equipamentos relevantes (0 ou 1) e os que precisam calibrar (1)
         cursor.execute("""
             SELECT 
-                COUNT(*) as total_relevantes,
-                SUM(CASE WHEN status_calibracao_id = 1 THEN 1 ELSE 0 END) as precisa_calibrar
+                COUNT(*) as total,
+                SUM(CASE WHEN status_calibracao_id = 0 THEN 1 ELSE 0 END) as calibrado,
+                SUM(CASE WHEN status_calibracao_id = 1 THEN 1 ELSE 0 END) as nao_calibrado,
+                SUM(CASE WHEN status_calibracao_id = 2 THEN 1 ELSE 0 END) as incerto,
+                SUM(CASE WHEN status_calibracao_id = 3 THEN 1 ELSE 0 END) as especial
             FROM equipamentos
-            WHERE status_calibracao_id IN (0, 1, 2 ,3)
+            WHERE status_calibracao_id IN (0, 1, 2, 3)
         """)
         row = cursor.fetchone()
         total = row[0] or 0
-        para_calibrar = row[1] or 0
-        return total, para_calibrar
+        calibrado = row[1] or 0
+        nao_calibrado = row[2] or 0
+        incerto = row[3] or 0
+        especial = row[4] or 0
+        return total, calibrado, nao_calibrado, incerto, especial
     except Exception as e:
         print(f"Erro ao obter quantidade de calibração: {e}")
-        return 0, 0
+        return 0, 0, 0, 0, 0
     finally:
         conn.close()
+
+
 

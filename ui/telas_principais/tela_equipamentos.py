@@ -131,12 +131,12 @@ class TelaPrincipal(tk.Tk):
           activeforeground="#5C4033", command=self.atualizar_status_e_recarregar
         ).place(relx=1.0, x=-1005, y=630, anchor="ne")
 
-        tk.Button(self, text="Quantidade de Equipamentos", font=("Lucida Console", 10, "bold"),
+        tk.Button(self, text="Resumo de Calibração", font=("Lucida Console", 10, "bold"),
                 bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
                 padx=44, pady=2,  # igual ao botão Atualizar
                 activebackground="#87B6E2", activeforeground="white",
                 command=self.exibir_pop_up_calibracao
-        ).place(relx=1.0, x=-852, y=658, anchor="ne")  # mesma coordenada y ajustada
+        ).place(relx=1.0, x=-906, y=658, anchor="ne")  # mesma coordenada y ajustada
 
         self.var_busca = tk.StringVar()
         entry_busca = tk.Entry(self, textvariable=self.var_busca, font=("Lucida Console", 12),
@@ -363,7 +363,7 @@ class TelaPrincipal(tk.Tk):
         TelaPlanoDeCalibracao()
 
     def exibir_pop_up_calibracao(self):
-        total, para_calibrar = quantidade_calibr()  # Chama a função template
+        total, calibrado, nao_calibrado, incerto, especial = quantidade_calibr()  # Agora retorna 5 valores
 
         # Cria a janela pop-up modal
         pop_up = tk.Toplevel(self)
@@ -389,15 +389,35 @@ class TelaPrincipal(tk.Tk):
         info_frame = tk.Frame(frame_principal, bg="#FDFCF8")
         info_frame.pack(pady=(0, 15))
 
+        # Total
         tk.Label(info_frame, text="Total de Equipamentos:", font=("Courier New", 12),
                 bg="#FDFCF8", fg="#333333").grid(row=0, column=0, sticky="w", padx=(0, 10))
         tk.Label(info_frame, text=str(total), font=("Courier New", 12, "bold"),
-                bg="#DFF2BB", fg="#333333", width=8, relief="sunken", bd=2).grid(row=0, column=1, sticky="w")
+                bg="#FFFFFF", fg="#333333", width=8, relief="sunken", bd=2).grid(row=0, column=1, sticky="w")
 
-        tk.Label(info_frame, text="Equipamentos para Calibrar:", font=("Courier New", 12),
+        # Calibrados
+        tk.Label(info_frame, text="Calibrados:", font=("Courier New", 12),
                 bg="#FDFCF8", fg="#333333").grid(row=1, column=0, sticky="w", padx=(0, 10), pady=(5,0))
-        tk.Label(info_frame, text=str(para_calibrar), font=("Courier New", 12, "bold"),
-                bg="#FFB3B3", fg="#333333", width=8, relief="sunken", bd=2).grid(row=1, column=1, sticky="w", pady=(5,0))
+        tk.Label(info_frame, text=str(calibrado), font=("Courier New", 12, "bold"),
+                bg="#A7E9AF", fg="#333333", width=8, relief="sunken", bd=2).grid(row=1, column=1, sticky="w", pady=(5,0))
+
+        # Não Calibrados
+        tk.Label(info_frame, text="Não Calibrados:", font=("Courier New", 12),
+                bg="#FDFCF8", fg="#333333").grid(row=2, column=0, sticky="w", padx=(0, 10), pady=(5,0))
+        tk.Label(info_frame, text=str(nao_calibrado), font=("Courier New", 12, "bold"),
+                bg="#FFB3B3", fg="#333333", width=8, relief="sunken", bd=2).grid(row=2, column=1, sticky="w", pady=(5,0))
+
+        # Incertos
+        tk.Label(info_frame, text="Incertos:", font=("Courier New", 12),
+                bg="#FDFCF8", fg="#333333").grid(row=3, column=0, sticky="w", padx=(0, 10), pady=(5,0))
+        tk.Label(info_frame, text=str(incerto), font=("Courier New", 12, "bold"),
+                bg="#DBDBDB", fg="#333333", width=8, relief="sunken", bd=2).grid(row=3, column=1, sticky="w", pady=(5,0))
+
+        # Especiais
+        tk.Label(info_frame, text="Especiais:", font=("Courier New", 12),
+                bg="#FDFCF8", fg="#333333").grid(row=4, column=0, sticky="w", padx=(0, 10), pady=(5,0))
+        tk.Label(info_frame, text=str(especial), font=("Courier New", 12, "bold"),
+                bg="#A9CCE3", fg="#333333", width=8, relief="sunken", bd=2).grid(row=4, column=1, sticky="w", pady=(5,0))
 
         # Separador visual
         ttk.Separator(frame_principal, orient="horizontal").pack(fill="x", pady=10)
@@ -410,4 +430,6 @@ class TelaPrincipal(tk.Tk):
         # Mantém modal (bloqueia interação com a janela pai até fechar)
         pop_up.grab_set()
         self.wait_window(pop_up)
+
+
 
