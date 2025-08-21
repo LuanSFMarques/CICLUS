@@ -5,7 +5,7 @@
 - Redesign da aba de Plano de Calibração.
 
 ## Atualizações (v1.2)
-- Adição de exportação de dados para excel (com escolhe de caminho para qualquer lugar do sistema pelo usuário)
+- Adição de exportação de dados para excel (com escolha de caminho para qualquer diretório do sistema)
 
 ## Atualizações (v1.3)
 - Criação da aba de Gráficos
