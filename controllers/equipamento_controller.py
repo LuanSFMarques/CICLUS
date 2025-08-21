@@ -234,3 +234,31 @@ def info_para_plano_calibr():
         raise e
     finally:
         conn.close()
+
+def quantidade_calibr():
+    """
+    Retorna uma tupla: (total_equipamentos_relevantes, quantidade_para_calibrar)
+    Considera apenas status_calibracao_id 0 ou 1.
+    """
+    conn = get_connection(DB_FILE)
+    conn.execute("PRAGMA foreign_keys = ON")
+    cursor = conn.cursor()
+    try:
+        # Consulta contando equipamentos relevantes (0 ou 1) e os que precisam calibrar (1)
+        cursor.execute("""
+            SELECT 
+                COUNT(*) as total_relevantes,
+                SUM(CASE WHEN status_calibracao_id = 1 THEN 1 ELSE 0 END) as precisa_calibrar
+            FROM equipamentos
+            WHERE status_calibracao_id IN (0, 1, 2 ,3)
+        """)
+        row = cursor.fetchone()
+        total = row[0] or 0
+        para_calibrar = row[1] or 0
+        return total, para_calibrar
+    except Exception as e:
+        print(f"Erro ao obter quantidade de calibração: {e}")
+        return 0, 0
+    finally:
+        conn.close()
+

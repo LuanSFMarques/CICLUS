@@ -6,7 +6,7 @@ import re
 import webbrowser
 from pathlib import Path
 
-from controllers.equipamento_controller import listar_equipamentos_resumido, excluir_equipamento
+from controllers.equipamento_controller import listar_equipamentos_resumido, excluir_equipamento, quantidade_calibr
 from ui.telas_criacao_edicao.tela_criacao_equip import TelaCriacaoEquipamento
 from ui.telas_criacao_edicao.tela_edicao_equip import TelaEdicaoEquipamento
 from ui.telas_principais.tela_itens import TelaCicloVida
@@ -54,6 +54,8 @@ class TelaPrincipal(tk.Tk):
 
         self.criar_widgets()
         self.exibir_pagina(1)
+
+        self.after(50, self.exibir_pop_up_calibracao)
 
     def normalizar(self, texto):
         texto = unicodedata.normalize("NFKD", texto).encode("ASCII", "ignore").decode("ASCII")
@@ -122,11 +124,19 @@ class TelaPrincipal(tk.Tk):
                 activeforeground="#5C4033", command=self.abrir_plano_calibr
         ).place(relx=1.0, x=-15, y=139, anchor="ne")
 
+        # Botão para exibir pop-up de resumo de calibração
         tk.Button(self, text="Atualizar", font=("Lucida Console", 10, "bold"),
           bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
           padx=44, pady=2, activebackground="#DDD0C8",
           activeforeground="#5C4033", command=self.atualizar_status_e_recarregar
-        ).place(relx=1.0, x=-1005, y=658, anchor="ne")
+        ).place(relx=1.0, x=-1005, y=630, anchor="ne")
+
+        tk.Button(self, text="Quantidade de Equipamentos", font=("Lucida Console", 10, "bold"),
+                bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
+                padx=44, pady=2,  # igual ao botão Atualizar
+                activebackground="#87B6E2", activeforeground="white",
+                command=self.exibir_pop_up_calibracao
+        ).place(relx=1.0, x=-852, y=658, anchor="ne")  # mesma coordenada y ajustada
 
         self.var_busca = tk.StringVar()
         entry_busca = tk.Entry(self, textvariable=self.var_busca, font=("Lucida Console", 12),
@@ -352,6 +362,52 @@ class TelaPrincipal(tk.Tk):
     def abrir_plano_calibr(self):
         TelaPlanoDeCalibracao()
 
-if __name__ == "__main__":
-    app = TelaPrincipal()
-    app.mainloop()
+    def exibir_pop_up_calibracao(self):
+        total, para_calibrar = quantidade_calibr()  # Chama a função template
+
+        # Cria a janela pop-up modal
+        pop_up = tk.Toplevel(self)
+        pop_up.title("Resumo de Calibração")
+        pop_up.configure(bg="#F5F1E9")
+        pop_up.resizable(False, False)
+
+        # Posiciona a janela pop-up próxima da janela principal
+        self.update_idletasks()
+        x = self.winfo_x() + 50
+        y = self.winfo_y() + 50
+        pop_up.geometry(f"+{x}+{y}")
+
+        # Frame principal interno para melhor organização
+        frame_principal = tk.Frame(pop_up, bg="#FDFCF8", bd=2, relief="groove", padx=20, pady=20)
+        frame_principal.pack(padx=20, pady=20)
+
+        # Título
+        tk.Label(frame_principal, text="Resumo de Calibração", font=("Courier New", 16, "bold"),
+                bg="#FDFCF8", fg="#333333").pack(pady=(0, 15))
+
+        # Informações detalhadas
+        info_frame = tk.Frame(frame_principal, bg="#FDFCF8")
+        info_frame.pack(pady=(0, 15))
+
+        tk.Label(info_frame, text="Total de Equipamentos:", font=("Courier New", 12),
+                bg="#FDFCF8", fg="#333333").grid(row=0, column=0, sticky="w", padx=(0, 10))
+        tk.Label(info_frame, text=str(total), font=("Courier New", 12, "bold"),
+                bg="#DFF2BB", fg="#333333", width=8, relief="sunken", bd=2).grid(row=0, column=1, sticky="w")
+
+        tk.Label(info_frame, text="Equipamentos para Calibrar:", font=("Courier New", 12),
+                bg="#FDFCF8", fg="#333333").grid(row=1, column=0, sticky="w", padx=(0, 10), pady=(5,0))
+        tk.Label(info_frame, text=str(para_calibrar), font=("Courier New", 12, "bold"),
+                bg="#FFB3B3", fg="#333333", width=8, relief="sunken", bd=2).grid(row=1, column=1, sticky="w", pady=(5,0))
+
+        # Separador visual
+        ttk.Separator(frame_principal, orient="horizontal").pack(fill="x", pady=10)
+
+        # Botão de fechar
+        tk.Button(frame_principal, text="Fechar", command=pop_up.destroy,
+                font=("Courier New", 12), bg="#C85A17", fg="white",
+                activebackground="#E38B2B", activeforeground="white", relief="raised", bd=3, padx=20, pady=5).pack(pady=(10, 0))
+
+        # Mantém modal (bloqueia interação com a janela pai até fechar)
+        pop_up.grab_set()
+        self.wait_window(pop_up)
+

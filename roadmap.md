@@ -9,3 +9,6 @@
 
 ## Atualizações (v1.3)
 - Criação da aba de Gráficos
+
+## Atualizações (v2.0)
+- Executável
