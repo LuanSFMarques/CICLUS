@@ -1,0 +1,87 @@
+import sqlite3
+import pandas as pd
+from pathlib import Path
+
+from data.tipos import tipos_eq, tipos_item, tipos_setor, tipos_status, tipos_status_calibr
+from helpers import DB_FILE, get_connection
+
+def export_to_excel(file_path="excel_output/equipamentos_itens.xlsx"):
+    conn = get_connection(DB_FILE)
+    
+    # ----------------------------- Query Equipamentos -----------------------------
+    query_equip = "SELECT * FROM equipamentos"
+    df_equip = pd.read_sql_query(query_equip, conn)
+    
+    # Mapear valores inteiros para nomes amigáveis
+    status_dict = dict(tipos_status)
+    status_calibr_dict = dict(tipos_status_calibr)
+    setor_dict = dict(tipos_setor)
+    
+    # tipos_eq precisa ser mapeado pelo id (começando de 1, já que AUTOINCREMENT inicia em 1)
+    tipo_eq_dict = {i+1: nome for i, nome in enumerate(tipos_eq)}
+    
+    df_equip['tipo_eq_id'] = df_equip['tipo_eq_id'].map(tipo_eq_dict)
+    df_equip['status_id'] = df_equip['status_id'].map(status_dict)
+    df_equip['status_calibracao_id'] = df_equip['status_calibracao_id'].map(status_calibr_dict)
+    df_equip['setor_id'] = df_equip['setor_id'].map(setor_dict)
+    
+    # Renomear colunas para algo mais amigável
+    df_equip.rename(columns={
+        'nome_eq': 'Nome',
+        'tipo_eq_id': 'Tipo',
+        'sigla_eq': 'Sigla',
+        'setor_id': 'Setor',
+        'status_id': 'Status',
+        'sond_id': 'Sond',
+        'data_aquisicao': 'Data Aquisição',
+        'ultima_calibracao': 'Última Calibração',
+        'periodicidade': 'Periodicidade',
+        'status_calibracao_id': 'Status Calibração',
+        'fabricante': 'Fabricante',
+        'modelo': 'Modelo',
+        'modelo_tecnico': 'Modelo Técnico',
+        'numero_serie': 'Número de Série',
+        'extra_info': 'Informações Extras'
+    }, inplace=True)
+    
+    # ----------------------------- Query Ciclo de Vida -----------------------------
+    query_itens = """
+    SELECT cv.id, cv.equipamento_id, cv.tipo_item_id, cv.descricao, cv.info_especial,
+           cv.data, cv.fornecedor, cv.valor, e.nome_eq
+    FROM ciclo_vida cv
+    JOIN equipamentos e ON cv.equipamento_id = e.id
+    """
+    df_itens = pd.read_sql_query(query_itens, conn)
+    
+    # Mapear tipo_item_id
+    tipos_item_dict = dict(tipos_item)
+    df_itens['tipo_item_id'] = df_itens['tipo_item_id'].map(tipos_item_dict)
+    
+    # Substituir equipamento_id pelo nome
+    df_itens.rename(columns={
+        'id': 'ID',
+        'equipamento_id': 'Equipamento ID',
+        'nome_eq': 'Equipamento',
+        'tipo_item_id': 'Tipo Item',
+        'descricao': 'Descrição',
+        'info_especial': 'Info Especial',
+        'data': 'Data',
+        'fornecedor': 'Fornecedor',
+        'valor': 'Valor'
+    }, inplace=True)
+    
+    # ----------------------------- Exportar para Excel -----------------------------
+    file_path = Path(file_path)
+    with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
+        df_equip.to_excel(writer, sheet_name='Equipamentos', index=False)
+        df_itens.to_excel(writer, sheet_name='Itens Ciclo de Vida', index=False)
+        
+        # Adicionar filtros automáticos
+        for sheet_name in writer.sheets:
+            worksheet = writer.sheets[sheet_name]
+            worksheet.auto_filter.ref = worksheet.dimensions
+    
+    print(f"Arquivo exportado com sucesso: {file_path}")
+
+if __name__ == "__main__":
+    export_to_excel()
