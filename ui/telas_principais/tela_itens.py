@@ -80,10 +80,11 @@ class TelaCicloVida(tk.Toplevel):
 
         # Container para os botões
         button_frame = tk.Frame(self, bg="#F5F1E9")
-        button_frame.pack(pady=10, padx=10)
+        button_frame.pack(pady=10, padx=10, fill="x")  # fill="x" ajuda na centralização
 
-        for col in range(3):
-            button_frame.grid_columnconfigure(col, weight=1, uniform="botoes")
+        # Criar 4 colunas: [vazia | botão 1 | botão 2 | vazia]
+        for col in range(4):
+            button_frame.grid_columnconfigure(col, weight=1)
 
         btn_style = {
             "bg": "#C85A17",
@@ -93,37 +94,28 @@ class TelaCicloVida(tk.Toplevel):
             "bd": 3,
             "activebackground": "#E38B2B",
             "activeforeground": "white",
-            "width": 41,  # força mesma largura em caracteres
-            "height": 2   # força mesma altura em linhas de texto
+            "width": 41,
+            "height": 2
         }
 
-        # Adicionar Item ao Ciclo de Vida
+        # Botão na coluna 1
         btn_adicionar_item = tk.Button(
             button_frame,
             text="Adicionar Item ao Ciclo de Vida",
             command=self.abrir_criacao_item_ciclo,
             **btn_style
         )
-        btn_adicionar_item.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
+        btn_adicionar_item.grid(row=0, column=1, padx=5, pady=5, sticky="e")
 
-        # Abrir Equipamento na Sond
+        # Botão na coluna 2
         btn_abrir_sond = tk.Button(
             button_frame,
             text="Abrir Equipamento na Sond",
             command=lambda equipamento=equipamento: self.abrir_item_sond(equipamento["nome_eq"], equipamento["ids"]),
             **btn_style
         )
-        btn_abrir_sond.grid(row=0, column=1, padx=5, pady=5, sticky="nsew")
-
-        # Criar Excel do Equipamento
-        btn_para_excel = tk.Button(
-            button_frame,
-            text="Criar Excel do Equipamento",
-            command=self.sqlite_para_excel,
-            **btn_style
-        )
-        btn_para_excel.grid(row=0, column=2, padx=5, pady=5, sticky="nsew")
-
+        btn_abrir_sond.grid(row=0, column=2, padx=5, pady=5, sticky="w")
+        
         # Carregar dados
         self.dados_equipamento = obter_equipamento_por_id(self.equip_id)
         self.exibir_dados_equipamento()

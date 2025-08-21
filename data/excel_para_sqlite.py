@@ -1,12 +1,11 @@
 import pandas as pd
-import numpy as np
 import sqlite3
 from helpers import log_msg, EXCEL_DIR, get_connection, DB_FILE
 
 # Evita FutureWarning global do Pandas sobre downcasting
 pd.set_option('future.no_silent_downcasting', True)
 
-# Registra adaptador de datas para evitar DeprecationWarning do sqlite3 no Python 3.12+
+# Adaptadores de data para sqlite3
 sqlite3.register_adapter(pd.Timestamp, lambda ts: ts.date() if not pd.isna(ts) else None)
 sqlite3.register_adapter(pd.NaT.__class__, lambda _: None)
 
@@ -40,83 +39,71 @@ def transferir_excel_p_sqlite(excel_file, db_file):
     conn.execute("PRAGMA foreign_keys = ON")
     cursor = conn.cursor()
 
+    atualizados = 0
+    novos_registros = 0
+
     try:
-        cursor.execute("SELECT sond_id FROM equipamentos")
-        ids_existentes = {str(row[0]).strip() for row in cursor.fetchall() if row[0] is not None}
-        novos_registros = 0
-
         for _, eq_linha in eq.iterrows():
-            sond_id = str(eq_linha['ID']).strip()
-
-            if sond_id in ids_existentes:
-                # Atualiza o registro existente se necessário
-                cursor.execute(
-                    '''
-                    UPDATE equipamentos
-                    SET nome_eq = ?, sigla_eq = ?, setor_id = ?, status_id = ?, 
-                        data_aquisicao = ?, ultima_calibracao = ?, periodicidade = ?,
-                        status_calibracao_id = ?, fabricante = ?, modelo_tecnico = ?, modelo = ?, numero_serie = ?, extra_info = ?
-                    WHERE sond_id = ?
-                    ''', (
-                        str(eq_linha['Equipamento']).strip(),
-                        str(eq_linha['Equipamento']).split("-", 1)[0].strip() if "-" in str(eq_linha['Equipamento']) else str(eq_linha['Equipamento']).strip(),
-                        eq_linha['SETOR'],
-                        eq_linha['Se encontra na Sond (ativos)'],
-                        eq_linha['Data Aquisicao'] if not pd.isna(eq_linha['Data Aquisicao']) else None,
-                        eq_linha['Última'] if not pd.isna(eq_linha['Última']) else None,
-                        eq_linha['Periodicidade (MESES)'],
-                        eq_linha['CALIBRAR'],
-                        eq_linha['Fabricante'],
-                        eq_linha['Modelo'],
-                        None,
-                        eq_linha['N Série'],
-                        eq_linha['Descrição'],
-                        sond_id
-                    )
-                )
-                log_msg(f"⚠️ Equipamento {sond_id} atualizado (existente)")
-                continue
-
-            # Novo registro
             nome_eq = str(eq_linha['Equipamento']).strip()
+            modelo_tecnico = eq_linha['Modelo']
+            numero_serie = eq_linha['N Série']
+
+            # Verifica se o equipamento já existe
+            cursor.execute("SELECT modelo_tecnico, numero_serie FROM equipamentos WHERE nome_eq = ?", (nome_eq,))
+            resultado = cursor.fetchone()
+
+            if resultado:
+                modelo_existente, serie_existente = resultado
+                # Atualiza somente se houver diferença
+                if (modelo_tecnico and modelo_tecnico != modelo_existente) or (numero_serie and numero_serie != serie_existente):
+                    cursor.execute(
+                        '''
+                        UPDATE equipamentos
+                        SET modelo_tecnico = ?, numero_serie = ?
+                        WHERE nome_eq = ?
+                        ''',
+                        (modelo_tecnico, numero_serie, nome_eq)
+                    )
+                    log_msg(f"⚡ {nome_eq} atualizado: modelo_tecnico ou numero_serie")
+                    atualizados += 1
+                continue  # Não insere nada se já existe
+
+            # Inserir novo registro somente se não existir
             sigla_eq = nome_eq.split("-", 1)[0].strip() if "-" in nome_eq else nome_eq
-            # Conversão de datas
             data_aquisicao = None if pd.isna(eq_linha['Data Aquisicao']) else eq_linha['Data Aquisicao'].isoformat()
             ultima_calibracao = None if pd.isna(eq_linha['Última']) else eq_linha['Última'].isoformat()
 
-            try:
-                cursor.execute(
-                    '''
-                    INSERT INTO equipamentos (
-                        nome_eq, tipo_eq_id, sigla_eq, setor_id, status_id,
-                        sond_id, data_aquisicao, ultima_calibracao, periodicidade,
-                        status_calibracao_id, fabricante, modelo, modelo_tecnico, numero_serie, extra_info
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                    ''', (
-                        nome_eq,
-                        None,
-                        sigla_eq,
-                        eq_linha['SETOR'],
-                        eq_linha['Se encontra na Sond (ativos)'],
-                        sond_id,
-                        data_aquisicao,
-                        ultima_calibracao,
-                        eq_linha['Periodicidade (MESES)'],
-                        eq_linha['CALIBRAR'],
-                        eq_linha['Fabricante'],
-                        None,
-                        eq_linha['Modelo'],
-                        eq_linha['N Série'],
-                        eq_linha['Descrição']
-                    )
+            cursor.execute(
+                '''
+                INSERT INTO equipamentos (
+                    nome_eq, tipo_eq_id, sigla_eq, setor_id, status_id,
+                    sond_id, data_aquisicao, ultima_calibracao, periodicidade,
+                    status_calibracao_id, fabricante, modelo, modelo_tecnico, numero_serie, extra_info
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ''',
+                (
+                    nome_eq,
+                    None,
+                    sigla_eq,
+                    eq_linha['SETOR'],
+                    eq_linha['Se encontra na Sond (ativos)'],
+                    eq_linha['ID'],
+                    data_aquisicao,
+                    ultima_calibracao,
+                    eq_linha['Periodicidade (MESES)'],
+                    eq_linha['CALIBRAR'],
+                    eq_linha['Fabricante'],
+                    None,
+                    modelo_tecnico,
+                    numero_serie,
+                    eq_linha['Descrição']
                 )
-                novos_registros += 1
-                log_msg(f"✅ Equipamento Criado: {nome_eq}")
-            except Exception as e:
-                print(f"❌ Erro ao inserir {nome_eq}: {e}")
+            )
+            log_msg(f"✅ Equipamento Criado: {nome_eq}")
+            novos_registros += 1
 
         conn.commit()
-        print(f"Importação concluída: {novos_registros} novos registros inseridos.")
+        print(f"Importação concluída: {novos_registros} novos registros inseridos, {atualizados} registros atualizados.")
 
     except Exception as e:
         conn.rollback()

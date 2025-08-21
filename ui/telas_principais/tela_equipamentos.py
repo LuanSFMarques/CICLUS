@@ -7,6 +7,7 @@ import webbrowser
 from pathlib import Path
 
 from controllers.equipamento_controller import listar_equipamentos_resumido, excluir_equipamento, quantidade_calibr
+from data.sqlite_para_excel import exportar_para_excel
 from ui.telas_criacao_edicao.tela_criacao_equip import TelaCriacaoEquipamento
 from ui.telas_criacao_edicao.tela_edicao_equip import TelaEdicaoEquipamento
 from ui.telas_principais.tela_itens import TelaCicloVida
@@ -112,17 +113,18 @@ class TelaPrincipal(tk.Tk):
                 activeforeground="#5C4033", command=self.abrir_sond
         ).place(relx=1.0, x=-15, y=59, anchor="ne")
 
-        tk.Button(self, text="Gráficos", font=("Lucida Console", 10, "bold", "overstrike"),
-                bg="#3B3B3B", fg="#EEE6D9", relief="raised", bd=3,
-                padx=62, pady=2, activebackground="#DDD0C8",
-                activeforeground="#5C4033", command=self.abrir_graficos
-        ).place(relx=1.0, x=-15, y=99, anchor="ne")
+        tk.Button(self, text="Exportar para Excel", font=("Lucida Console", 10, "bold"),
+          bg="#3B3B3B", fg="#EEE6D9", relief="raised", bd=3,
+          padx=12, pady=2, activebackground="#DDD0C8",
+          activeforeground="#5C4033", command=self.exportar_e_aviso  # chama a função importada
+        ).place(relx=1.0, x=-15, y=139, anchor="ne")
+
 
         tk.Button(self, text="Plano de Calibr.", font=("Lucida Console", 10, "bold"),
                 bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
                 padx=26, pady=2, activebackground="#DDD0C8",
                 activeforeground="#5C4033", command=self.abrir_plano_calibr
-        ).place(relx=1.0, x=-15, y=139, anchor="ne")
+        ).place(relx=1.0, x=-15, y=99, anchor="ne")
 
         # Botão para exibir pop-up de resumo de calibração
         tk.Button(self, text="Atualizar", font=("Lucida Console", 10, "bold"),
@@ -430,6 +432,12 @@ class TelaPrincipal(tk.Tk):
         # Mantém modal (bloqueia interação com a janela pai até fechar)
         pop_up.grab_set()
         self.wait_window(pop_up)
+    def exportar_e_aviso(self):
+        try:
+            exportar_para_excel()  # chama a função que realmente faz a exportação
+            messagebox.showinfo("Sucesso", "Exportação para Excel realizada com sucesso!")
+        except Exception as e:
+            messagebox.showerror("Erro", f"Ocorreu um erro durante a exportação:\n{e}")
 
 
 

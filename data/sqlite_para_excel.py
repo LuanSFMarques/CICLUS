@@ -1,23 +1,20 @@
 import sqlite3
 import pandas as pd
 from pathlib import Path
-
+from openpyxl.utils import get_column_letter
 from data.tipos import tipos_eq, tipos_item, tipos_setor, tipos_status, tipos_status_calibr
 from helpers import DB_FILE, get_connection
 
-def export_to_excel(file_path="excel_output/equipamentos_itens.xlsx"):
+def exportar_para_excel(file_path="data/excel_output/equipamentos_itens.xlsx"):
     conn = get_connection(DB_FILE)
     
     # ----------------------------- Query Equipamentos -----------------------------
     query_equip = "SELECT * FROM equipamentos"
     df_equip = pd.read_sql_query(query_equip, conn)
     
-    # Mapear valores inteiros para nomes amigáveis
     status_dict = dict(tipos_status)
     status_calibr_dict = dict(tipos_status_calibr)
     setor_dict = dict(tipos_setor)
-    
-    # tipos_eq precisa ser mapeado pelo id (começando de 1, já que AUTOINCREMENT inicia em 1)
     tipo_eq_dict = {i+1: nome for i, nome in enumerate(tipos_eq)}
     
     df_equip['tipo_eq_id'] = df_equip['tipo_eq_id'].map(tipo_eq_dict)
@@ -25,7 +22,9 @@ def export_to_excel(file_path="excel_output/equipamentos_itens.xlsx"):
     df_equip['status_calibracao_id'] = df_equip['status_calibracao_id'].map(status_calibr_dict)
     df_equip['setor_id'] = df_equip['setor_id'].map(setor_dict)
     
-    # Renomear colunas para algo mais amigável
+    df_equip['data_aquisicao'] = pd.to_datetime(df_equip['data_aquisicao'], errors='coerce').dt.strftime('%d-%m-%Y')
+    df_equip['ultima_calibracao'] = pd.to_datetime(df_equip['ultima_calibracao'], errors='coerce').dt.strftime('%d-%m-%Y')
+    
     df_equip.rename(columns={
         'nome_eq': 'Nome',
         'tipo_eq_id': 'Tipo',
@@ -53,11 +52,11 @@ def export_to_excel(file_path="excel_output/equipamentos_itens.xlsx"):
     """
     df_itens = pd.read_sql_query(query_itens, conn)
     
-    # Mapear tipo_item_id
     tipos_item_dict = dict(tipos_item)
     df_itens['tipo_item_id'] = df_itens['tipo_item_id'].map(tipos_item_dict)
     
-    # Substituir equipamento_id pelo nome
+    df_itens['data'] = pd.to_datetime(df_itens['data'], errors='coerce').dt.strftime('%d-%m-%Y')
+    
     df_itens.rename(columns={
         'id': 'ID',
         'equipamento_id': 'Equipamento ID',
@@ -70,18 +69,41 @@ def export_to_excel(file_path="excel_output/equipamentos_itens.xlsx"):
         'valor': 'Valor'
     }, inplace=True)
     
+    # Reordenar colunas: segunda coluna será "Equipamento"
+    cols = df_itens.columns.tolist()
+    if 'Equipamento' in cols:
+        cols.remove('Equipamento')
+        cols = cols[:1] + ['Equipamento'] + cols[1:]
+    df_itens = df_itens[cols]
+    
     # ----------------------------- Exportar para Excel -----------------------------
     file_path = Path(file_path)
     with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
         df_equip.to_excel(writer, sheet_name='Equipamentos', index=False)
         df_itens.to_excel(writer, sheet_name='Itens Ciclo de Vida', index=False)
         
-        # Adicionar filtros automáticos
         for sheet_name in writer.sheets:
             worksheet = writer.sheets[sheet_name]
             worksheet.auto_filter.ref = worksheet.dimensions
     
     print(f"Arquivo exportado com sucesso: {file_path}")
 
-if __name__ == "__main__":
-    export_to_excel()
+    with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
+        df_equip.to_excel(writer, sheet_name='Equipamentos', index=False)
+        df_itens.to_excel(writer, sheet_name='Itens Ciclo de Vida', index=False)
+        
+        for sheet_name in writer.sheets:
+            worksheet = writer.sheets[sheet_name]
+            worksheet.auto_filter.ref = worksheet.dimensions
+            
+            # Ajustar largura das colunas pelo tamanho do header
+            for col_idx, col in enumerate(worksheet.iter_cols(1, worksheet.max_column), start=1):
+                max_length = 0
+                header = col[0].value
+                if header:
+                    max_length = len(str(header))
+                column_letter = get_column_letter(col_idx)
+                worksheet.column_dimensions[column_letter].width = max_length + 2  # +2 para espaçamento extra
+
+    print(f"Arquivo formatado com sucesso")
+
