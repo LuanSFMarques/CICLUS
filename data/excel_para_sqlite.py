@@ -12,7 +12,6 @@ sqlite3.register_adapter(pd.NaT.__class__, lambda _: None)
 def transferir_excel_p_sqlite(excel_file, db_file):
     eq = pd.read_excel(excel_file)
 
-    # Filtrar linhas válidas
     eq = eq[eq['ID'].notna()]
     eq = eq.drop_duplicates(subset=['ID', 'Equipamento'], keep='last')
     eq = eq[
@@ -47,28 +46,44 @@ def transferir_excel_p_sqlite(excel_file, db_file):
             nome_eq = str(eq_linha['Equipamento']).strip()
             modelo_tecnico = eq_linha['Modelo']
             numero_serie = eq_linha['N Série']
+            descricao = eq_linha['Descrição']
+            sond_id = eq_linha['ID']
 
-            # Verifica se o equipamento já existe
-            cursor.execute("SELECT modelo_tecnico, numero_serie FROM equipamentos WHERE nome_eq = ?", (nome_eq,))
+            # Verifica se o equipamento já existe pelo nome ou sond_id
+            cursor.execute(
+                "SELECT modelo_tecnico, numero_serie, extra_info, sond_id FROM equipamentos WHERE nome_eq = ? OR sond_id = ?",
+                (nome_eq, sond_id)
+            )
             resultado = cursor.fetchone()
 
             if resultado:
-                modelo_existente, serie_existente = resultado
-                # Atualiza somente se houver diferença
-                if (modelo_tecnico and modelo_tecnico != modelo_existente) or (numero_serie and numero_serie != serie_existente):
-                    cursor.execute(
-                        '''
-                        UPDATE equipamentos
-                        SET modelo_tecnico = ?, numero_serie = ?
-                        WHERE nome_eq = ?
-                        ''',
-                        (modelo_tecnico, numero_serie, nome_eq)
-                    )
-                    log_msg(f"⚡ {nome_eq} atualizado: modelo_tecnico ou numero_serie")
-                    atualizados += 1
-                continue  # Não insere nada se já existe
+                modelo_existente, serie_existente, extra_info_existente, sond_existente = resultado
 
-            # Inserir novo registro somente se não existir
+                campos_update = []
+                valores_update = []
+
+                if modelo_tecnico and modelo_tecnico != modelo_existente:
+                    campos_update.append("modelo_tecnico = ?")
+                    valores_update.append(modelo_tecnico)
+
+                if numero_serie and numero_serie != serie_existente:
+                    campos_update.append("numero_serie = ?")
+                    valores_update.append(numero_serie)
+
+                if descricao and descricao != extra_info_existente:
+                    campos_update.append("extra_info = ?")
+                    valores_update.append(descricao)
+
+                if campos_update:
+                    sql_update = f"UPDATE equipamentos SET {', '.join(campos_update)} WHERE sond_id = ?"
+                    valores_update.append(sond_existente)
+                    cursor.execute(sql_update, valores_update)
+                    log_msg(f"⚡ {nome_eq} atualizado: {', '.join(campos_update)}")
+                    atualizados += 1
+
+                continue  # Pula inserção de novos registros
+
+            # Inserir novo registro
             sigla_eq = nome_eq.split("-", 1)[0].strip() if "-" in nome_eq else nome_eq
             data_aquisicao = None if pd.isna(eq_linha['Data Aquisicao']) else eq_linha['Data Aquisicao'].isoformat()
             ultima_calibracao = None if pd.isna(eq_linha['Última']) else eq_linha['Última'].isoformat()
@@ -87,7 +102,7 @@ def transferir_excel_p_sqlite(excel_file, db_file):
                     sigla_eq,
                     eq_linha['SETOR'],
                     eq_linha['Se encontra na Sond (ativos)'],
-                    eq_linha['ID'],
+                    sond_id,
                     data_aquisicao,
                     ultima_calibracao,
                     eq_linha['Periodicidade (MESES)'],
@@ -96,7 +111,7 @@ def transferir_excel_p_sqlite(excel_file, db_file):
                     None,
                     modelo_tecnico,
                     numero_serie,
-                    eq_linha['Descrição']
+                    descricao
                 )
             )
             log_msg(f"✅ Equipamento Criado: {nome_eq}")
