@@ -119,7 +119,6 @@ class TelaPrincipal(tk.Tk):
           activeforeground="#5C4033", command=self.exportar_e_aviso  # chama a função importada
         ).place(relx=1.0, x=-15, y=139, anchor="ne")
 
-
         tk.Button(self, text="Plano de Calibr.", font=("Lucida Console", 10, "bold"),
                 bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
                 padx=26, pady=2, activebackground="#DDD0C8",

@@ -112,7 +112,7 @@ helpers.py
 main.py
 ```
 
-## Armazenamento de Dados (Model)
+## Armazenamento de Dados
 A base de dados em SQLite é simples e otimizada para manter o histórico de cada equipamento.
 - A tabela equipamentos é a principal e conecta-se a outras por foreign keys.
 - Cada equipamento possui um conjunto ilimitado de itens no ciclo de vida.
@@ -120,7 +120,7 @@ A base de dados em SQLite é simples e otimizada para manter o histórico de cad
 
 <img src="assets/images/ciclus_diagrama.png" width="80%">
 
-## Controle de Dados (Controllers)
+## Controle de Dados
 Os controllers centralizam as funções de manipulação e consulta:
 - equipamento_controller.py → busca, criação, edição e exclusão de equipamentos.
 - itens_controller.py → gerenciamento do histórico de itens dos equipamentos.
@@ -165,7 +165,7 @@ Detalhes adicionais sobre cada ocorrência no histórico.
 
 <img src="assets/images/ciclus_tela_descricao.png" width="65%">
 
-## Fluxo Geral (UI / CONTROLLERS / DATA)
+## Fluxo Geral
 
 O fluxo segue o padrão MVC:
 - O usuário interage pela interface (UI).
