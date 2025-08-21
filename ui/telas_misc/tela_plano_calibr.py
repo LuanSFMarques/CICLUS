@@ -12,39 +12,54 @@ class TelaPlanoDeCalibracao(tk.Toplevel):
         self.geometry("800x400")
         self.configure(bg="#F5F1E9")
         self.resizable(True, True)
+        
+        lbl = tk.Label(
+            self,
+            text="Equipamentos com calibração vencendo nos próximos 30 dias",
+            font=("Courier New", 14, "bold"),
+            bg="#E9E4D9",
+            fg="#333333",
+            relief="groove",
+            padx=10,
+            pady=10
+        )
+        lbl.pack(pady=10, fill="x")
 
-        # Label topo
-        lbl = tk.Label(self, text="Equipamentos com calibração vencendo nos próximos 30 dias",
-                       font=("Courier New", 14, "bold"), bg="#F5F1E9", relief="raised", padx=5, pady=10)
-        lbl.pack(pady=10)
+        # Frame principal
+        frame_tree = tk.Frame(self, bg="#F5F1E9")
+        frame_tree.pack(fill=tk.BOTH, expand=True, padx=15, pady=15)
 
-        # Frame para Text e Scrollbar
-        frame_text = tk.Frame(self)
-        frame_text.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        # Criar Treeview
+        self.tree = ttk.Treeview(frame_tree, columns=("equipamento", "data", "dias"), show="headings", selectmode="browse")
+        self.tree.heading("equipamento", text="Equipamento")
+        self.tree.heading("data", text="Próxima Calibração")
+        self.tree.heading("dias", text="Dias Restantes")
 
-        self.text = tk.Text(frame_text, wrap=tk.WORD, font=("Courier New", 11))
-        self.text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.tree.column("equipamento", anchor="w", width=350)
+        self.tree.column("data", anchor="center", width=180)
+        self.tree.column("dias", anchor="center", width=150)
 
-        scrollbar = ttk.Scrollbar(frame_text, command=self.text.yview)
+        self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        # Scrollbar
+        scrollbar = ttk.Scrollbar(frame_tree, orient="vertical", command=self.tree.yview)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.tree.configure(yscrollcommand=scrollbar.set)
 
-        self.text.config(yscrollcommand=scrollbar.set)
-
-        # Carrega dados e exibe
+        # Carrega dados
         self.listar_equipamentos_proximos_30_dias()
 
     def listar_equipamentos_proximos_30_dias(self):
         try:
             equipamentos = info_para_plano_calibr()
         except Exception as e:
-            self.text.insert(tk.END, f"Erro ao carregar equipamentos: {e}")
-            self.text.config(state="disabled")  # trava edição mesmo em caso de erro
+            self.tree.insert("", "end", values=("Erro ao carregar", str(e), ""))
             return
 
         hoje = datetime.today()
         limite = hoje + timedelta(days=30)
 
-        relatorio = []
+        achou = False
         for eq in equipamentos:
             try:
                 data_ult_cal = eq.get("ultima_calibracao")
@@ -58,18 +73,19 @@ class TelaPlanoDeCalibracao(tk.Toplevel):
 
                 if hoje <= dt_prox_cal <= limite:
                     dias_restantes = (dt_prox_cal - hoje).days + 1
-                    dia = "dia" if dias_restantes == 1 else "dias"
-                    relatorio.append(
-                        f"{eq['nome_eq']}\t\tPróxima calibração em {dt_prox_cal.strftime('%d/%m/%Y')}"
-                        f"\t\t\t(em {dias_restantes} {dia})\n"
+                    self.tree.insert(
+                        "",
+                        "end",
+                        values=(
+                            eq["nome_eq"],
+                            dt_prox_cal.strftime("%d/%m/%Y"),
+                            f"{dias_restantes} {'dia' if dias_restantes == 1 else 'dias'}"
+                        )
                     )
+                    achou = True
             except Exception as e:
                 print(f"Erro ao processar {eq}: {e}")
                 continue
 
-        if not relatorio:
-            self.text.insert(tk.END, "Nenhum equipamento com calibração vencendo nos próximos 30 dias.")
-        else:
-            self.text.insert(tk.END, "".join(relatorio))
-
-        self.text.config(state="disabled")
+        if not achou:
+            self.tree.insert("", "end", values=("Nenhum equipamento encontrado", "", ""))

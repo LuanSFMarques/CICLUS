@@ -127,16 +127,16 @@ class TelaPrincipal(tk.Tk):
         # Botão para exibir pop-up de resumo de calibração
         tk.Button(self, text="Atualizar", font=("Lucida Console", 10, "bold"),
           bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
-          padx=44, pady=2, activebackground="#DDD0C8",
+          padx=86, pady=2, activebackground="#DDD0C8",
           activeforeground="#5C4033", command=self.atualizar_status_e_recarregar
-        ).place(relx=1.0, x=-1005, y=630, anchor="ne")
+        ).place(relx=1.0, x=-915, y=628, anchor="ne")
 
         tk.Button(self, text="Resumo de Calibração", font=("Lucida Console", 10, "bold"),
                 bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
-                padx=44, pady=2,  # igual ao botão Atualizar
+                padx=36, pady=2,  # igual ao botão Atualizar
                 activebackground="#87B6E2", activeforeground="white",
                 command=self.exibir_pop_up_calibracao
-        ).place(relx=1.0, x=-906, y=658, anchor="ne")  # mesma coordenada y ajustada
+        ).place(relx=1.0, x=-916, y=658, anchor="ne")  # mesma coordenada y ajustada
 
         self.var_busca = tk.StringVar()
         entry_busca = tk.Entry(self, textvariable=self.var_busca, font=("Lucida Console", 12),
