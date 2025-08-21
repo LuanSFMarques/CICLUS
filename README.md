@@ -149,12 +149,12 @@ Lista cronológica dos eventos relacionados a cada equipamento.
 - Data automática inserida caso o campo fique vazio.
 - Atualização automática de status ou setor ao criar itens específicos.
 
-<img src="assets/images/ciclus_tela_criacao_item.png" width="65%">
+<img src="assets/images/ciclus_tela_criacao_item.png" width="55%">
 
 ### Descrição de Itens
 Detalhes adicionais sobre cada ocorrência no histórico.
 
-<img src="assets/images/ciclus_tela_descricao.png" width="75%">
+<img src="assets/images/ciclus_tela_descricao.png" width="65%">
 
 ## Fluxo Geral (UI / CONTROLLERS / DATA)
 
