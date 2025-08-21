@@ -9,6 +9,7 @@ O software adota o mesmo padrão de identificação e categorização utilizado 
 ## Novidades (v1.2)
 - Novo botão na tela inicial que permite transferir todos os dados de equipamentos e itens para tabela excel
 - Melhoria na disposição de botões
+- Formatação de datas em modelo brasileiro na janela de ciclo de vida
 
 ## 📖 Sumário
 

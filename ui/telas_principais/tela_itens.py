@@ -188,6 +188,13 @@ class TelaCicloVida(tk.Toplevel):
             frame_linha = tk.Frame(self.scroll_frame_esquerdo, bg="#EDE6D6")
             frame_linha.pack(fill=tk.X, padx=15, pady=5)
 
+            if key in ["data_aquisicao", "ultima_calibracao"] and valor not in [None, ""]:
+                try:
+                    valor_dt = datetime.strptime(valor, "%Y-%m-%d")
+                    valor = valor_dt.strftime("%d-%m-%Y")
+                except Exception:
+                    pass
+
             lbl_nome = tk.Label(
                 frame_linha,
                 text=f"{label_text}:",
