@@ -96,12 +96,12 @@ def exportar_para_excel(file_path="data/excel_output/equipamentos_itens.xlsx"):
             worksheet = writer.sheets[sheet_name]
             worksheet.auto_filter.ref = worksheet.dimensions
             
-            # Ajustar largura das colunas pelo tamanho do header
+            # Ajustar largura das colunas pelo tamanho do header e do maior valor
             for col_idx, col in enumerate(worksheet.iter_cols(1, worksheet.max_column), start=1):
                 max_length = 0
-                header = col[0].value
-                if header:
-                    max_length = len(str(header))
+                for cell in col:
+                    if cell.value:
+                        max_length = max(max_length, len(str(cell.value)))
                 column_letter = get_column_letter(col_idx)
                 worksheet.column_dimensions[column_letter].width = max_length + 2  # +2 para espaçamento extra
 
