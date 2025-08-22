@@ -14,6 +14,7 @@ from ui.telas_principais.tela_itens import TelaCicloVida
 from ui.telas_misc.tela_plano_calibr import TelaPlanoDeCalibracao
 from data.atualizar_calibracao import atualizar_status_calibr_todos
 from helpers import DB_FILE
+from config import CICLUS_VERSION
 
 CAMINHO_LOGO_SUPORTE = Path(__file__).resolve().parent.parent.parent / "assets" / "logos" / "suporte_logo_laranja.png"
 CAMINHO_LOGO_CICLUS = Path(__file__).resolve().parent.parent.parent / "assets" / "logos" / "ciclus_logo_laranja.png"
@@ -87,6 +88,9 @@ class TelaPrincipal(tk.Tk):
         return processados
 
     def criar_widgets(self):
+        tk.Label(self, text=f"Ciclus V {CICLUS_VERSION}", font=("Courier New", 9, "italic"),
+             bg="#F5F1E9", fg="#333333").place(x=10, y=5)
+        
         try:
             imagem_logo_topo = Image.open(CAMINHO_LOGO_CICLUS).convert("RGBA")  # Garante transparência
             imagem_logo_topo = imagem_logo_topo.resize((200, 50), Image.Resampling.LANCZOS)
