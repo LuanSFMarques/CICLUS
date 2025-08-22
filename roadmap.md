@@ -15,3 +15,4 @@
 
 ## Atualizações (v2.0)
 - Executável
+- Atualização do README para versão 2.0

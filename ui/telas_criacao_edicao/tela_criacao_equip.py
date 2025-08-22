@@ -111,6 +111,21 @@ class TelaCriacaoEquipamento(tk.Toplevel):
                 combo.current(0)
                 setattr(self, nome_atributo, combo)
 
+                # Função para bloquear scroll quando dropdown fechado
+                def bloquear_scroll(event, c=combo):
+                    # popdown é criado quando dropdown abre
+                    popdown = c.tk.call('ttk::combobox::PopdownWindow', c)
+                    if popdown == '':
+                        return "break"  # bloqueia scroll
+                    # se estiver aberto, deixa scroll funcionar
+
+                # Bind do scroll para Windows e Linux/macOS
+                combo.bind("<MouseWheel>", bloquear_scroll)  # Windows
+                combo.bind("<Button-4>", bloquear_scroll)    # Linux scroll up
+                combo.bind("<Button-5>", bloquear_scroll)    # Linux scroll down
+
+
+
             elif nome_atributo == "text_extra_info":
                 largura, altura = tamanho
                 text = tk.Text(
