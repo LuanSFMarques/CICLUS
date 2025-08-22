@@ -8,6 +8,7 @@
 - Adição de exportação de dados para excel (com escolha de caminho para qualquer diretório do sistema)
 - Adicionar exportação para csv
 - Aba de 'exportação'
+- Pequena indicação em texto da versão do software na aba principal
 
 ## Atualizações (v1.3)
 - Criação da aba de Gráficos
