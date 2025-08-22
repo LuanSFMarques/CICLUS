@@ -1,0 +1,235 @@
+﻿id;Nome;Tipo;Sigla;Setor;Status;Sond;Data Aquisição;Última Calibração;Periodicidade;Status Calibração;Fabricante;Modelo;Modelo Técnico;Número de Série;Informações Extras
+1;PRE-MP-001;Prensa;PRE;COM;ativo;864;02-02-2023;21-08-2024;12;Não_Calibrado;Ownlab;;Multiuso Especiais;0243;MP01-MULTIPRENSA 10 Ton
+2;PRE-MP-002;Prensa;PRE;COM;ativo;1257;10-10-2024;21-07-2025;12;Calibrado;Wonlab;;MP01;0244;MULTIPRENSA 10Ton / Multiuso CBR / 220V / Peso: 240kg / Ano 2022.
+3;PRE-001;Prensa;PRE;COM;ativo;59;01-05-2011;21-07-2025;12;Calibrado;Solotest;;CSR-ST (Referência 1.022.220);20110331/112502008;Prensa eletrom.autom.p/ensaio CBR/Marshall e tambem ensaios genericos demandem controle da veloc. de subida do prato e medicao da deformacao. Os resultados sao armazenados na memoria da prensa, podendo ser visualizados e/ou transferidos p/computador PC.Inclui cel.de carga(5000Kgf) LVDT(25 mm)220V-50/60Hz
+4;PRE-002;Prensa;PRE;COM;ativo;60;30-04-2014;21-07-2025;12;Calibrado;Solotest;;CSR-ST (Referência 1.022.220);20110936/120700613;Prensa eletrom.autom.p/ensaio CBR/Marshall e tambem ensaios genericos demandem controle da veloc. de subida do prato e medicao da deformacao. Os resultados sao armazenados na memoria da prensa, podendo ser visualizados e/ou transferidos p/computador PC.Inclui cel.de carga(5000Kgf) LVDT(25 mm)220V-50/60Hz
+5;BAL-011;Balança;BAL;COM;ativo;81;01-01-2021;12-06-2025;12;Calibrado;Marte;;AD500 (Classe II;377958 - Compactação;Voltou da manutenção dia 30/08 Setor: Compactação
+6;BAL-020;Balança;BAL;COM;ativo;792;07-11-2022;04-06-2025;12;Calibrado;Marte Cientifica;;AD5002;452558 - Compactação;Balança de Precisão Marte modelo AD 5002 - 5010 g- 5010 g e div. 0,01 g - RS 232 / TopLab. Balança voltou do reparo. Setor: Compactação
+7;BAL-014;Balança;BAL;COM;ativo;542;15-02-2021;04-06-2025;12;Calibrado;PRIX;;9094C/5;12657700 - Compactação;BALANCA ELET. DIG. MOD. 9094-15KG (balança voltou da manutenção) 11/12/2024. Próxima calibração 11/2025.
+8;BAL-017;Balança;BAL;COM;ativo;775;01-01-2019;04-06-2025;12;Calibrado;Marte Cientifica;;AD5002;26908408-3 - Compactação;Balança de Precisão Marte modelo AD 5002 - 5010 g- 5010 g e div. 0,01 g - RS 232 / TopLab *Setor compactação*
+9;BAL-023;Balança;BAL;COM;ativo;1329;25-10-2024;04-06-2025;12;Calibrado;PRIX;;9094C/10;13793425 - Compactação;BALANCA ELET. DIG. MOD-9094 (balança está sendo usada para o setor da compactação) GARANTIA DE 06 MESES, A PARTIR DA DATA DA NOTA FISCAL (A GARANTIA ESTÁ NA CAIXA) SETOR: COMPACTAÇÃO
+10;BAL-009;Balança;BAL;COM;ativo;79;01-01-2021;04-06-2025;12;Calibrado;KN Waagen;;;K0010/2018 - Compactação;Balança KN Waagen16 kg Setor : Pesagem 5kg - compactação
+11;EST-007;Estufa;EST;COM;ativo;1050;31-07-2023;14-05-2025;12;Calibrado;Quimis;;Q317M-72;AF070469;ESTUFA DE SECAGEM MICROPROCESSADA 336 LITROS 200°C
+12;PEN-017;Peneira;PEN;COM;inativo;179;01-02-2013;;12;Não_Calibrado;;Malha 1 1/2;Ø 8x2”;1.1/2Y;Malha 1.1/2 Peneira de análise granulométrica Abert 37,5mm
+13;PEN-023;Peneira;PEN;COM;ativo;185;01-02-2013;;12;Especial;Solotest;Malha 10;Ø 8x2” Abert 2,00mm Malha 10;10Y;Peneira de análise granulométrica Abert 2,00mm Malha 10
+14;BAL-004;Balança;BAL;DOS;ativo;74;01-01-2021;04-06-2025;12;Calibrado;Toledo;;PRIX 3/14 (Classe III);10764973 - Dosagem;Balança eletrônica digital 15 kg - Toledo Setor: Dosagem
+15;PEN-043;Peneira;PEN;DOS;ativo;606;07-04-2022;24-04-2023;12;Não_Calibrado;Lacerda;Malha 40;12,500mm - N1/2 - Malha 40;PC-24/22;Peneira RED 8x2 - 12,500 - N1/2 - Malha 40
+16;PEN-032;Peneira;PEN;DOS;ativo;194;01-02-2013;;12;Incerto;Solotest;Malha 4;Abert 4,75mm Malha 4;107613;Peneira de análise granulométrica Abert 4,75mm Malha 4
+17;PP-001;Peso Padrão;PP;EE1;ativo;204;;10-02-2025;12;Calibrado;KN Waagen;;classe F1- OIML;13065401;Peso Padrão (10g)
+18;PP-002;Peso Padrão;PP;EE1;ativo;205;;10-02-2025;12;Calibrado;KN Waagen;;classe F1- OIML;13065401;Peso Padrão (20g)
+19;PP-003;Peso Padrão;PP;EE1;ativo;208;;10-02-2025;12;Calibrado;KN Waagen;;classe F1- OIML;13065401;Peso Padrão (50g)
+20;PP-004;Peso Padrão;PP;EE1;ativo;209;;10-02-2025;12;Calibrado;KN Waagen;;classe F1- OIML;13065401;Peso Padrão (100g)
+21;PP-005;Peso Padrão;PP;EE1;ativo;210;;10-02-2025;12;Calibrado;KN Waagen;;classe F1- OIML;13065401;Peso Padrão (200g)
+22;PP-006;Peso Padrão;PP;EE1;ativo;211;;10-02-2025;12;Calibrado;KN Waagen;;classe F1- OIML;13065401;Peso Padrão (500g)
+23;PP-007;Peso Padrão;PP;EE1;ativo;212;;06-03-2025;60;Calibrado;KN Waagen;;classe F1- OIML;13065402;Peso Padrão (5kg)
+24;AD-001;Prensa;AD;EE1;ativo;61;16-10-2019;21-07-2025;12;Calibrado;Solotest Aparelhos para Mecânica do Solo Ltda.;;Tipo Bishop;23795;Equipamento para ensaio de Adensamento
+25;AD-002;Prensa;AD;EE1;ativo;62;31-07-2020;21-07-2025;12;Calibrado;Viatest;;Tipo Bishop;WS-140629009 ID 02685;Equipamento para ensaio de Adensamento
+26;AD-003;Prensa;AD;EE1;ativo;63;31-07-2020;21-07-2025;12;Calibrado;Viatest;;Tipo Bishop;WS-140629009 ID 11012;Equipamento para ensaio de Adensamento
+27;AD-004;Prensa;AD;EE1;ativo;64;31-07-2020;21-07-2025;12;Calibrado;Viatest;;Tipo Bishop;WS-140629009 ID 11011;Equipamento para ensaio de Adensamento
+28;PP-008;Peso Padrão;PP;EE1;inativo;1482;;27-12-2024;12;Calibrado;;;Classe M3 OIML;;Peso padrão 10g
+29;TRI-E-001;Prensa;TRI;EE1;ativo;54;11-11-2019;23-08-2024;12;Calibrado;Biopdi;;;000 000 295;"Máquina de ensaio triaxial estatico - 5000 kgf , Celula de Carga - 5.000 Kg , Celula triaxial - amostras de 1,5\"" , Sistema de pressurizacao - Maquina de ensaio triaxial , Conjunto Pedestal para amostras 1,5\"" - Celula triaxial Acessórios | N° Série Célula de Carga | 92578 Pressurizador CP | 000 000 289 Pressurizador BP | 000 000 288 LVDT | 4031"
+30;TRI-E-002;Prensa;TRI;EE1;ativo;56;07-04-2021;23-08-2024;12;Calibrado;Biopdi;;;000 000 309;"Máquina de ensaio triaxial Esáatico - 5000 kgf Celula de Carga - 5.000 Kg Celula triaxial - amostras de 1,5\"" Sistema de pressurizacao - Maquina de ensaio triaxial Conjunto Pedestal para amostras 1,5\"" - Celula triaxial Acessórios | N° Série Célula de Carga | 127132 Pressurizador CP | 000 000 311 Pressurizador BP | 000 000 310 LVDT | 140629009"
+31;TRI-D-001;Prensa;TRI;EE1;ativo;55;10-07-2020;;12;Especial;Biopdi;;;000 000 359;"Máquina de ensaio triaxial Dinâmica - 5000 kgf, Celula de Carga - 5.000 Kg, Célula triaxial - amostras de 1,5\"" , Sistema de pressurização - Máquina de ensaio triaxial Acessórios | N° Série Célula de Carga | 204501 Pressurizador CP | 000 000 346 LVDT Solo | 224512/226373 LVDT Asfalto | 1406290009"
+32;TRI-D-002;Prensa;TRI;EE1;ativo;977;06-06-2023;21-07-2025;12;Calibrado;;;MS 151;0235;
+33;CD-001;Prensa;CD;EE1;ativo;70;01-01-2014;21-07-2025;12;Calibrado;Wykeham Farrance;;27 - WF 2160;1300374;Máquina de Cisalhamento Direto / AutoShear
+34;CIS-001;Prensa;CIS;EE1;ativo;1207;10-11-2023;21-07-2025;12;Calibrado;Ownlab;;MS 102;0300;MS102 - Cisalhamento Automatico + DSS
+35;PCIS-008;Peso Cisalhamento;PCIS;EE1;ativo;289;;;12;Especial;Wykeham Farrance;;WF0273/A;08;Peso Cisalhamento direto 2 kg
+36;PCIS-012;Peso Cisalhamento;PCIS;EE1;ativo;293;;;12;Especial;Wykeham Farrance;;WF0275/A;;Peso Cisalhamento direto 8 kg
+37;PCIS-003;Peso Cisalhamento;PCIS;EE1;ativo;284;;;12;Especial;Wykeham Farrance;;WF0271/A;04;Peso Cisalhamento direto 0.500 g
+38;PCIS-002;Peso Cisalhamento;PCIS;EE1;ativo;283;;;12;Especial;Wykeham Farrance;;WF0270/A;02;Peso Cisalhamento direto 250 g
+39;PCIS-005;Peso Cisalhamento;PCIS;EE1;ativo;286;;;12;Especial;Wykeham Farrance;;WF0272/A;05;Peso Cisalhamento direto 1 kg
+40;PCIS-001;Peso Cisalhamento;PCIS;EE1;ativo;282;;;12;Especial;Wykeham Farrance;;WF0270/A;01;Peso Cisalhamento direto 250 g
+41;PCIS-017;Peso Cisalhamento;PCIS;EE1;ativo;507;;;12;Especial;;;;;
+42;PCIS-007;Peso Cisalhamento;PCIS;EE1;ativo;288;;;12;Especial;Wykeham Farrance;;WF0274/A;11;Peso Cisalhamento direto 4 kg
+43;PCIS-006;Peso Cisalhamento;PCIS;EE1;ativo;287;;;12;Especial;Wykeham Farrance;;WF0273/A;09;Peso Cisalhamento direto 2 kg
+44;PCIS-018;Peso Cisalhamento;PCIS;EE1;ativo;508;;;12;Especial;;;;;
+45;PCIS-013;Peso Cisalhamento;PCIS;EE1;ativo;294;;;12;Especial;Wykeham Farrance;;WF0275/A;;Peso Cisalhamento direto 8 kg
+46;PCIS-015;Peso Cisalhamento;PCIS;EE1;ativo;296;;;12;Especial;Wykeham Farrance;;WF0277/A;;Peso Cisalhamento direto 10 kg
+47;PEN-051;Peneira;PEN;EE1;ativo;729;15-08-2022;18-11-2022;12;Não_Calibrado;Projetest;Malha 1;25,00mm (Nº1´´);;
+48;PEN-139;Peneira;PEN;EE1;inativo;1359;15-10-2024;09-12-2024;12;Calibrado;ECO FORMAS;Malha 200;PEN N200;;
+49;PEN-050;Peneira;PEN;EE1;ativo;728;15-08-2022;18-11-2022;12;Incerto;Projetest;Malha 3/8;9,50mm (3/8´´);;
+50;PEN-117;Peneira;PEN;EE1;ativo;1226;15-01-2024;;12;Especial;Projetest;Malha 40;0,425mm(Nº40);445054;Perneira 0,425mm(Nº40) ENSAIO ESPECIAIS
+51;PEN-044;Peneira;PEN;EE1;ativo;607;07-04-2022;27-04-2023;12;Não_Calibrado;Bertel;Malha 5/8;8x2” Abertura16,00mm - 5/8\\\';16y;Peneira para análise granulométrica Abertura16,00mm - 5/8\\\'\\\'
+52;VAC-001;Banqueta;VAC;EE1;inativo;465;;;12;Especial;Prismatec;;131;1214702/13;Bomba de vácuo com compressor Prismatec 131 2VC - Lubrificada a óleo - 38 l/min - 695 mmHg
+53;CASA-002;Casagrande;CASA;EE2;ativo;530;01-01-2019;;12;Especial;SoloTest;;Elétrico;002;
+54;BAL-010;Balança;BAL;EE2;ativo;80;01-01-2021;04-06-2025;12;Calibrado;Marte;;AD500 (Classe II;377959 - LL & LP;Balança eletrônica digital 2200 g - Bel *Setor Limites* 0,01
+55;CASA-004;Casagrande;CASA;EE2;ativo;767;23-09-2022;;12;Especial;Lacerda;;Digital Elétrico;CGE-01/22;Aparelho casa grande elétrico c/ contador digital Manutenção interna feita pelo Kairo, porém precisa de manutenção externa na parte elétrica. ------------------------------ 11/06/2025 voltou da manutenção e foi entregue para Monica.
+56;CASA-003;Casagrande;CASA;EE2;inativo;531;01-01-2019;;12;Especial;;;Elétrico;003;Casagrande utilizado para o ensaio de Limite de liquidez.
+57;REL-001-MCT-P;Relógio Comparador;REL;EE2;ativo;342;20-03-2013;23-02-2024;12;Não_Calibrado;KingTools;;0-10mm/0,01mm;3560;Relógio Comparador KingTools capacidade 0-10mm e graduação 0,01mm - Exp
+58;VAC-004;Bomba de Vácuo;VAC;EE2;ativo;1529;15-04-2025;04-06-2025;12;Calibrado;Prismatec;;;;Relógio Vacuômetro com bomba de vácuo Número de série da bomba é 28818.
+59;VAC-002;Bomba de Vácuo;VAC;EE2;ativo;466;;18-03-2024;12;Não_Calibrado;Prismatec;;131;959508/11;Voltou da manutenção 30/08 - Calibração até dia 25/08/2025 ---------- Nova manutenção feita voltou dia 28/05/2025 (não foi feito uma nova calibração). Setor: Massa Específica (antiga preparação).
+60;BAL-019;Balança;BAL;EE2;ativo;791;07-11-2022;;12;Incerto;Marte Cientifica;;AD5002;452560;Voltou da manutenção 30/08 - Calibração até dia 25/08/2025 ---------- Nova manutenção feita voltou dia 28/05/2025 (não foi feito uma nova calibração). Setor: Massa Específica (antiga preparação).
+61;EST-005;Estufa;EST;EE2;ativo;68;29-11-2018;14-05-2025;12;Calibrado;Quimis;;Q317M-32;18101151;Estufa microprocessada de secagem com timer
+62;EST-006;Estufa;EST;EE2;ativo;69;17-07-2020;14-05-2025;12;Calibrado;Solab;;SL-100/336;20070077;Estufa microprocessada de secagem com timer
+63;EST-001;Estufa;EST;EE2;ativo;65;01-05-2011;14-05-2025;12;Calibrado;Solotest Aparelhos para Mecânica do Solo Ltda.;;Q317M-32;11062730;Estufa microprocessada de secagem com timer
+64;EST-008;Estufa;EST;EE2;ativo;1591;26-06-2025;24-06-2025;12;Calibrado;Quimis;;Q317M-93;AG070544;Estufa microprocessada de secagem com timer
+65;BAL-027;Balança;BAL;EE2;inativo;1455;27-01-2025;;12;Incerto;Marte Cientifica;;AD5002;467193;Balança de Precisão Marte modelo AD 5002 Resolução 0,01Setor Especiais (Mini MCV). ---------- Voltou da manutenção dia 28/05/2025, teve defeito na placa de fábrica, foi trocado dentro da garantia.
+66;PRE-003;Prensa;PRE;EE2;ativo;58;15-06-2020;21-07-2025;12;Calibrado;Biopdi;;;000 000 312;Prensa CBR/Marshall/ Ruptura 50kN - Automática
+67;PAQ-004;Paquímetro;PAQ;EE2;ativo;1183;23-09-2023;19-08-2025;12;Calibrado;Stainless Hardened;;Digital 200mm;004;PAQUIMETRO DIGITAL 08 200MM CURSOR ACO 7VT EDA Entregue ao almoxarifado (estoque).
+68;BAL-024;Balança;BAL;PRE;ativo;1390;30-10-2024;04-06-2025;12;Calibrado;Marte;;Balança AD5000;;Balança de precisão 5.010g resolução 0,1g Foi entregue ao almoxarifado. Essa balança vai ficar de estoque para o setor dos convencionais. Calibração OK (12/2025). Balança sendo usada no setor da preparação (09/01/25)
+69;BAL-016;Balança;BAL;PRE;ativo;655;01-01-2022;01-02-2024;12;Incerto;Marte;;AS 2000C;312755 - MCT.C;Voltou da manutenção dia 19/06/2024. Foi entregue ao setor de preparação, porém foi trocada com o mctc.c devido a pesagem até 2kg. Calibração até 14/06/2025.
+70;PEN-039;Peneira;PEN;PRE;ativo;201;01-02-2013;;12;Incerto;E-solo;Malha 4;Abert 4,75mm Malha 4;04Y;Peneira de análise granulométrica Abert 4,75mm Malha 4
+71;EST-003;Estufa;EST;SED;ativo;67;30-04-2013;14-05-2025;12;Calibrado;Quimis;;Q317M-32;13050023;Estufa microprocessada de secagem com timer
+72;PEN-007;Peneira;PEN;SED;ativo;169;01-02-2013;;12;Incerto;Granutest;Malha 16;Abert 1,18mm Malha 16;16Y;Peneira de análise granulométrica Abert 1,18mm Malha 16
+73;PEN-015;Peneira;PEN;SED;inativo;177;01-02-2013;;12;Especial;Granutest;Malha 30;Abert 0,60mm Malha 30;30Y;Peneira de análise granulométrica Abert 0,60mm Malha 30
+74;PEN-060;Peneira;PEN;SED;ativo;738;15-08-2022;10-02-2025;12;Calibrado;Projetest;Malha 40;0,425mm(Nº40);;
+75;PEN-049;Peneira;PEN;SED;ativo;727;15-08-2022;10-02-2025;12;Calibrado;Projetest;Malha 60;0,250mm (Nº60);;
+76;PEN-028;Peneira;PEN;SED;ativo;190;01-02-2013;;12;Incerto;Solotest;Malha 100;Abert 150mm Malha 100;100Y;Peneira de análise granulométrica Abert 150mm Malha 100
+77;PEN-149;Peneira;PEN;SED;inativo;1493;05-02-2025;;12;Especial;Solotest;Malha 200;Malha 200;490057;Peneira 8x2 Número 200 - abertura 0,75mm
+78;PEN-063;Peneira;PEN;SED;ativo;811;10-11-2022;;12;Incerto;Solotest;;Fundo 8x2´;;Fundo para peneira 8x2´´ de aço inox
+79;BAL-012;Balança;BAL;SED;ativo;82;01-01-2021;;12;Incerto;Bel;;S2202h (Classe II);BE2000590;Balança eletrônica digital 2200 g - Bel *Setor Sed/Pen*
+80;PEN-077;Peneira;PEN;SED;ativo;1015;21-07-2023;;12;Incerto;Projetest;Malha 16;1,18 mm (nº16);3Y850023;PENEIRA 8X2´´ NR.16 - 1,18MM INOX
+81;PEN-111;Peneira;PEN;SED;ativo;1320;23-10-2024;22-06-2025;12;Calibrado;Projetest;Malha 30;0,600mm(Nº30);445063;Em uso para o pen fino . Peneira0,600mm(Nº30)
+82;PEN-080;Peneira;PEN;SED;ativo;1018;21-07-2023;;12;Incerto;Projetest;Malha 40;0,425 mm (nº40);ONIBR923;PENEIRA 8X2´´ NR.40 - 0,425MM INOX
+83;PEN-092;Peneira;PEN;SED;inativo;1030;21-07-2023;;12;Especial;Projetest;Malha 60;0,250mm (nº60);2H0X8N23;Em uso para o pen fino. PENEIRA 8X2´´ NR.60- 0,250MM INOX
+84;PEN-082;Peneira;PEN;SED;ativo;1020;21-07-2023;;12;Incerto;Projetest;Malha 100;0,150 MM (Nº100);I3V68Z23;Em uso para o pen fino. PENEIRA 8X2´´ NR.100 - 0,150MM INOX
+85;PEN-141;Peneira;PEN;SED;ativo;1419;12-12-2024;22-06-2025;12;Calibrado;Solotest;Malha 200;PEN N200;487604;Peneira de malha 200 - 0,075mm INOX . Precisa de calibração Em uso para o pen fino (Dani) 24-01-2025
+86;BAL-006;Balança;BAL;SED;ativo;76;01-01-2021;04-06-2025;12;Calibrado;Bel;;S2202h (Classe II);BE1800971;Balança eletrônica digital 2200 g - Bel *Setor Sed/Pen*
+87;BAL-007;Balança;BAL;SED;ativo;77;01-01-2021;04-06-2025;12;Calibrado;Bel;;S2202h (Classe II);BE1800696;Balança eletrônica digital 2200 g - Bel *Setor Preparação* Manutenção-19/04/2024------ Voltou da manutenção dia 19/06/2024 e entregue para preparação.
+88;PEN-061;Peneira;PEN;SED;ativo;809;10-11-2022;;12;Incerto;Solotest;;Fundo 8x2´;;
+89;PEN-109;Peneira;PEN;SED;inativo;1047;12-12-2023;;12;Especial;;Malha 200;0,075mm (Nº200);463855;Peneira 0,075mm (Nº200)
+90;PEN-134;Peneira;PEN;SED;ativo;1354;15-10-2024;11-12-2024;12;Calibrado;ECO FORMAS;Malha 40;PEN N40;;
+91;PEN-138;Peneira;PEN;SED;ativo;1358;15-10-2024;09-12-2024;12;Calibrado;ECO FORMAS;Malha 100;PEN N100;;
+92;PEN-143;Peneira;PEN;SED;ativo;1421;12-12-2024;;12;Incerto;Solotest;Malha 200;PEN N200;487603;Peneira de malha 200 - 0,075mm INOX ESTOQUE
+93;PEN-114;Peneira;PEN;SED;ativo;1318;23-10-2024;12-05-2025;12;Calibrado;Projetest;Malha 40;0,425mm(Nº40);445055;Em uso para o pen fino. Peneira 0,425mm(Nº40
+94;PEN-054;Peneira;PEN;SED;ativo;732;15-08-2022;;12;Incerto;Projetest;Malha 10;2,00mm (Nº10);;
+95;PEN-096;Peneira;PEN;SED;ativo;1034;21-07-2023;;12;Incerto;Projetest;Malha 3/8;"9,5 mm (nº3/8\\\"")";W5641523;"Em uso para o pen grosso. PENEIRA 8X2´´ NR.3/8\\\"" - 9,5 MM INOX"
+96;PEN-085;Peneira;PEN;SED;ativo;1023;21-07-2023;;12;Especial;Projetest;Malha 1;"25,00 MM (Nº1\\\"")";6896R023;"PENEIRA NR.1\\\"" -25,00MM INOX ENSAIO ESPECIAIS"
+97;PEN-053;Peneira;PEN;SED;ativo;731;15-08-2022;18-11-2022;12;Incerto;Projetest;Malha 1 1/2;37,50mm (1.1/2´´);;
+98;PEN-016;Peneira;PEN;SED;inativo;178;01-02-2013;;12;Incerto;Marte;Malha 2;Abert 50mm Malha 2;100444;Peneira de análise granulométrica Abert 50mm Malha 2
+99;BAL-021;Balança;BAL;SED;ativo;1244;20-02-2024;04-06-2025;12;Calibrado;TOLEDO;;9094C/12;13612281;Balança de capacidade 15kg Setor: Sed/Peneiramento Grosso
+100;EST-002;Estufa;EST;SED;inativo;1453;30-04-2012;14-05-2025;12;Calibrado;SOLOTEST;;Q317M-32;12070957;Estufa microprocessada de secagem com timer
+101;TAN-003;Tanque;TAN;SED;ativo;1235;26-01-2024;;12;Especial;SOLAB;;Tanque para banho;;Tanque para banho de provetas com aquecimento para ensaio de sedimentação. Tanque de 18.
+102;TAN-004;Tanque;TAN;SED;ativo;1394;04-11-2024;;12;Especial;SOLAB;;Tanque para banho;;Tanque banho maria para ensaio de sedimentação com capacidade para 20 provetas.
+103;TAN-001;Tanque;TAN;SED;ativo;1233;26-01-2024;;12;Especial;SoloTest;;Tanque para banho;;Tanque para banho de provetas com aquecimento para ensaio de sedimentação.
+104;TAN-002;Tanque;TAN;SED;ativo;1234;26-01-2024;;12;Especial;Solab;;Tanque para banho;;Tanque para banho de provetas com aquecimento para ensaio de sedimentação.
+105;PEN-120;Peneira;PEN;SED;ativo;1315;23-10-2024;;12;Especial;ECO FORMAS;Malha 200;200;0;Peneira de malha 200 usada para lavagem na sedimentação.
+106;PEN-153;Peneira;PEN;SED;ativo;1518;09-04-2025;;12;Especial;Solotest;Malha 200;Malha 200 (3201200);495399;Peneira 8x2 Número 200 - abertura 0,75mm
+107;PEN-097;Peneira;PEN;SED;inativo;1035;21-07-2023;;12;Incerto;Projetest;Malha 2;"50 MM (Nº2\\\"")";5CS4Z123;"Em uso para o pen grosso. PENEIRA 8X2´´ NR.2\\\"" - 50 MM INOX"
+108;PEN-072;Peneira;PEN;SED;inativo;991;03-07-2023;;12;Incerto;SoloTest;Malha 200;0,075mm (Nº200);455289;PENEIRA 8X2´´ NR.200 - 0,075MM INOX
+109;PEN-144;Peneira;PEN;SED;inativo;1422;12-12-2024;;12;Incerto;Solotest;Malha 200;N200;487602;Peneira de malha 200 - 0,075mm INOX Em uso para a sedimentação 13/03/2025 Pendente Calibração
+110;PEN-108;Peneira;PEN;SED;inativo;1046;12-12-2023;;12;Incerto;Solotest;Malha 200;0,075mm (Nº200);463867;Peneira 0,075mm (Nº200)
+111;DEN-005;Densímetro;DEN;SED;ativo;1229;01-01-2020;;12;Especial;HG;;0,995/1050;3768/22;DENSÍMETRO PARA ENSAIO DE SEDIMENTAÇÃO
+112;PEN-150;Peneira;PEN;SED;ativo;1511;09-04-2025;11-08-2025;12;Calibrado;Solotest;Malha 200;Malha 200 (3201200);495396;Peneira 8x2 Número 200 - abertura 0,75mm
+113;PEN-155;Peneira;PEN;EST;ativo;1593;25-02-2025;11-08-2025;12;Calibrado;Solotest;Malha 200;Malha 200;500462;Peneira granulométrica - 200
+114;PEN-156;Peneira;PEN;EST;ativo;1594;25-02-2025;11-08-2025;12;Calibrado;Solotest;Malha 200;Malha 200;500429;Peneira de Análise Granulométrica
+115;PEN-157;Peneira;PEN;EST;ativo;1595;25-02-2025;11-08-2025;12;Calibrado;Solotest;Malha 200;Malha 200;500430;Peneira de Análise Granulométrica - 200
+116;BAL-026;Balança;BAL;EE1;ativo;1454;27-01-2025;;12;Incerto;Marte Científica;;AD5002;467181;Balança de Precisão Marte modelo AD 5002 - 5010 g Resolução 0,01gSetor entregue Especiais.
+117;BAL-028;Balança;BAL;EE2;ativo;1583;26-06-2025;;12;Incerto;BEL;;S2202 (Classe II);BE25000220;Balança eletrônica digital 2200 g - Bel *Setor Especiais/Umid*
+118;PEN-021;Peneira;PEN;EST;ativo;183;01-02-2013;24-04-2023;12;Incerto;Bertel;Malha 4;Abert 4,75mm Malha 4;04Y;Peneira de análise granulométrica Abert 4,75mm Malha 4
+119;PEN-042;Peneira;PEN;EST;ativo;605;07-04-2022;24-04-2023;12;Não_Calibrado;Bertel;Malha 8;8x2” 2,36mm;8Y;Peneira para análise granulométrica Abertura 2,36mm - 8\\\'\\\'x2\\\'\\\' - Malha 8y
+120;PEN-052;Peneira;PEN;EST;ativo;730;15-08-2022;09-12-2024;12;Calibrado;Projetest;Malha 30;0,600mm (Nº30);;
+121;PEN-075;Peneira;PEN;EST;ativo;1013;21-07-2023;;12;Especial;Projetest;Malha 30;0,600mm (Nº30);Q9050B23;PENEIRA 8X2´´ NR.30 - 0,0600MM INOX
+122;PEN-078;Peneira;PEN;EST;inativo;1016;21-07-2023;;12;Incerto;Projetest;Malha 30;8X2´´ NR.30 - 0,600MM INOX;N747OF23;PENEIRA 8X2´´ NR.30 - 0,600MM INOX
+123;PEN-079;Peneira;PEN;EST;ativo;1017;21-07-2023;;12;Especial;Projetest;Malha 30;0,600mm (Nº30);91X6AC23;PENEIRA 8X2´´ NR.30 - 0,600MM INOX
+124;PEN-084;Peneira;PEN;EST;ativo;1021;21-07-2023;;12;Incerto;Projetest;Malha 4;100 MM (Nº4);842J8C23;PENEIRA 8X2´´ NR.4- 100 MM INOX
+125;PEN-087;Peneira;PEN;EST;ativo;1025;21-07-2023;09-12-2024;12;Calibrado;Projetest;Malha 100;0,150 MM (Nº100);02SOD223;PENEIRA 8X2´´ NR.100 - 0,150MM INOX
+126;PEN-088;Peneira;PEN;EST;ativo;1026;21-07-2023;;12;Especial;Projetest;Malha 4;100 MM (Nº4);0G71Q323;PENEIRA 8X2´´ NR.4- 100 MM INOX
+127;PEN-089;Peneira;PEN;EST;ativo;1027;21-07-2023;;12;Incerto;Projetest;Malha 3/4;19 MM (Nº3/4);0LPT8C23;PENEIRA 8X2´´ NR.3/4 - 19MM INOX
+128;PEN-090;Peneira;PEN;EST;inativo;1028;21-07-2023;;12;Especial;Projetest;Malha 2;"50 MM (Nº2\\\"")";6896R023;"PENEIRA 8X2´´ NR.2\\\\\\\"" - 50MM INOX"
+129;PEN-093;Peneira;PEN;EST;ativo;1031;21-07-2023;;12;Especial;Projetest;Malha 16;1,18 mm (nº16);7RD5J423;PENEIRA 8X2´´ NR.16 - 1,18 MM INOX
+130;PEN-098;Peneira;PEN;EST;ativo;1036;21-07-2023;;12;Especial;Projetest;Malha 40;0,425 mm (nº40);Q6LFIC23;PENEIRA 8X2´´ NR.40 - 0,425 MM INOX
+131;PEN-099;Peneira;PEN;EST;ativo;1037;21-07-2023;;12;Incerto;Projetest;Malha 40;0,425 mm (nº40);57YFKL23;PENEIRA 8X2´´ NR.40 - 0,425MM INOX
+132;PEN-101;Peneira;PEN;EST;ativo;1039;21-07-2023;;12;Incerto;Projetest;Malha 1/2;"12,5 MM(Nº 1/2\\\"")";8D44PZ23;"PENEIRA´´ NR.1/2\\\"" - 12,5MM INOX"
+133;PEN-104;Peneira;PEN;EST;ativo;1042;21-07-2023;;12;Especial;Projetest;Malha 10;2,00mm (Nº10);59Z8F523;PENEIRA NR.10 - 2,00MM INOX
+134;PEN-112;Peneira;PEN;EST;inativo;1319;23-10-2024;11-12-2024;12;Calibrado;Projetest;Malha 30;0,600mm(Nº30);445052;Peneira0,600mm(Nº30)
+135;PEN-123;Peneira;PEN;EST;ativo;1341;15-10-2024;11-12-2024;12;Calibrado;Eco Formas;Malha 10;N10;;
+136;PEN-125;Peneira;PEN;EST;ativo;1345;15-10-2024;11-12-2024;12;Calibrado;Eco Formas;Malha 10;N10;;
+137;PEN-126;Peneira;PEN;EST;ativo;1346;15-10-2024;09-12-2024;12;Calibrado;Eco Formas;Malha 2;Nº2;;
+138;PEN-127;Peneira;PEN;EST;ativo;1347;15-10-2024;09-12-2024;12;Calibrado;Eco Formas;Malha 1/4;PEN 1/4;;
+139;PEN-128;Peneira;PEN;EST;inativo;1348;15-10-2024;09-12-2024;12;Calibrado;Eco Formas;Malha 1;"PEN 1 \""";;
+140;PEN-130;Peneira;PEN;EST;ativo;1350;15-10-2024;11-12-2024;12;Calibrado;Eco Formas;Malha 3/8;PEN 3/8;;
+141;PEN-132;Peneira;PEN;EST;inativo;1352;15-10-2024;09-12-2024;12;Calibrado;Eco Formas;Malha 16;PEN N16;;
+142;PEN-133;Peneira;PEN;EST;ativo;1353;15-10-2024;11-12-2024;12;Calibrado;Eco Formas;Malha 30;PEN N30;;
+143;PEN-135;Peneira;PEN;EST;ativo;1355;15-10-2024;11-12-2024;12;Calibrado;Eco Formas;Malha 40;PEN N40;;
+144;PEN-136;Peneira;PEN;EST;inativo;1356;15-10-2024;11-12-2024;12;Calibrado;Eco Formas;Malha 40;PEN N40;;
+145;PEN-147;Peneira;PEN;EST;ativo;1491;05-02-2025;;12;Incerto;Solotest;Malha 200;Malha 200;490055;Peneira 8x2 Número 200 - abertura 0,75mm
+146;PEN-124;Peneira;PEN;EST;ativo;1344;15-10-2024;11-12-2024;12;Calibrado;Eco Formas;Malha 10;PEN N10;;
+147;PEN-158;Peneira;PEN;EST;ativo;1597;22-02-2025;09-12-2024;12;Calibrado;Projetest;Malha 60;250um, Malha n.60;;
+148;PEN-152;Peneira;PEN;SED;inativo;1517;09-04-2025;;12;Especial;Solotest;Malha 200;Malha 200 (3201200);495397;Peneira 8x2 Número 200 - abertura 0,75mm
+149;PEN-159;Peneira;PEN;EST;ativo;1598;10-02-2025;;12;Especial;Projetest;Malha 2 1/2;Malha 63MM;;
+150;PAQ-005;Paquímetro;PAQ;EST;ativo;1395;04-11-2024;06-12-2024;12;Calibrado;Stainless Hardened;;Digital;005;Paquímetro digital 150mm
+151;PAQ-003;Paquímetro;PAQ;EST;inativo;701;08-08-2022;16-10-2023;12;Não_Calibrado;Stainless Hardened;;Digital 300mm/12;2011/65;PAQUIMETRO DIGITAL 08 200MM CURSOR ACO 7VT EDA
+152;PAQ-001;Paquímetro;PAQ;EST;ativo;469;;24-04-2023;36;Calibrado;Jomarca;;Paquímetro;057 20046;
+153;PRO-152;Proveta;PRO;SED;ativo;1581;10-02-2025;;12;Incerto;Eco Formas;;Vidro 1000ml;;Proveta graduada vidro de 1000ml com bico e base para ensaio de sedimentação. Sem calibração.
+154;PRO-151;Proveta;PRO;SED;ativo;1580;10-02-2025;;12;Incerto;Eco Formas;;Vidro 1000ml;; Proveta graduada vidro de 1000ml com bico e base para ensaio de sedimentação. Sem calibração.
+155;PRO-150;Proveta;PRO;EST;ativo;1579;10-02-2025;;12;Incerto;Eco Formas;;Vidro 1000ml;;Proveta graduada vidro de 1000ml com bico e base para ensaio de sedimentação. Sem calibração.
+156;PRO-149;Proveta;PRO;SED;ativo;1578;10-02-2025;;12;Incerto;Eco Formas;;Vidro 1000ml;;Proveta graduada vidro de 1000ml com bico e base para ensaio de sedimentação. Sem calibração.
+157;PRO-147;Proveta;PRO;SED;ativo;1576;10-02-2025;;12;Incerto;Eco Formas;;Vidro 1000ml;;Proveta graduada vidro de 1000ml com bico e base para ensaio de sedimentação. Sem calibração.
+158;PRO-144;Proveta;PRO;SED;ativo;1549;10-02-2025;;12;Incerto;Eco Formas;;Vidro 1000ml;;Proveta graduada vidro de 1000ml com bico e base para ensaio de sedimentação. Sem calibração.
+159;PRO-142;Proveta;PRO;SED;ativo;1535;10-02-2025;;12;Incerto;Eco Formas;;Vidro 1000ml;;Proveta de vidro graduada com bico 1000ml.
+160;PRO-141;Proveta;PRO;SED;ativo;1534;10-02-2025;;12;Incerto;Eco Formas;;Vidro 1000ml;;Proveta de vidro graduada com bico 1000ml.
+161;PRO-140;Proveta;PRO;SED;inativo;1533;10-02-2025;;12;Especial;Eco Formas;;Vidro 1000ml;;Proveta de vidro graduada com bico 1000ml.
+162;PRO-139;Proveta;PRO;SED;ativo;1532;10-02-2025;;12;Incerto;Eco Formas;;Vidro 1000ml;;Proveta de vidro graduada com bico 1000ml
+163;PRO-138;Proveta;PRO;SED;ativo;1531;10-02-2025;;12;Incerto;Eco Formas;;Vidro 1000ml;;Proveta de vidro graduada com bico 1000ml.
+164;PRO-137;Proveta;PRO;SED;ativo;1530;10-02-2025;;12;Especial;Eco Formas;;Vidro 1000ml;;Proveta de vidro graduada com bico 1000ml.
+165;PRO-134;Proveta;PRO;SED;ativo;1509;10-02-2025;;12;Incerto;Eco Formas;;Vidro 1000ml;;Proveta de vidro graduada com bico 1000ml.
+166;PRO-133;Proveta;PRO;SED;inativo;1508;10-02-2025;;12;Especial;Eco Fomras;;Vidro 1000ml;;Proveta de vidro graduada com bico 1000ml.
+167;PRO-131;Proveta;PRO;SED;ativo;1379;15-10-2024;;12;Especial;Eco Formas;;Vidro 1000ml;;Proveta de vidro graduada com bico 1000ml.
+168;PRO-132;Proveta;PRO;SED;ativo;1380;15-10-2024;;12;Especial;Eco Formas;;Vidro 1000ml;; Proveta de vidro graduada com bico 1000ml.
+169;PRO-127;Proveta;PRO;SED;ativo;1375;15-10-2024;;12;Incerto;Eco Formas;;Vidro 1000ml;;Proveta de vidro graduada com bico 1000ml. 
+170;PRO-128;Proveta;PRO;SED;inativo;1376;15-10-2024;;12;Incerto;Eco Formas;;Vidro 1000ml;;Proveta de vidro graduada com bico 1000ml.
+171;PRO-130;Proveta;PRO;SED;ativo;1378;15-10-2024;;12;Incerto;Eco Formas;;Vidro 1000ml;; Proveta de vidro graduada com bico 1000ml.
+172;PRO-125;Proveta;PRO;SED;ativo;1373;15-10-2024;;12;Especial;Eco Formas;;Vidro 1000ml;;Proveta de vidro graduada com bico 1000ml.
+173;PRO-124;Proveta;PRO;SED;ativo;1372;15-10-2024;;12;Incerto;Eco Formas;;Vidro 1000ml;;Proveta de vidro graduada com bico 1000ml.
+174;PRO-115;Proveta;PRO;SED;ativo;1362;15-10-2024;;12;Incerto;Eco Formas;;Vidro 1000ml;;Proveta de vidro graduada com bico 1000ml.
+175;PRO-091;Proveta;PRO;SED;ativo;1098;21-08-2023;;12;Incerto;Projetest;;Vidro 1000ml;;Proveta sem bico graduada 1.000ml com base plástica
+176;PRO-110;Proveta;PRO;SED;ativo;1118;21-08-2023;;12;Incerto;Projetest;;Vidro 1000ml;;Proveta sem bico graduada 1000ml com base plástica
+177;PRO-105;Proveta;PRO;SED;ativo;1111;21-08-2023;;12;Incerto;Projetest;;Vidro 1000ml;;Proveta sem bico graduada 1.000ml com base plástica
+178;PRO-103;Proveta;PRO;SED;ativo;1109;21-08-2023;;12;Incerto;Projetest;;Vidro 1000ml;;Proveta sem bico graduada 1.000ml com base plástica
+179;PRO-101;Proveta;PRO;SED;ativo;1108;21-08-2023;;12;Incerto;Projetest;;Vidro 1000ml;;Proveta sem bico graduada 1.000ml com base plástica
+180;PRO-099;Proveta;PRO;SED;ativo;1106;21-08-2023;;12;Incerto;Projetest;;Vidro 1000ml;;Proveta sem bico graduada 1.000ml com base plástica
+181;PRO-094;Proveta;PRO;SED;inativo;1101;21-08-2023;;12;Especial;Projetest;;Vidro 1000ml;;Proveta sem bico graduada 1.000ml com base plástica
+182;PRO-093;Proveta;PRO;EST;inativo;1100;21-08-2023;;12;Incerto;Projetest;;Vidro 1000ml;;Proveta sem bico graduada 1.000ml com base plástica
+183;PRO-089;Proveta;PRO;SED;ativo;939;10-04-2023;23-02-2024;12;Incerto;Lacerda;;Vidro 1000ml;;Proveta sem bico graduada 1.000ml
+184;PRO-087;Proveta;PRO;SED;ativo;937;10-04-2023;;12;Incerto;Lacerda;;Vidro 1000ml;;Proveta sem bico graduada 1.000ml
+185;PRO-086;Proveta;PRO;SED;ativo;936;10-04-2023;;12;Incerto;Lacerda;;Vidro 1000ml;;Proveta sem bico graduada 1.000ml
+186;PRO-073;Proveta;PRO;SED;ativo;800;10-11-2022;;12;Incerto;Solotest;;Vidro 1000ml;;Proveta de vidro sem graduação e bico 1000ml
+187;PRO-075;Proveta;PRO;SED;ativo;803;10-11-2022;;12;Incerto;Solotest;;Vidro 1000ml;;Proveta de vidro sem graduação e bico 1000ml
+188;PRO-074;Proveta;PRO;SED;ativo;801;10-11-2022;;12;Especial;Solotest;;Vidro 1000ml;;Proveta de vidro sem graduação e bico 1000ml
+189;PRO-071;Proveta;PRO;SED;ativo;798;10-11-2022;;12;Incerto;Solotest;;Vidro 1000ml;;Proveta de vidro sem graduação e sem bico 1000ml
+190;PRO-065;Proveta;PRO;SED;ativo;719;08-08-2022;;12;Incerto;Lacerda;;Vidro 1000ml;;Proveta de vidro 1000ml -> Sem graduação e sem bico vertedor
+191;PRO-060;Proveta;PRO;SED;ativo;714;08-08-2022;;12;Incerto;Lacerda;;Vidro 1000ml;;Proveta de vidro 1000ml -> Sem graduação e sem bico vertedor
+192;PRO-051;Proveta;PRO;SED;ativo;705;08-08-2022;;12;Incerto;Lacerda;;Vidro 1000ml;;Proveta de vidro 1000ml -> Sem graduação e sem bico vertedor
+193;PRO-049;Proveta;PRO;SED;inativo;703;08-08-2022;;12;Especial;Lacerda;;Vidro 1000ml;;Proveta de vidro 1000ml -> Sem graduação e sem bico vertedor
+194;PRO-042;Proveta;PRO;SED;inativo;338;01-01-2019;;12;Incerto;LaborGlas;;Vidro 1000ml;;Proveta vidro graduada 1000ml
+195;PRO-037;Proveta;PRO;SED;ativo;333;01-01-2019;23-02-2024;12;Não_Calibrado;Deltex;;Vidro 1000ml;;Proveta vidro graduada 1000ml
+196;PRO-035;Proveta;PRO;SED;ativo;331;01-01-2019;;12;Incerto;Deltex;;Vidro 1000ml;;Proveta vidro graduada 1000ml
+197;PRO-030;Proveta;PRO;SED;ativo;326;01-01-2019;;12;Incerto;Deltex;;Vidro 1000ml;; Proveta vidro graduada 1000ml
+198;PRO-027;Proveta;PRO;SED;ativo;323;01-01-2019;;12;Especial;Deltex;;Vidro 1000ml;;Proveta vidro graduada 1000ml
+199;PRO-095;Proveta;PRO;SED;inativo;1103;21-08-2023;;12;Incerto;Projetest;;Vidro 1000ml;095;Proveta sem bico graduada 1.000ml com base plástica
+200;PRO-108;Proveta;PRO;SED;inativo;1116;21-08-2023;;12;Incerto;Projetest;;Vidro graduado 1000ml;108;Proveta sem bico graduada 1000ml com base plástica
+201;PRO-063;Proveta;PRO;SED;inativo;717;08-08-2022;;12;Incerto;Lacerda;;Vidro 1000ml;;Proveta de vidro 1000ml -> Sem graduação e sem bico vertedor
+202;PRO-153;Proveta;PRO;SED;ativo;1608;10-07-2025;;12;Incerto;Eco Formas;;Proveta 1000ml;;Proveta 1000 ml Vidro Graduada 1000 Ml com base Polie
+203;PRO-154;Proveta;PRO;SED;ativo;1609;10-07-2025;;12;Incerto;Eco Formas;;Proveta 1000ml;;Proveta 1000 ml Vidro Graduada 1000 Ml com base Polie
+204;PRO-155;Proveta;PRO;SED;ativo;1610;10-07-2025;;12;Incerto;Eco Formas;;Proveta 1000ml;;Proveta 1000 ml Vidro Graduada 1000 Ml com base Polie
+205;PRO-156;Proveta;PRO;SED;ativo;1611;10-07-2025;;12;Incerto;Eco Formas;;Proveta 1000ml;;Proveta 1000 ml Vidro Graduada 1000 Ml com base Polie
+206;PRO-157;Proveta;PRO;SED;ativo;1612;10-07-2025;;12;Incerto;Eco Formas;;Proveta 1000ml;;Proveta 1000 ml Vidro Graduada 1000 Ml com base Polie
+207;PRO-158;Proveta;PRO;SED;inativo;1613;10-07-2025;;12;Incerto;Eco Formas;;Proveta 1000ml;;Proveta 1000 ml Vidro Graduada 1000 Ml com base Polie
+208;PRO-159;Proveta;PRO;SED;inativo;1614;10-07-2025;;12;Especial;Eco Formas;;Proveta 1000ml;;Proveta 1000 ml Vidro Graduada 1000 Ml com base Polie
+209;PRO-160;Proveta;PRO;SED;ativo;1615;10-07-2025;;12;Incerto;Eco Formas;;Proveta 1000ml;;Proveta 1000 ml Vidro Graduada 1000 Ml com base Polie
+210;PRO-161;Proveta;PRO;SED;ativo;1616;10-07-2025;;12;Incerto;Eco Formas;;Proveta 1000ml;;Proveta 1000 ml Vidro Graduada 1000 Ml com base Polie
+211;PRO-162;Proveta;PRO;SED;ativo;1617;10-07-2025;;12;Incerto;Eco Formas;;Proveta 1000ml;;Proveta 1000 ml Vidro Graduada 1000 Ml com base Polie
+212;PRO-163;Proveta;PRO;SED;ativo;1618;10-07-2025;;12;Especial;Eco Formas;;Proveta 1000ml;;Proveta 1000 ml Vidro Graduada 1000 Ml com base Polie
+213;PRO-164;Proveta;PRO;SED;ativo;1619;10-07-2025;;12;Especial;Eco Formas;;Proveta 1000ml;;Proveta 1000 ml Vidro Graduada 1000 Ml com base Polie
+214;PRO-165;Proveta;PRO;SED;ativo;1620;10-07-2025;;12;Incerto;Eco Formas;;Proveta 1000ml;;Proveta 1000 ml Vidro Graduada 1000 Ml com base Polie
+215;PRO-166;Proveta;PRO;SED;inativo;1621;10-07-2025;;12;Especial;Eco Formas;;Proveta 1000ml;;Proveta 1000 ml Vidro Graduada 1000 Ml com base Polie
+216;PRO-167;Proveta;PRO;SED;ativo;1622;10-07-2025;;12;Incerto;Eco Formas;;Proveta 1000ml;;Proveta 1000 ml Vidro Graduada 1000 Ml com base Polie
+217;PRO-145;Proveta;PRO;SED;ativo;1559;10-02-2025;;12;Incerto;ECO FORMAS;;Vidro 1000ml;;Proveta graduada vidro de 1000ml com bico e base para ensaio de sedimentação.
+218;PRO-148;Proveta;PRO;SED;ativo;1577;10-02-2025;;12;Especial;ECO FORMAS;;Vidro 1000ml;;Proveta graduada vidro de 1000ml com bico e base para ensaio de sedimentação. Sem calibração.
+219;PRO-002;Proveta;PRO;SED;ativo;298;01-01-2019;;12;Incerto;Solotest;;Plástica 1000ml;;Proveta plástica graduada 1000ml
+220;DEN-007;Densímetro;DEN;SED;inativo;1273;01-01-2023;07-05-2025;12;Calibrado;Pyromed;;PY5846.4.4;00080-21;Densímetro para ensaio de sedimentação.
+221;DEN-006;Densímetro;DEN;SED;ativo;1230;01-01-2023;07-05-2025;12;Calibrado;Pyromed;;PY5846.4.4;03986-20;DENSÍMETRO PARA ENSAIO DE SEDIMENTAÇÃO
+222;THD-002;Termo Higrômetro;THD;COM;ativo;477;;22-04-2021;12;Não_Calibrado;YYINS;;YS17627W;17627;Relógio Digital Marca Hora Temperatura Umidade Do Ar + Alarm
+223;PEN-137;Peneira;PEN;SED;ativo;1357;15-10-2024;09-12-2024;12;Calibrado;ECO FORMAS;Malha 60;PEN N60;;
+224;PEN-154;Peneira;PEN;SED;ativo;1592;05-02-2025;;12;Especial;SOLOTEST;Malha 200;Malha 200;500461;Malha 200
+225;CASA-005;Casagrande;CASA;EE2;ativo;833;23-12-2022;;12;Incerto;Brasil Solos;;Manual;728715-001;Aparelho Casa Grande Manual com contador + cinzeis
+226;CASA-006;Casagrande;CASA;EE2;ativo;965;23-05-2023;;12;Incerto;Brasil Solos;;Manual;006;Aparelho Casagrande Manual com cinzeis
+227;DIS-003;Dispersor;DIS;SED;ativo;536;13-11-2023;;12;Especial;BRASIL SOLOS;;BMK220CC5;009390;Dispersor de Amostras Solos com Copo - Inox e Chicana 220V
+228;DIS-006;Dispersor;DIS;SED;ativo;1412;04-11-2024;;12;Incerto;ENGETOTUS;;Dispersor de solos;157;1412
+229;PEN-129;Peneira;PEN;EE1;ativo;1349;15-10-2024;;12;Incerto;Eco Formas;Malha 3/4;PEN 3/4;;
+230;PEN-057;Peneira;PEN;EE1;ativo;735;15-08-2022;18-11-2022;12;Especial;Projetest;Malha 3/4;19,00mm (3/4´´);;
+231;DEN-004;Densímetro;DEN;SED;ativo;1228;01-01-2020;12-02-2025;12;Calibrado;INCOTERM;;5846.4;4239/18;DENSÍMETRO PARA ENSAIO DE SEDIMENTAÇÃO.
+232;DEN-002;Densímetro;DEN;EST;inativo;86;01-01-2021;;12;Incerto;Incoterm;;5846.4;49231/11;DENSÍMETRO PARA ENSAIO DE SEDIMENTAÇÃO.
+234;BAL-008;Balança;BAL;NEN;inativo;78;01-01-2021;04-06-2025;12;Calibrado;Marte;;AD5002;388482;Balança de Precisão Marte modelo AD 5002 - 5010 g- 5010 g e div. 0,01 g - RS 232 / TopLab *Setor especiais, umidade natural*
+235;BAL-025;Balança;BAL;NEN;inativo;1391;30-10-2024;04-06-2025;12;Calibrado;Marte;;AD3300;;Balança de precisão 3.300g resolução 0,01g

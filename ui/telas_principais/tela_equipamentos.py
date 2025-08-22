@@ -7,7 +7,7 @@ import webbrowser
 from pathlib import Path
 
 from controllers.equipamento_controller import listar_equipamentos_resumido, excluir_equipamento, quantidade_calibr
-from data.sqlite_para_excel import exportar_para_excel
+from data.exportar import exportar_para_excel, exportar_eq_csv, exportar_item_csv
 from ui.telas_criacao_edicao.tela_criacao_equip import TelaCriacaoEquipamento
 from ui.telas_criacao_edicao.tela_edicao_equip import TelaEdicaoEquipamento
 from ui.telas_principais.tela_itens import TelaCicloVida
@@ -113,10 +113,10 @@ class TelaPrincipal(tk.Tk):
                 activeforeground="#5C4033", command=self.abrir_sond
         ).place(relx=1.0, x=-15, y=59, anchor="ne")
 
-        tk.Button(self, text="Exportar para Excel", font=("Lucida Console", 10, "bold"),
+        tk.Button(self, text="Exportar", font=("Lucida Console", 10, "bold"),
           bg="#3B3B3B", fg="#EEE6D9", relief="raised", bd=3,
-          padx=12, pady=2, activebackground="#DDD0C8",
-          activeforeground="#5C4033", command=self.exportar_e_aviso  # chama a função importada
+          padx=62, pady=2, activebackground="#DDD0C8",
+          activeforeground="#5C4033", command=self.exportar  # agora chama a nova função
         ).place(relx=1.0, x=-15, y=139, anchor="ne")
 
         tk.Button(self, text="Plano de Calibr.", font=("Lucida Console", 10, "bold"),
@@ -437,6 +437,89 @@ class TelaPrincipal(tk.Tk):
             messagebox.showinfo("Sucesso", "Exportação para Excel realizada com sucesso!")
         except Exception as e:
             messagebox.showerror("Erro", f"Ocorreu um erro durante a exportação:\n{e}")
+    def exportar(self):
+        # cria uma janela pop-up para escolher a exportação
+        popup = tk.Toplevel(self)
+        popup.title("Exportar Dados")
+        popup.configure(bg="#F5F1E9", bd=6, relief="ridge")
+        popup.resizable(False, False)
+
+        # posiciona a janela ao lado da principal
+        self.update_idletasks()
+        x = self.winfo_x() + 150
+        y = self.winfo_y() + 120
+        popup.geometry(f"+{x}+{y}")
+
+        tk.Label(
+            popup,
+            text="Escolha o formato de exportação:",
+            font=("Courier New", 13, "bold"),
+            bg="#F5F1E9",
+            fg="#2B2B2B",
+            padx=20,
+            pady=20
+        ).pack(pady=(12, 18))
+
+        btn_width = 30
+
+        button_style = {
+            "font": ("Lucida Console", 10, "bold"),
+            "bg": "#C85A17",
+            "fg": "#EEE6D9",
+            "relief": "raised",
+            "bd": 4,
+            "width": btn_width,
+            "padx": 22,
+            "pady": 6,
+            "highlightbackground": "#B5B1A9",  # moldura clara
+            "highlightthickness": 1,
+            "activebackground": "#5A5A5A",
+            "activeforeground": "#FFFFFF"
+        }
+
+        # Botão Excel
+        tk.Button(
+            popup, text="Exportar para Excel",
+            command=lambda: self._executar_exportacao(popup, exportar_para_excel, "Excel"),
+            **button_style
+        ).pack(pady=6)
+
+        # Botão CSV Equipamentos
+        tk.Button(
+            popup, text="Exportar Equipamentos para CSV",
+            command=lambda: self._executar_exportacao(popup, exportar_eq_csv, "CSV de Equipamentos"),
+            **button_style
+        ).pack(pady=6)
+
+        # Botão CSV Itens
+        tk.Button(
+            popup, text="Exportar Itens para CSV",
+            command=lambda: self._executar_exportacao(popup, exportar_item_csv, "CSV de Itens"),
+            **button_style
+        ).pack(pady=6)
+
+        # Fechar
+        tk.Button(
+            popup, text="Cancelar",
+            command=popup.destroy,
+            font=("Courier New", 11, "bold"),
+            bg="#8B2E2E", fg="white",
+            relief="ridge", bd=4,
+            padx=22, pady=6,
+            activebackground="#A84545"
+        ).pack(pady=(18, 10))
+
+        popup.grab_set()  # modal
+        self.wait_window(popup)
+
+    def _executar_exportacao(self, popup, func, nome_tipo):
+        try:
+            func()
+            messagebox.showinfo("Sucesso", f"Exportação para {nome_tipo} realizada com sucesso!")
+        except Exception as e:
+            messagebox.showerror("Erro", f"Ocorreu um erro durante a exportação:\n{e}")
+        finally:
+            popup.destroy()
 
 
 
