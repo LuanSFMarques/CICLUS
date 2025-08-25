@@ -14,6 +14,7 @@ from ui.telas_criacao_edicao.tela_edicao_equip import TelaEdicaoEquipamento
 from ui.telas_principais.tela_itens import TelaCicloVida
 from ui.telas_misc.tela_plano_calibr import TelaPlanoDeCalibracao
 from ui.telas_misc.tela_resumo_calibracao import TelaResumoCalibracao
+from ui.telas_misc.tela_graficos import TelaGraficosCalibracao
 
 from data.atualizar_calibracao import atualizar_status_calibr_todos
 from helpers import DB_FILE
@@ -371,7 +372,7 @@ class TelaPrincipal(tk.Tk):
         webbrowser.open_new_tab("https://www.sond.com.br/ativos-laboratorio-lista/status/1/")
 
     def abrir_graficos(self):
-        messagebox.showinfo("Gráficos", "Função de gráficos será implementada em breve.")
+        TelaGraficosCalibracao()
 
     def abrir_plano_calibr(self):
         TelaPlanoDeCalibracao()

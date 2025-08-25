@@ -23,15 +23,15 @@ class TelaResumoCalibracao(tk.Toplevel):
 
         # Frame principal
         frame_principal = tk.Frame(self, bg="#FDFCF8", bd=2, relief="groove", padx=20, pady=20)
-        frame_principal.pack(padx=20, pady=20)
+        frame_principal.pack(padx=40, pady=20)
 
         # Título
-        tk.Label(frame_principal, text="Resumo de Calibração", font=("Courier New", 16, "bold"),
+        tk.Label(frame_principal, text="Resumo de Calibração (Ativos)", font=("Courier New", 16, "bold"),
                  bg="#FDFCF8", fg="#333333").pack(pady=(0, 15))
 
         # Frame de informações
         info_frame = tk.Frame(frame_principal, bg="#FDFCF8")
-        info_frame.pack(pady=(0, 15))
+        info_frame.pack(pady=(0, 15), padx=15)
 
         # Dados
         dados = [

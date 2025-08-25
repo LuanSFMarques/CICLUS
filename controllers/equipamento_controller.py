@@ -1,5 +1,6 @@
 from helpers import log_msg
 from helpers import get_connection, DB_FILE
+import pandas as pd
 
 # Criar novo equipamento
 def criar_equipamento(equipamento_data: dict):
@@ -274,6 +275,35 @@ def quantidade_calibr():
     finally:
         conn.close()
 
+def carregar_tabelas():
+    """
+    Carrega tabelas fixas do banco e retorna um dicionário de DataFrames.
+    """
+    conn = get_connection(DB_FILE)
+    conn.execute("PRAGMA foreign_keys = ON")
 
+    tabelas = {
+        "equipamentos": "equipamentos",
+        "ciclo_vida": "ciclo_vida",
+        "tipos_eq": "tipos_equipamento",
+        "tipos_setor": "tipos_setor",
+        "tipos_status": "tipos_status",
+        "tipos_status_calibr": "tipos_status_calibr",
+        "tipos_item": "tipos_item"
+    }
+
+    try:
+        resultado = {}
+        for chave, tabela in tabelas.items():
+            resultado[chave] = pd.read_sql(f"SELECT * FROM {tabela}", conn)
+
+        return resultado
+
+    except Exception as e:
+        print(f"Erro ao carregar tabelas: {e}")
+        return {}
+
+    finally:
+        conn.close()
 
 

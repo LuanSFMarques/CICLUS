@@ -1,1 +1,2 @@
 CICLUS_VERSION = 1.3
+PLOT_RES = (14, 8)
