@@ -11,6 +11,7 @@
 - Pequena indicação em texto da versão do software na aba principal
 
 ## Atualizações (v1.3)
+- FIX no scroll para limitar visualização
 - Criação da aba de Gráficos
 
 ## Atualizações (v2.0)

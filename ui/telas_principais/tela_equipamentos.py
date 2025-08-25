@@ -109,39 +109,45 @@ class TelaPrincipal(tk.Tk):
           bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
           padx=44, pady=2, activebackground="#DDD0C8",
           activeforeground="#5C4033", command=self.abrir_documentacao
-        ).place(relx=1.0, x=-15, y=19, anchor="ne")
+        ).place(relx=1.0, x=-12, y=19, anchor="ne")
 
         tk.Button(self, text="Sond", font=("Lucida Console", 10, "bold"),
                 bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
                 padx=80, pady=2, activebackground="#DDD0C8",
                 activeforeground="#5C4033", command=self.abrir_sond
-        ).place(relx=1.0, x=-15, y=59, anchor="ne")
+        ).place(relx=1.0, x=-12, y=49, anchor="ne")
 
         tk.Button(self, text="Exportar", font=("Lucida Console", 10, "bold"),
           bg="#3B3B3B", fg="#EEE6D9", relief="raised", bd=3,
           padx=62, pady=2, activebackground="#DDD0C8",
           activeforeground="#5C4033", command=self.exportar  # agora chama a nova função
-        ).place(relx=1.0, x=-15, y=139, anchor="ne")
+        ).place(relx=1.0, x=-12, y=139, anchor="ne")
 
         tk.Button(self, text="Plano de Calibr.", font=("Lucida Console", 10, "bold"),
                 bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
                 padx=26, pady=2, activebackground="#DDD0C8",
                 activeforeground="#5C4033", command=self.abrir_plano_calibr
-        ).place(relx=1.0, x=-15, y=99, anchor="ne")
+        ).place(relx=1.0, x=-12, y=79, anchor="ne")
 
         # Botão para exibir pop-up de resumo de calibração
         tk.Button(self, text="Atualizar", font=("Lucida Console", 10, "bold"),
           bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
-          padx=86, pady=2, activebackground="#DDD0C8",
+          padx=80, pady=2, activebackground="#DDD0C8",
           activeforeground="#5C4033", command=self.atualizar_status_e_recarregar
-        ).place(relx=1.0, x=-915, y=628, anchor="ne")
+        ).place(relx=1.0, x=-934, y=628, anchor="ne")
+
+        tk.Button(self, text="Gráficos", font=("Lucida Console", 10, "bold"),
+          bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
+          padx=62, pady=2, activebackground="#DDD0C8",
+          activeforeground="#5C4033", command=self.abrir_graficos
+        ).place(relx=1.0, x=-12, y=109, anchor="ne")
 
         tk.Button(self, text="Resumo de Calibração", font=("Lucida Console", 10, "bold"),
                 bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
-                padx=36, pady=2,  # igual ao botão Atualizar
+                padx=31, pady=2,  # igual ao botão Atualizar
                 activebackground="#87B6E2", activeforeground="white",
                 command=self.exibir_pop_up_calibracao
-        ).place(relx=1.0, x=-916, y=658, anchor="ne")  # mesma coordenada y ajustada
+        ).place(relx=1.0, x=-934, y=658, anchor="ne")  # mesma coordenada y ajustada
 
         self.var_busca = tk.StringVar()
         entry_busca = tk.Entry(self, textvariable=self.var_busca, font=("Lucida Console", 12),

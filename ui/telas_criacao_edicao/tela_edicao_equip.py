@@ -116,7 +116,7 @@ class TelaEdicaoEquipamento(tk.Toplevel):
         self.campos["fabricante"].insert(0, e["fabricante"])
         self.campos["modelo"].insert(0, e["modelo"])
         self.campos["modelo_tecnico"].insert(0, e["modelo_tecnico"])
-        self.campos["numero_serie"].insert(0, e["numero_serie"])
+        self.campos["numero_serie"].insert(0, str(e.get("numero_serie", "")))
         self.campos["extra_info"].insert("1.0", e["extra_info"])
 
     def formatar_data(self, data_str):
