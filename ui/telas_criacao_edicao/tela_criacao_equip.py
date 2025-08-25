@@ -187,6 +187,7 @@ class TelaCriacaoEquipamento(tk.Toplevel):
         ultima_calibracao_br = self.entry_ultima_cal.get().strip()
         periodicidade_raw = self.entry_periodicidade.get().strip()
 
+
         if not nome:
             messagebox.showerror("Erro", "Nome do equipamento é obrigatório!")
             return

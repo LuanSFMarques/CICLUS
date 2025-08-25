@@ -240,7 +240,7 @@ def quantidade_calibr():
     Retorna uma tupla:
     (total_equipamentos, calibrados, nao_calibrados, incertos, especiais)
 
-    - total_equipamentos: todos os equipamentos com status 0,1,2,3
+    - total_equipamentos: todos os equipamentos ativos (status = 0) com status_calibracao_id em 0,1,2,3
     - calibrados: status_calibracao_id = 0
     - nao_calibrados: status_calibracao_id = 1
     - incertos: status_calibracao_id = 2
@@ -258,7 +258,8 @@ def quantidade_calibr():
                 SUM(CASE WHEN status_calibracao_id = 2 THEN 1 ELSE 0 END) as incerto,
                 SUM(CASE WHEN status_calibracao_id = 3 THEN 1 ELSE 0 END) as especial
             FROM equipamentos
-            WHERE status_calibracao_id IN (0, 1, 2, 3)
+            WHERE status_id = 0
+            AND status_calibracao_id IN (0, 1, 2, 3)
         """)
         row = cursor.fetchone()
         total = row[0] or 0
@@ -272,6 +273,7 @@ def quantidade_calibr():
         return 0, 0, 0, 0, 0
     finally:
         conn.close()
+
 
 
 

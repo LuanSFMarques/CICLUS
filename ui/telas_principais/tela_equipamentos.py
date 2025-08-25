@@ -8,10 +8,13 @@ from pathlib import Path
 
 from controllers.equipamento_controller import listar_equipamentos_resumido, excluir_equipamento, quantidade_calibr
 from data.exportar import exportar_para_excel, exportar_eq_csv, exportar_item_csv
+
 from ui.telas_criacao_edicao.tela_criacao_equip import TelaCriacaoEquipamento
 from ui.telas_criacao_edicao.tela_edicao_equip import TelaEdicaoEquipamento
 from ui.telas_principais.tela_itens import TelaCicloVida
 from ui.telas_misc.tela_plano_calibr import TelaPlanoDeCalibracao
+from ui.telas_misc.tela_resumo_calibracao import TelaResumoCalibracao
+
 from data.atualizar_calibracao import atualizar_status_calibr_todos
 from helpers import DB_FILE
 from config import CICLUS_VERSION
@@ -374,73 +377,8 @@ class TelaPrincipal(tk.Tk):
         TelaPlanoDeCalibracao()
 
     def exibir_pop_up_calibracao(self):
-        total, calibrado, nao_calibrado, incerto, especial = quantidade_calibr()  # Agora retorna 5 valores
-
-        # Cria a janela pop-up modal
-        pop_up = tk.Toplevel(self)
-        pop_up.title("Resumo de Calibração")
-        pop_up.configure(bg="#F5F1E9")
-        pop_up.resizable(False, False)
-
-        # Posiciona a janela pop-up próxima da janela principal
-        self.update_idletasks()
-        x = self.winfo_x() + 50
-        y = self.winfo_y() + 50
-        pop_up.geometry(f"+{x}+{y}")
-
-        # Frame principal interno para melhor organização
-        frame_principal = tk.Frame(pop_up, bg="#FDFCF8", bd=2, relief="groove", padx=20, pady=20)
-        frame_principal.pack(padx=20, pady=20)
-
-        # Título
-        tk.Label(frame_principal, text="Resumo de Calibração", font=("Courier New", 16, "bold"),
-                bg="#FDFCF8", fg="#333333").pack(pady=(0, 15))
-
-        # Informações detalhadas
-        info_frame = tk.Frame(frame_principal, bg="#FDFCF8")
-        info_frame.pack(pady=(0, 15))
-
-        # Total
-        tk.Label(info_frame, text="Total de Equipamentos:", font=("Courier New", 12),
-                bg="#FDFCF8", fg="#333333").grid(row=0, column=0, sticky="w", padx=(0, 10))
-        tk.Label(info_frame, text=str(total), font=("Courier New", 12, "bold"),
-                bg="#FFFFFF", fg="#333333", width=8, relief="sunken", bd=2).grid(row=0, column=1, sticky="w")
-
-        # Calibrados
-        tk.Label(info_frame, text="Calibrados:", font=("Courier New", 12),
-                bg="#FDFCF8", fg="#333333").grid(row=1, column=0, sticky="w", padx=(0, 10), pady=(5,0))
-        tk.Label(info_frame, text=str(calibrado), font=("Courier New", 12, "bold"),
-                bg="#A7E9AF", fg="#333333", width=8, relief="sunken", bd=2).grid(row=1, column=1, sticky="w", pady=(5,0))
-
-        # Não Calibrados
-        tk.Label(info_frame, text="Não Calibrados:", font=("Courier New", 12),
-                bg="#FDFCF8", fg="#333333").grid(row=2, column=0, sticky="w", padx=(0, 10), pady=(5,0))
-        tk.Label(info_frame, text=str(nao_calibrado), font=("Courier New", 12, "bold"),
-                bg="#FFB3B3", fg="#333333", width=8, relief="sunken", bd=2).grid(row=2, column=1, sticky="w", pady=(5,0))
-
-        # Incertos
-        tk.Label(info_frame, text="Incertos:", font=("Courier New", 12),
-                bg="#FDFCF8", fg="#333333").grid(row=3, column=0, sticky="w", padx=(0, 10), pady=(5,0))
-        tk.Label(info_frame, text=str(incerto), font=("Courier New", 12, "bold"),
-                bg="#DBDBDB", fg="#333333", width=8, relief="sunken", bd=2).grid(row=3, column=1, sticky="w", pady=(5,0))
-
-        # Especiais
-        tk.Label(info_frame, text="Especiais:", font=("Courier New", 12),
-                bg="#FDFCF8", fg="#333333").grid(row=4, column=0, sticky="w", padx=(0, 10), pady=(5,0))
-        tk.Label(info_frame, text=str(especial), font=("Courier New", 12, "bold"),
-                bg="#A9CCE3", fg="#333333", width=8, relief="sunken", bd=2).grid(row=4, column=1, sticky="w", pady=(5,0))
-
-        # Separador visual
-        ttk.Separator(frame_principal, orient="horizontal").pack(fill="x", pady=10)
-
-        # Botão de fechar
-        tk.Button(frame_principal, text="Fechar", command=pop_up.destroy,
-                font=("Courier New", 12), bg="#C85A17", fg="white",
-                activebackground="#E38B2B", activeforeground="white", relief="raised", bd=3, padx=20, pady=5).pack(pady=(10, 0))
-
-        # Mantém modal (bloqueia interação com a janela pai até fechar)
-        pop_up.grab_set()
-        self.wait_window(pop_up)
+        TelaResumoCalibracao()
+        
     def exportar_e_aviso(self):
         try:
             exportar_para_excel()  # chama a função que realmente faz a exportação
