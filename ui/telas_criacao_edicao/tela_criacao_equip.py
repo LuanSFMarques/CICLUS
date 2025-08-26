@@ -41,25 +41,69 @@ class TelaCriacaoEquipamento(tk.Toplevel):
         container = tk.Frame(self, bg="#F5F1E9")
         container.pack(fill="both", expand=True)
 
-        canvas = tk.Canvas(container, bg="#F5F1E9", highlightthickness=0)
-        scrollbar = ttk.Scrollbar(container, orient="vertical", command=canvas.yview)
-        canvas.configure(yscrollcommand=scrollbar.set)
+        # Canvas + scrollbar para o formulário rolável
+        self.canvas = tk.Canvas(container, bg="#F5F1E9", highlightthickness=0)
+        scrollbar = ttk.Scrollbar(container, orient="vertical", command=self.canvas.yview)
+        self.canvas.configure(yscrollcommand=scrollbar.set)
 
         scrollbar.pack(side="right", fill="y")
-        canvas.pack(side="left", fill="both", expand=True)
+        self.canvas.pack(side="left", fill="both", expand=True)
 
-        scroll_frame = tk.Frame(canvas, bg="#F5F1E9")
-        canvas.create_window((0, 0), window=scroll_frame, anchor="nw")
-        scroll_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+        self.scroll_frame = tk.Frame(self.canvas, bg="#F5F1E9")
+        self.canvas.create_window((0, 0), window=self.scroll_frame, anchor="nw")
+        self.scroll_frame.bind("<Configure>", lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all")))
 
-        def on_enter(event):
-            canvas.bind_all("<MouseWheel>", lambda e: canvas.yview_scroll(-int(e.delta / 120), "units"))
+        # --- Helper para verificar ascendência de widgets ---
+        def is_descendant_of(widget, ancestor):
+            """Retorna True se widget é descendente do ancestor."""
+            w = widget
+            while w:
+                if w == ancestor:
+                    return True
+                # stop at toplevels
+                if isinstance(w, (tk.Tk, tk.Toplevel)):
+                    break
+                w = getattr(w, "master", None)
+            return False
 
-        def on_leave(event):
-            canvas.unbind_all("<MouseWheel>")
+        # --- Handler global de mousewheel ---
+        def on_mousewheel_all(event):
+            # determina qual widget está sob o cursor
+            target = self.winfo_containing(event.x_root, event.y_root)
+            if not target:
+                return  # nada a fazer
 
-        canvas.bind("<Enter>", on_enter)
-        canvas.bind("<Leave>", on_leave)
+            # se cursor está sobre (ou dentro) um Combobox => NÃO tocar no canvas (combobox deve lidar)
+            w = target
+            while w:
+                if isinstance(w, ttk.Combobox):
+                    return  # não processa scroll global (combobox já terá interceptado via widget-bind)
+                if isinstance(w, (tk.Tk, tk.Toplevel)):
+                    break
+                w = getattr(w, "master", None)
+
+            # se o widget está dentro da área rolável (scroll_frame), então scrolla o canvas
+            if is_descendant_of(target, self.scroll_frame):
+                # Windows/mac: event.delta ; Linux: use event.num (4/5)
+                if hasattr(event, "delta"):
+                    # normaliza o delta (divisão por 120 é padrão no Windows)
+                    self.canvas.yview_scroll(-int(event.delta / 120), "units")
+                else:
+                    if event.num == 4:
+                        self.canvas.yview_scroll(-1, "units")
+                    elif event.num == 5:
+                        self.canvas.yview_scroll(1, "units")
+                return "break"  # já tratamos o evento
+
+            # caso contrário, não fazemos nada (deixa outros widgets receberem)
+            return
+
+        # registramos bind_all para cobrir entradas que não tenham binding próprio
+        # bind_all é usado, MAS os Combobox terão um binding widget-level que retorna "break"
+        # então, quando o cursor estiver sobre um Combobox, o evento será consumido antes de chegar aqui.
+        self.bind_all("<MouseWheel>", on_mousewheel_all)
+        self.bind_all("<Button-4>", on_mousewheel_all)  # Linux scroll up
+        self.bind_all("<Button-5>", on_mousewheel_all)  # Linux scroll down
 
         campos = [
             ("Nome do Equipamento:", 50, "entry_nome"),
@@ -79,11 +123,11 @@ class TelaCriacaoEquipamento(tk.Toplevel):
         ]
 
         for texto, tamanho, nome_atributo in campos:
-            label(scroll_frame, texto).pack(anchor="w", padx=pad_x, pady=(pad_y, 2))
+            label(self.scroll_frame, texto).pack(anchor="w", padx=pad_x, pady=(pad_y, 2))
 
             if nome_atributo.startswith("entry_"):
                 entry = tk.Entry(
-                    scroll_frame,
+                    self.scroll_frame,
                     width=tamanho,
                     font=("Courier New", 11),
                     bg="#FFFFFF",
@@ -102,7 +146,7 @@ class TelaCriacaoEquipamento(tk.Toplevel):
                     conn = get_connection(DB_FILE)
                     cursor = conn.cursor()
                     cursor.execute("SELECT id, nome FROM tipos_equipamento ORDER BY nome COLLATE NOCASE")
-                    self.tipos_equipamento = cursor.fetchall()  # lista de tuplas (id, nome)
+                    self.tipos_equipamento = cursor.fetchall()
                     conn.close()
                     values = [nome for _, nome in self.tipos_equipamento]
 
@@ -113,25 +157,22 @@ class TelaCriacaoEquipamento(tk.Toplevel):
                 elif nome_atributo == "combo_status_calibr":
                     values = sorted([s[1] for s in tipos_status_calibr])
 
-                combo = ttk.Combobox(scroll_frame, values=values, state="readonly", font=("Courier New", 11))
+                combo = ttk.Combobox(self.scroll_frame, values=values, state="readonly", font=("Courier New", 11))
                 combo.pack(padx=pad_x, pady=(0, pad_y))
+
+    
+                combo.bind("<MouseWheel>", lambda e: "break")   # Windows / mac
+                combo.bind("<Button-4>", lambda e: "break")     # Linux up
+                combo.bind("<Button-5>", lambda e: "break")     # Linux down
+
                 if values:
                     combo.current(0)
                 setattr(self, nome_atributo, combo)
 
-                def bloquear_scroll(event, c=combo):
-                    popdown = c.tk.call('ttk::combobox::PopdownWindow', c)
-                    if popdown == '':
-                        return "break"
-
-                combo.bind("<MouseWheel>", bloquear_scroll)
-                combo.bind("<Button-4>", bloquear_scroll)
-                combo.bind("<Button-5>", bloquear_scroll)
-
             elif nome_atributo == "text_extra_info":
                 largura, altura = tamanho
                 text = tk.Text(
-                    scroll_frame,
+                    self.scroll_frame,
                     width=largura,
                     height=altura,
                     font=("Courier New", 11),
@@ -146,7 +187,7 @@ class TelaCriacaoEquipamento(tk.Toplevel):
                 setattr(self, nome_atributo, text)
 
         # Botões
-        btn_frame = tk.Frame(scroll_frame, bg="#F5F1E9")
+        btn_frame = tk.Frame(self.scroll_frame, bg="#F5F1E9")
         btn_frame.pack(pady=25)
 
         btn_salvar = tk.Button(
@@ -178,7 +219,6 @@ class TelaCriacaoEquipamento(tk.Toplevel):
             width=12
         )
         btn_cancelar.pack(side="left", padx=20)
-
 
     def salvar_equipamento(self):
         nome = self.entry_nome.get().strip()
@@ -263,9 +303,3 @@ class TelaCriacaoEquipamento(tk.Toplevel):
         except Exception as e:
             messagebox.showerror("Erro", f"Falha ao criar equipamento:\n{e}")
 
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    root.withdraw()
-    app = TelaCriacaoEquipamento(root)
-    app.mainloop()
