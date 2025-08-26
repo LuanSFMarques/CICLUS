@@ -107,11 +107,11 @@ class TelaCriacaoEquipamento(tk.Toplevel):
                     values = [nome for _, nome in self.tipos_equipamento]
 
                 elif nome_atributo == "combo_setor":
-                    values = [s[1] for s in tipos_setor]
+                    values = sorted([s[1] for s in tipos_setor])
                 elif nome_atributo == "combo_status":
-                    values = [s[1] for s in tipos_status]
+                    values = sorted([s[1] for s in tipos_status])
                 elif nome_atributo == "combo_status_calibr":
-                    values = [s[1] for s in tipos_status_calibr]
+                    values = sorted([s[1] for s in tipos_status_calibr])
 
                 combo = ttk.Combobox(scroll_frame, values=values, state="readonly", font=("Courier New", 11))
                 combo.pack(padx=pad_x, pady=(0, pad_y))
@@ -178,6 +178,7 @@ class TelaCriacaoEquipamento(tk.Toplevel):
             width=12
         )
         btn_cancelar.pack(side="left", padx=20)
+
 
     def salvar_equipamento(self):
         nome = self.entry_nome.get().strip()

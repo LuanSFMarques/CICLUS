@@ -66,20 +66,20 @@ class TelaEdicaoEquipamento(tk.Toplevel):
         # Campos
         # Campos
         campos = [
-            ("Nome do Equipamento", "nome_eq"),
+            ("Nome do Equipamento:", "nome_eq"),
             # Ordena alfabeticamente os tipos de equipamento
-            ("Tipo do Equipamento", "tipo_eq_id", sorted([nome for _, nome in self.tipos_equipamento])),
-            ("Setor", "setor_id", sorted([s[1] for s in tipos_setor])),
-            ("Status", "status_id", sorted([s[1] for s in tipos_status])),
-            ("Data de Aquisição (DD-MM-YYYY)", "data_aquisicao"),
-            ("Última Calibração (DD-MM-YYYY)", "ultima_calibracao"),
-            ("Periodicidade (meses)", "periodicidade"),
-            ("Status de Calibração", "status_calibracao_id", sorted([s[1] for s in tipos_status_calibr])),
-            ("Fabricante", "fabricante"),
-            ("Modelo", "modelo"),
-            ("Modelo Técnico", "modelo_tecnico"),
-            ("Número de Série", "numero_serie"),
-            ("Informações Extras", "extra_info")
+            ("Tipo do Equipamento:", "tipo_eq_id", sorted([nome for _, nome in self.tipos_equipamento])),
+            ("Setor:", "setor_id", sorted([s[1] for s in tipos_setor])),
+            ("Status:", "status_id", sorted([s[1] for s in tipos_status])),
+            ("Data de Aquisição (DD-MM-YYYY):", "data_aquisicao"),
+            ("Última Calibração (DD-MM-YYYY):", "ultima_calibracao"),
+            ("Periodicidade (meses):", "periodicidade"),
+            ("Status de Calibração:", "status_calibracao_id", sorted([s[1] for s in tipos_status_calibr])),
+            ("Fabricante:", "fabricante"),
+            ("Modelo:", "modelo"),
+            ("Modelo Técnico:", "modelo_tecnico"),
+            ("Número de Série:", "numero_serie"),
+            ("Informações Extras:", "extra_info")
         ]
 
 

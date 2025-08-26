@@ -16,5 +16,6 @@
 - Criação da aba de Gráficos
 
 ## Atualizações (v2.0)
+- Tornar o código mais organizados, tirar as queries em códigos de tela e colocalos apenas nos controllers.
 - Executável
 - Atualização do README para versão 2.0
