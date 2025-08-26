@@ -11,214 +11,125 @@ class TelaCriacaoEquipamento(tk.Toplevel):
     def __init__(self, master=None):
         super().__init__(master)
         self.title("Criar Novo Equipamento")
+        self.geometry("1200x560")
         self.resizable(False, False)
-
-        if master is not None:
-            master_x = master.winfo_x()
-            master_y = master.winfo_y()
-            pos_x = master_x + 50
-            pos_y = master_y + 50
-            self.geometry(f"500x600+{pos_x}+{pos_y}")
-        else:
-            self.geometry("500x600")
-
         self.configure(bg="#F5F1E9")
+        self.carregar_tipos_equipamento()
         self.criar_widgets()
 
+    def carregar_tipos_equipamento(self):
+        conn = get_connection(DB_FILE)
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, nome FROM tipos_equipamento ORDER BY nome COLLATE NOCASE")
+        self.tipos_equipamento = cursor.fetchall()
+        conn.close()
+
     def criar_widgets(self):
-        pad_x = 15
-        pad_y = 8
+        fonte_label = ("Courier New", 11, "bold")
+        fonte_entry = ("Courier New", 11)
 
-        def label(parent, text):
-            return tk.Label(
-                parent,
-                text=text,
-                bg="#F5F1E9",
-                fg="#333333",
-                font=("Courier New", 11, "bold")
-            )
+        def criar_label(parent, text, row, column):
+            tk.Label(parent, text=text, bg="#F2EEE6", fg="#333333", font=fonte_label)\
+                .grid(row=row, column=column, sticky="w", padx=5, pady=5)
 
-        container = tk.Frame(self, bg="#F5F1E9")
-        container.pack(fill="both", expand=True)
+        def criar_entry(parent, atributo, row, column, width=30):
+            entry = tk.Entry(parent, width=width, font=fonte_entry)
+            entry.grid(row=row, column=column, padx=5, pady=5, sticky="w")
+            setattr(self, atributo, entry)
 
-        # Canvas + scrollbar para o formulário rolável
-        self.canvas = tk.Canvas(container, bg="#F5F1E9", highlightthickness=0)
-        scrollbar = ttk.Scrollbar(container, orient="vertical", command=self.canvas.yview)
-        self.canvas.configure(yscrollcommand=scrollbar.set)
+        def criar_combo(parent, atributo, values, row, column):
+            combo = ttk.Combobox(parent, values=values, state="readonly", font=fonte_entry, width=28)
+            combo.grid(row=row, column=column, padx=5, pady=5, sticky="w")
+            combo.bind("<MouseWheel>", lambda e: "break")
+            combo.bind("<Button-4>", lambda e: "break")
+            combo.bind("<Button-5>", lambda e: "break")
+            setattr(self, atributo, combo)
 
-        scrollbar.pack(side="right", fill="y")
-        self.canvas.pack(side="left", fill="both", expand=True)
+        def criar_text(parent, atributo, row, column, width=70, height=4):
+            text = tk.Text(parent, width=width, height=height, font=fonte_entry, wrap="word")
+            text.grid(row=row, column=column, padx=5, pady=5, columnspan=2, sticky="w")
+            setattr(self, atributo, text)
 
-        self.scroll_frame = tk.Frame(self.canvas, bg="#F5F1E9")
-        self.canvas.create_window((0, 0), window=self.scroll_frame, anchor="nw")
-        self.scroll_frame.bind("<Configure>", lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all")))
-
-        # --- Helper para verificar ascendência de widgets ---
-        def is_descendant_of(widget, ancestor):
-            """Retorna True se widget é descendente do ancestor."""
-            w = widget
-            while w:
-                if w == ancestor:
-                    return True
-                # stop at toplevels
-                if isinstance(w, (tk.Tk, tk.Toplevel)):
-                    break
-                w = getattr(w, "master", None)
-            return False
-
-        # --- Handler global de mousewheel ---
-        def on_mousewheel_all(event):
-            # determina qual widget está sob o cursor
-            target = self.winfo_containing(event.x_root, event.y_root)
-            if not target:
-                return  # nada a fazer
-
-            # se cursor está sobre (ou dentro) um Combobox => NÃO tocar no canvas (combobox deve lidar)
-            w = target
-            while w:
-                if isinstance(w, ttk.Combobox):
-                    return  # não processa scroll global (combobox já terá interceptado via widget-bind)
-                if isinstance(w, (tk.Tk, tk.Toplevel)):
-                    break
-                w = getattr(w, "master", None)
-
-            # se o widget está dentro da área rolável (scroll_frame), então scrolla o canvas
-            if is_descendant_of(target, self.scroll_frame):
-                # Windows/mac: event.delta ; Linux: use event.num (4/5)
-                if hasattr(event, "delta"):
-                    # normaliza o delta (divisão por 120 é padrão no Windows)
-                    self.canvas.yview_scroll(-int(event.delta / 120), "units")
-                else:
-                    if event.num == 4:
-                        self.canvas.yview_scroll(-1, "units")
-                    elif event.num == 5:
-                        self.canvas.yview_scroll(1, "units")
-                return "break"  # já tratamos o evento
-
-            # caso contrário, não fazemos nada (deixa outros widgets receberem)
-            return
-
-        # registramos bind_all para cobrir entradas que não tenham binding próprio
-        # bind_all é usado, MAS os Combobox terão um binding widget-level que retorna "break"
-        # então, quando o cursor estiver sobre um Combobox, o evento será consumido antes de chegar aqui.
-        self.bind_all("<MouseWheel>", on_mousewheel_all)
-        self.bind_all("<Button-4>", on_mousewheel_all)  # Linux scroll up
-        self.bind_all("<Button-5>", on_mousewheel_all)  # Linux scroll down
-
-        campos = [
-            ("Nome do Equipamento:", 50, "entry_nome"),
-            ("Tipo do Equipamento:", None, "combo_tipo"),
-            ("Setor:", None, "combo_setor"),
-            ("Status:", None, "combo_status"),
-            ("SOND ID (Número único):", 20, "entry_sond"),
-            ("Data de Aquisição (DD-MM-YYYY):", 20, "entry_data_aq"),
-            ("Última Calibração (DD-MM-YYYY):", 20, "entry_ultima_cal"),
-            ("Periodicidade (meses):", 10, "entry_periodicidade"),
-            ("Status de Calibração:", None, "combo_status_calibr"),
-            ("Fabricante:", 30, "entry_fabricante"),
-            ("Modelo:", 30, "entry_modelo"),
-            ("Modelo Técnico:", 30, "entry_modelo_tecnico"),
-            ("Número de Série:", 30, "entry_num_serie"),
-            ("Informações Extras:", (50, 4), "text_extra_info")
-        ]
-
-        for texto, tamanho, nome_atributo in campos:
-            label(self.scroll_frame, texto).pack(anchor="w", padx=pad_x, pady=(pad_y, 2))
-
-            if nome_atributo.startswith("entry_"):
-                entry = tk.Entry(
-                    self.scroll_frame,
-                    width=tamanho,
-                    font=("Courier New", 11),
-                    bg="#FFFFFF",
-                    fg="#333333",
-                    relief="sunken",
-                    bd=1,
-                    insertbackground="#333333"
-                )
-                entry.pack(padx=pad_x, pady=(0, pad_y))
-                setattr(self, nome_atributo, entry)
-
-            elif nome_atributo.startswith("combo_"):
-                values = []
-                if nome_atributo == "combo_tipo":
-                    # Busca os tipos de equipamento do banco em ordem alfabética
-                    conn = get_connection(DB_FILE)
-                    cursor = conn.cursor()
-                    cursor.execute("SELECT id, nome FROM tipos_equipamento ORDER BY nome COLLATE NOCASE")
-                    self.tipos_equipamento = cursor.fetchall()
-                    conn.close()
-                    values = [nome for _, nome in self.tipos_equipamento]
-
-                elif nome_atributo == "combo_setor":
-                    values = sorted([s[1] for s in tipos_setor])
-                elif nome_atributo == "combo_status":
-                    values = sorted([s[1] for s in tipos_status])
-                elif nome_atributo == "combo_status_calibr":
-                    values = sorted([s[1] for s in tipos_status_calibr])
-
-                combo = ttk.Combobox(self.scroll_frame, values=values, state="readonly", font=("Courier New", 11))
-                combo.pack(padx=pad_x, pady=(0, pad_y))
-
-    
-                combo.bind("<MouseWheel>", lambda e: "break")   # Windows / mac
-                combo.bind("<Button-4>", lambda e: "break")     # Linux up
-                combo.bind("<Button-5>", lambda e: "break")     # Linux down
-
-                if values:
-                    combo.current(0)
-                setattr(self, nome_atributo, combo)
-
-            elif nome_atributo == "text_extra_info":
-                largura, altura = tamanho
-                text = tk.Text(
-                    self.scroll_frame,
-                    width=largura,
-                    height=altura,
-                    font=("Courier New", 11),
-                    bg="#FFFFFF",
-                    fg="#333333",
-                    relief="sunken",
-                    bd=1,
-                    insertbackground="#333333",
-                    wrap="word"
-                )
-                text.pack(padx=pad_x, pady=(0, pad_y))
-                setattr(self, nome_atributo, text)
-
-        # Botões
-        btn_frame = tk.Frame(self.scroll_frame, bg="#F5F1E9")
-        btn_frame.pack(pady=25)
-
-        btn_salvar = tk.Button(
-            btn_frame,
-            text="Salvar",
-            bg="#C85A17",
-            fg="white",
-            font=("Courier New", 13, "bold"),
-            relief="raised",
-            bd=3,
-            activebackground="#E38B2B",
-            activeforeground="white",
-            command=self.salvar_equipamento,
-            width=12
+                # Título acima do container
+        titulo_label = tk.Label(
+            self,
+            text="Cadastro de Equipamento",
+            bg="#F5F1E9",
+            fg="#2F4F4F",
+            font=("Courier New", 16, "bold")
         )
-        btn_salvar.pack(side="left", padx=20)
+        titulo_label.pack(pady=(15, 0))
 
-        btn_cancelar = tk.Button(
-            btn_frame,
-            text="Cancelar",
-            bg="#8B8B8B",
-            fg="white",
-            font=("Courier New", 13, "bold"),
-            relief="raised",
-            bd=3,
-            activebackground="#A9A9A9",
-            activeforeground="white",
-            command=self.destroy,
-            width=12
-        )
-        btn_cancelar.pack(side="left", padx=20)
+
+        # Container principal com borda e fundo escurecido
+        container_frame = tk.Frame(self, bg="#F2EEE6", relief="sunken", bd=2)
+        container_frame.pack(padx=20, pady=20, fill="both", expand=False)
+
+        # Frame do formulário dentro do container
+        form_frame = tk.Frame(container_frame, bg="#F2EEE6")
+        form_frame.pack(padx=20, pady=20)
+
+        # COLUNA 1
+        criar_label(form_frame, "Nome do Equipamento:", 0, 0)
+        criar_entry(form_frame, "entry_nome", 0, 1)
+
+        criar_label(form_frame, "Tipo do Equipamento:", 1, 0)
+        criar_combo(form_frame, "combo_tipo", [nome for _, nome in self.tipos_equipamento], 1, 1)
+
+        criar_label(form_frame, "Setor:", 2, 0)
+        criar_combo(form_frame, "combo_setor", sorted([s[1] for s in tipos_setor]), 2, 1)
+
+        criar_label(form_frame, "Status:", 3, 0)
+        criar_combo(form_frame, "combo_status", sorted([s[1] for s in tipos_status]), 3, 1)
+
+        criar_label(form_frame, "SOND ID (Número único):", 4, 0)
+        criar_entry(form_frame, "entry_sond", 4, 1, width=20)
+
+        criar_label(form_frame, "Data de Aquisição (DD-MM-YYYY):", 5, 0)
+        criar_entry(form_frame, "entry_data_aq", 5, 1, width=20)
+
+        criar_label(form_frame, "Última Calibração (DD-MM-YYYY):", 6, 0)
+        criar_entry(form_frame, "entry_ultima_cal", 6, 1, width=20)
+
+        criar_label(form_frame, "Periodicidade (meses):", 7, 0)
+        criar_entry(form_frame, "entry_periodicidade", 7, 1, width=10)
+
+        criar_label(form_frame, "Status de Calibração:", 8, 0)
+        criar_combo(form_frame, "combo_status_calibr", sorted([s[1] for s in tipos_status_calibr]), 8, 1)
+
+        # COLUNA 2
+        criar_label(form_frame, "Fabricante:", 0, 2)
+        criar_entry(form_frame, "entry_fabricante", 0, 3)
+
+        criar_label(form_frame, "Modelo:", 1, 2)
+        criar_entry(form_frame, "entry_modelo", 1, 3)
+
+        criar_label(form_frame, "Modelo Técnico:", 2, 2)
+        criar_entry(form_frame, "entry_modelo_tecnico", 2, 3)
+
+        criar_label(form_frame, "Número de Série:", 3, 2)
+        criar_entry(form_frame, "entry_num_serie", 3, 3)
+
+        criar_label(form_frame, "Informações Extras:", 4, 2)
+        criar_text(form_frame, "text_extra_info", 5, 2)
+
+        # Frame de botões
+        btn_frame = tk.Frame(self, bg="#F5F1E9")
+        btn_frame.pack(pady=10)
+
+        tk.Button(
+            btn_frame, text="SALVAR", command=self.salvar_equipamento,
+            bg="#C85A17", fg="white", font=("Courier New", 12, "bold"),
+            width=14, height=2, activebackground="#E38B2B"
+        ).pack(side="left", padx=40)
+
+        tk.Button(
+            btn_frame, text="CANCELAR", command=self.destroy,
+            bg="#8B8B8B", fg="white", font=("Courier New", 12, "bold"),
+            width=14, height=2, activebackground="#A9A9A9"
+        ).pack(side="left", padx=40)
+
+
 
     def salvar_equipamento(self):
         nome = self.entry_nome.get().strip()
@@ -230,20 +141,8 @@ class TelaCriacaoEquipamento(tk.Toplevel):
         ultima_calibracao_br = self.entry_ultima_cal.get().strip()
         periodicidade_raw = self.entry_periodicidade.get().strip()
 
-        if not nome:
-            messagebox.showerror("Erro", "Nome do equipamento é obrigatório!")
-            return
-        if "-" not in nome:
-            messagebox.showerror("Erro", "Nome do equipamento deve conter um '-' para gerar a sigla!")
-            return
-        if not tipo:
-            messagebox.showerror("Erro", "Tipo do equipamento é obrigatório!")
-            return
-        if not setor:
-            messagebox.showerror("Erro", "Setor é obrigatório!")
-            return
-        if not status:
-            messagebox.showerror("Erro", "Status é obrigatório!")
+        if not nome or "-" not in nome:
+            messagebox.showerror("Erro", "Informe um nome válido (com '-').")
             return
         if not sond_id_raw.isdigit():
             messagebox.showerror("Erro", "SOND ID deve ser um número válido!")
@@ -253,20 +152,21 @@ class TelaCriacaoEquipamento(tk.Toplevel):
             return
 
         def parse_data(data_str):
-            for formato in ("%d-%m-%Y", "%d/%m/%Y"):
+            for fmt in ("%d-%m-%Y", "%d/%m/%Y"):
                 try:
-                    return datetime.strptime(data_str, formato).strftime("%Y-%m-%d")
+                    return datetime.strptime(data_str, fmt).strftime("%Y-%m-%d")
                 except ValueError:
                     continue
             return None
 
         data_aquisicao = parse_data(data_aquisicao_br) if data_aquisicao_br else None
         ultima_calibracao = parse_data(ultima_calibracao_br) if ultima_calibracao_br else None
+
         if data_aquisicao_br and not data_aquisicao:
-            messagebox.showerror("Erro", "Data de aquisição inválida! Use o formato DD-MM-YYYY ou DD/MM/YYYY.")
+            messagebox.showerror("Erro", "Data de aquisição inválida!")
             return
         if ultima_calibracao_br and not ultima_calibracao:
-            messagebox.showerror("Erro", "Última calibração inválida! Use o formato DD-MM-YYYY ou DD/MM/YYYY.")
+            messagebox.showerror("Erro", "Data de calibração inválida!")
             return
 
         confirmacao = messagebox.askyesno("Confirmação", "Deseja realmente criar este equipamento?")
@@ -302,4 +202,3 @@ class TelaCriacaoEquipamento(tk.Toplevel):
             self.destroy()
         except Exception as e:
             messagebox.showerror("Erro", f"Falha ao criar equipamento:\n{e}")
-

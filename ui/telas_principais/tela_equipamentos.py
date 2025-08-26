@@ -288,7 +288,11 @@ class TelaPrincipal(tk.Tk):
         for item in page_items:
             self.adicionar_item(item)
 
+        # **RESETAR SCROLL PARA O TOPO**
+        self.canvas.yview_moveto(0)
+
         self.atualizar_paginacao()
+
 
     def atualizar_paginacao(self):
         for widget in self.paginacao_frame.winfo_children():

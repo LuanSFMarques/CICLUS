@@ -1,115 +1,137 @@
-from helpers import log_msg, get_connection, DB_FILE
 import tkinter as tk
 from tkinter import ttk, messagebox
 from datetime import datetime
 
 from controllers.equipamento_controller import obter_equipamento_cru, atualizar_equipamento
 from data.tipos import tipos_setor, tipos_status, tipos_status_calibr
+from helpers import log_msg, get_connection, DB_FILE
+
 
 class TelaEdicaoEquipamento(tk.Toplevel):
     def __init__(self, equip_id, master=None):
         super().__init__(master)
         self.title(f"Editar Equipamento - ID {equip_id}")
+        self.geometry("1200x560")
         self.resizable(False, False)
+        self.configure(bg="#F5F1E9")
+
         self.equip_id = equip_id
         self.equipamento = obter_equipamento_cru(equip_id)
-
         if not self.equipamento:
             messagebox.showerror("Erro", "Equipamento não encontrado.")
             self.destroy()
             return
 
-        if master is not None:
-            pos_x = master.winfo_x() + 50
-            pos_y = master.winfo_y() + 50
-            self.geometry(f"500x600+{pos_x}+{pos_y}")
-        else:
-            self.geometry("500x600")
-
-        self.configure(bg="#F5F1E9")
-        self.tipos_equipamento = self.carregar_tipos_equipamento()
+        self.carregar_tipos_equipamento()
         self.criar_widgets()
         self.preencher_campos()
 
     def carregar_tipos_equipamento(self):
-        """Busca todos os tipos de equipamento do banco: retorna lista de tuplas (id, nome)"""
         conn = get_connection(DB_FILE)
         cursor = conn.cursor()
-        cursor.execute("SELECT id, nome FROM tipos_equipamento ORDER BY id")
-        tipos = cursor.fetchall()
+        cursor.execute("SELECT id, nome FROM tipos_equipamento ORDER BY nome COLLATE NOCASE")
+        self.tipos_equipamento = cursor.fetchall()
         conn.close()
-        return tipos  # [(1, 'Microscópio'), (2, 'Centrífuga'), ...]
 
     def criar_widgets(self):
-        self.campos = {}
+        fonte_label = ("Courier New", 11, "bold")
+        fonte_entry = ("Courier New", 11)
 
-        def label(parent, text):
-            return tk.Label(parent, text=text, bg="#F5F1E9", fg="#333333", font=("Courier New", 11, "bold"))
+        def criar_label(parent, text, row, column):
+            tk.Label(parent, text=text, bg="#F2EEE6", fg="#333333", font=fonte_label)\
+                .grid(row=row, column=column, sticky="w", padx=5, pady=5)
 
-        container = tk.Frame(self, bg="#F5F1E9")
-        container.pack(fill="both", expand=True)
+        def criar_entry(parent, atributo, row, column, width=30):
+            entry = tk.Entry(parent, width=width, font=fonte_entry)
+            entry.grid(row=row, column=column, padx=5, pady=5, sticky="w")
+            setattr(self, atributo, entry)
 
-        canvas = tk.Canvas(container, bg="#F5F1E9", highlightthickness=0)
-        scrollbar = ttk.Scrollbar(container, orient="vertical", command=canvas.yview)
-        canvas.configure(yscrollcommand=scrollbar.set)
+        def criar_combo(parent, atributo, values, row, column):
+            combo = ttk.Combobox(parent, values=values, state="readonly", font=fonte_entry, width=28)
+            combo.grid(row=row, column=column, padx=5, pady=5, sticky="w")
+            combo.bind("<MouseWheel>", lambda e: "break")
+            combo.bind("<Button-4>", lambda e: "break")
+            combo.bind("<Button-5>", lambda e: "break")
+            setattr(self, atributo, combo)
 
-        scrollbar.pack(side="right", fill="y")
-        canvas.pack(side="left", fill="both", expand=True)
+        def criar_text(parent, atributo, row, column, width=70, height=4):
+            text = tk.Text(parent, width=width, height=height, font=fonte_entry, wrap="word")
+            text.grid(row=row, column=column, padx=5, pady=5, columnspan=2, sticky="w")
+            setattr(self, atributo, text)
 
-        self.scroll_frame = tk.Frame(canvas, bg="#F5F1E9")
-        canvas.create_window((0, 0), window=self.scroll_frame, anchor="nw")
-        self.scroll_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+        # Título
+        tk.Label(
+            self,
+            text="Edição de Equipamento",
+            bg="#F5F1E9",
+            fg="#2F4F4F",
+            font=("Courier New", 16, "bold")
+        ).pack(pady=(15, 0))
 
-        canvas.bind("<Enter>", lambda e: canvas.bind_all("<MouseWheel>", lambda e: canvas.yview_scroll(-int(e.delta / 120), "units")))
-        canvas.bind("<Leave>", lambda e: canvas.unbind_all("<MouseWheel>"))
+        # Container
+        container_frame = tk.Frame(self, bg="#F2EEE6", relief="sunken", bd=2)
+        container_frame.pack(padx=20, pady=20, fill="both", expand=False)
 
-        # Campos
-        # Campos
-        campos = [
-            ("Nome do Equipamento:", "nome_eq"),
-            # Ordena alfabeticamente os tipos de equipamento
-            ("Tipo do Equipamento:", "tipo_eq_id", sorted([nome for _, nome in self.tipos_equipamento])),
-            ("Setor:", "setor_id", sorted([s[1] for s in tipos_setor])),
-            ("Status:", "status_id", sorted([s[1] for s in tipos_status])),
-            ("Data de Aquisição (DD-MM-YYYY):", "data_aquisicao"),
-            ("Última Calibração (DD-MM-YYYY):", "ultima_calibracao"),
-            ("Periodicidade (meses):", "periodicidade"),
-            ("Status de Calibração:", "status_calibracao_id", sorted([s[1] for s in tipos_status_calibr])),
-            ("Fabricante:", "fabricante"),
-            ("Modelo:", "modelo"),
-            ("Modelo Técnico:", "modelo_tecnico"),
-            ("Número de Série:", "numero_serie"),
-            ("Informações Extras:", "extra_info")
-        ]
+        # Formulário
+        form_frame = tk.Frame(container_frame, bg="#F2EEE6")
+        form_frame.pack(padx=20, pady=20)
 
+        # COLUNA 1
+        criar_label(form_frame, "Nome do Equipamento:", 0, 0)
+        criar_entry(form_frame, "entry_nome", 0, 1)
 
-        for texto, chave, *opcoes in campos:
-            label(self.scroll_frame, texto).pack(anchor="w", padx=15, pady=(8, 2))
-            if opcoes:
-                combo = ttk.Combobox(self.scroll_frame, values=opcoes[0], state="readonly", font=("Courier New", 11))
-                combo.pack(padx=15, pady=(0, 8))
-                self.campos[chave] = combo
-            elif chave == "extra_info":
-                text = tk.Text(self.scroll_frame, height=4, width=50, font=("Courier New", 11))
-                text.pack(padx=15, pady=(0, 8))
-                self.campos[chave] = text
-            else:
-                entry = tk.Entry(self.scroll_frame, font=("Courier New", 11), width=50)
-                entry.pack(padx=15, pady=(0, 8))
-                self.campos[chave] = entry
+        criar_label(form_frame, "Tipo do Equipamento:", 1, 0)
+        criar_combo(form_frame, "combo_tipo", [nome for _, nome in self.tipos_equipamento], 1, 1)
 
-        btn_frame = tk.Frame(self.scroll_frame, bg="#F5F1E9")
-        btn_frame.pack(pady=25)
+        criar_label(form_frame, "Setor:", 2, 0)
+        criar_combo(form_frame, "combo_setor", sorted([s[1] for s in tipos_setor]), 2, 1)
+
+        criar_label(form_frame, "Status:", 3, 0)
+        criar_combo(form_frame, "combo_status", sorted([s[1] for s in tipos_status]), 3, 1)
+
+        criar_label(form_frame, "Data de Aquisição (DD-MM-YYYY):", 4, 0)
+        criar_entry(form_frame, "entry_data_aq", 4, 1, width=20)
+
+        criar_label(form_frame, "Última Calibração (DD-MM-YYYY):", 5, 0)
+        criar_entry(form_frame, "entry_ultima_cal", 5, 1, width=20)
+
+        criar_label(form_frame, "Periodicidade (meses):", 6, 0)
+        criar_entry(form_frame, "entry_periodicidade", 6, 1, width=10)
+
+        criar_label(form_frame, "Status de Calibração:", 7, 0)
+        criar_combo(form_frame, "combo_status_calibr", sorted([s[1] for s in tipos_status_calibr]), 7, 1)
+
+        # COLUNA 2
+        criar_label(form_frame, "Fabricante:", 0, 2)
+        criar_entry(form_frame, "entry_fabricante", 0, 3)
+
+        criar_label(form_frame, "Modelo:", 1, 2)
+        criar_entry(form_frame, "entry_modelo", 1, 3)
+
+        criar_label(form_frame, "Modelo Técnico:", 2, 2)
+        criar_entry(form_frame, "entry_modelo_tecnico", 2, 3)
+
+        criar_label(form_frame, "Número de Série:", 3, 2)
+        criar_entry(form_frame, "entry_num_serie", 3, 3)
+
+        criar_label(form_frame, "Informações Extras:", 4, 2)
+        criar_text(form_frame, "text_extra_info", 5, 2)
+
+        # Botões
+        btn_frame = tk.Frame(self, bg="#F5F1E9")
+        btn_frame.pack(pady=10)
 
         tk.Button(
-            btn_frame, text="Salvar Alterações", command=self.salvar, bg="#C85A17",
-            fg="white", font=("Courier New", 13, "bold"), width=18
-        ).pack(side="left", padx=10)
+            btn_frame, text="SALVAR ALTERAÇÕES", command=self.salvar_equipamento,
+            bg="#C85A17", fg="white", font=("Courier New", 12, "bold"),
+            width=20, height=2, activebackground="#E38B2B"
+        ).pack(side="left", padx=40)
 
         tk.Button(
-            btn_frame, text="Cancelar", command=self.destroy, bg="#8B8B8B",
-            fg="white", font=("Courier New", 13, "bold"), width=12
-        ).pack(side="left", padx=10)
+            btn_frame, text="CANCELAR", command=self.destroy,
+            bg="#8B8B8B", fg="white", font=("Courier New", 12, "bold"),
+            width=14, height=2, activebackground="#A9A9A9"
+        ).pack(side="left", padx=40)
 
     def preencher_campos(self):
         e = self.equipamento
@@ -117,53 +139,59 @@ class TelaEdicaoEquipamento(tk.Toplevel):
         def get_nome_por_id(lista, id_):
             return next((nome for ident, nome in lista if ident == id_), "")
 
-        self.campos["nome_eq"].insert(0, e["nome_eq"])
-        # Seleciona tipo do equipamento pelo ID
-        self.campos["tipo_eq_id"].set(get_nome_por_id(self.tipos_equipamento, e["tipo_eq_id"]))
-        self.campos["setor_id"].set(get_nome_por_id(tipos_setor, e["setor_id"]))
-        self.campos["status_id"].set(get_nome_por_id(tipos_status, e["status_id"]))
-        self.campos["data_aquisicao"].insert(0, self.formatar_data(e["data_aquisicao"]))
-        self.campos["ultima_calibracao"].insert(0, self.formatar_data(e["ultima_calibracao"]))
-        self.campos["periodicidade"].insert(0, str(e["periodicidade"]))
-        self.campos["status_calibracao_id"].set(get_nome_por_id(tipos_status_calibr, e["status_calibracao_id"]))
-        self.campos["fabricante"].insert(0, e["fabricante"])
-        self.campos["modelo"].insert(0, e["modelo"])
-        self.campos["modelo_tecnico"].insert(0, e["modelo_tecnico"])
-        self.campos["numero_serie"].insert(0, str(e.get("numero_serie", "")))
-        self.campos["extra_info"].insert("1.0", e["extra_info"])
+        self.entry_nome.insert(0, e["nome_eq"])
+        self.combo_tipo.set(get_nome_por_id(self.tipos_equipamento, e["tipo_eq_id"]))
+        self.combo_setor.set(get_nome_por_id(tipos_setor, e["setor_id"]))
+        self.combo_status.set(get_nome_por_id(tipos_status, e["status_id"]))
+        self.entry_data_aq.insert(0, self.formatar_data(e["data_aquisicao"]))
+        self.entry_ultima_cal.insert(0, self.formatar_data(e["ultima_calibracao"]))
+        self.entry_periodicidade.insert(0, str(e["periodicidade"]))
+        self.combo_status_calibr.set(get_nome_por_id(tipos_status_calibr, e["status_calibracao_id"]))
+        self.entry_fabricante.insert(0, e["fabricante"])
+        self.entry_modelo.insert(0, e["modelo"])
+        self.entry_modelo_tecnico.insert(0, e["modelo_tecnico"])
+        self.entry_num_serie.insert(0, str(e.get("numero_serie", "")))
+        self.text_extra_info.insert("1.0", e["extra_info"])
 
     def formatar_data(self, data_str):
         if not data_str:
             return ""
         return datetime.strptime(data_str, "%Y-%m-%d").strftime("%d-%m-%Y")
 
-    def salvar(self):
-        try:
-            nome = self.campos["nome_eq"].get().strip()
-            sigla = nome.split("-")[0] if "-" in nome else ""
-            data_aq = self.converter_data(self.campos["data_aquisicao"].get().strip())
-            ultima_cal = self.converter_data(self.campos["ultima_calibracao"].get().strip())
-            periodicidade = int(self.campos["periodicidade"].get().strip()) if self.campos["periodicidade"].get().strip().isdigit() else None
+    def converter_data(self, data_str):
+        for fmt in ("%d-%m-%Y", "%d/%m/%Y"):
+            try:
+                return datetime.strptime(data_str, fmt).strftime("%Y-%m-%d")
+            except ValueError:
+                continue
+        return None
 
-            # Obtém o ID do tipo selecionado
-            tipo_nome = self.campos["tipo_eq_id"].get()
+    def salvar_equipamento(self):
+        try:
+            nome = self.entry_nome.get().strip()
+            sigla = nome.split("-")[0] if "-" in nome else ""
+            data_aq = self.converter_data(self.entry_data_aq.get().strip())
+            ultima_cal = self.converter_data(self.entry_ultima_cal.get().strip())
+            periodicidade = int(self.entry_periodicidade.get().strip()) if self.entry_periodicidade.get().strip().isdigit() else None
+
+            tipo_nome = self.combo_tipo.get()
             tipo_id = next((id_ for id_, nome in self.tipos_equipamento if nome == tipo_nome), None)
 
             novos_dados = {
                 "nome_eq": nome,
                 "tipo_eq_id": tipo_id,
                 "sigla_eq": sigla,
-                "setor_id": next((i for i, nome in tipos_setor if nome == self.campos["setor_id"].get()), None),
-                "status_id": next((i for i, nome in tipos_status if nome == self.campos["status_id"].get()), None),
+                "setor_id": next((i for i, nome in tipos_setor if nome == self.combo_setor.get()), None),
+                "status_id": next((i for i, nome in tipos_status if nome == self.combo_status.get()), None),
                 "data_aquisicao": data_aq,
                 "ultima_calibracao": ultima_cal,
                 "periodicidade": periodicidade,
-                "status_calibracao_id": next((i for i, nome in tipos_status_calibr if nome == self.campos["status_calibracao_id"].get()), None),
-                "fabricante": self.campos["fabricante"].get().strip(),
-                "modelo": self.campos["modelo"].get().strip(),
-                "modelo_tecnico": self.campos["modelo_tecnico"].get().strip(),
-                "numero_serie": self.campos["numero_serie"].get().strip(),
-                "extra_info": self.campos["extra_info"].get("1.0", "end").strip()
+                "status_calibracao_id": next((i for i, nome in tipos_status_calibr if nome == self.combo_status_calibr.get()), None),
+                "fabricante": self.entry_fabricante.get().strip(),
+                "modelo": self.entry_modelo.get().strip(),
+                "modelo_tecnico": self.entry_modelo_tecnico.get().strip(),
+                "numero_serie": self.entry_num_serie.get().strip(),
+                "extra_info": self.text_extra_info.get("1.0", "end").strip()
             }
 
             confirmacao = messagebox.askyesno("Confirmação", "Deseja realmente salvar as alterações?")
@@ -177,11 +205,3 @@ class TelaEdicaoEquipamento(tk.Toplevel):
 
         except Exception as e:
             messagebox.showerror("Erro", f"Erro ao salvar: {e}")
-
-    def converter_data(self, data_str):
-        for fmt in ("%d-%m-%Y", "%d/%m/%Y"):
-            try:
-                return datetime.strptime(data_str, fmt).strftime("%Y-%m-%d")
-            except ValueError:
-                continue
-        return None
