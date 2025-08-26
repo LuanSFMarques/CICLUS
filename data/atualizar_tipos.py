@@ -9,32 +9,54 @@ def atualizar_tipos(data):
     try:
         cursor.execute("BEGIN")
 
-        # Atualiza tipos_equipamento (sem ID fixo, só nome)
-        cursor.executemany(
-            "INSERT OR IGNORE INTO tipos_equipamento (nome) VALUES (?)",
-            [(nome,) for nome in tipos_eq]
-        )
+        # -------- Atualiza tipos_equipamento (sem ID) --------
+        cursor.execute("SELECT nome FROM tipos_equipamento")
+        existentes = set(row[0] for row in cursor.fetchall())
+        novos = [(nome,) for nome in tipos_eq if nome not in existentes]
 
-        # Função auxiliar para atualizar e limpar
-        def atualizar_tabela(nome_tabela, lista):
-            # Atualiza ou insere
+        if novos:
             cursor.executemany(
-                f"""
-                INSERT INTO {nome_tabela} (id, nome)
-                VALUES (?, ?)
-                ON CONFLICT(id) DO UPDATE SET nome = excluded.nome
-                """,
-                lista
+                "INSERT INTO tipos_equipamento (nome) VALUES (?)",
+                novos
             )
-            # Limpa os registros que não estão mais no código
-            ids_atuais = [t[0] for t in lista]
-            if ids_atuais:
-                placeholders = ",".join("?" for _ in ids_atuais)
-                cursor.execute(f"DELETE FROM {nome_tabela} WHERE id NOT IN ({placeholders})", ids_atuais)
-            else:
-                cursor.execute(f"DELETE FROM {nome_tabela}")  # Remove tudo se lista estiver vazia
 
+        # -------- Função para atualizar tabelas com ID --------
+        def atualizar_tabela(nome_tabela, lista):
+            # Pega o maior ID atual
+            cursor.execute(f"SELECT MAX(id) FROM {nome_tabela}")
+            max_id = cursor.fetchone()[0] or 0
 
+            # Seleciona nomes já existentes
+            cursor.execute(f"SELECT id, nome FROM {nome_tabela}")
+            existentes = {row[1]: row[0] for row in cursor.fetchall()}
+
+            # Normaliza lista: garante que cada item seja string
+            nomes_simples = [str(item) if isinstance(item, (tuple, list)) else item for item in lista]
+
+            # Insere novos registros
+            novos = []
+            for nome in nomes_simples:
+                if nome not in existentes:
+                    max_id += 1
+                    novos.append((max_id, nome))
+
+            if novos:
+                cursor.executemany(
+                    f"INSERT INTO {nome_tabela} (id, nome) VALUES (?, ?)",
+                    novos
+                )
+
+            # Atualiza nomes existentes caso tenham mudado
+            updates = [(nome, id) for nome, id in existentes.items() if nome in nomes_simples]
+            if updates:
+                cursor.executemany(
+                    f"UPDATE {nome_tabela} SET nome = ? WHERE id = ?",
+                    updates
+                )
+
+            # Não deletamos registros para evitar FOREIGN KEY errors
+
+        # -------- Atualiza todas as tabelas com ID --------
         atualizar_tabela("tipos_item", tipos_item)
         atualizar_tabela("tipos_setor", tipos_setor)
         atualizar_tabela("tipos_status", tipos_status)
@@ -44,7 +66,10 @@ def atualizar_tipos(data):
         print("Atualização de tipos concluída com sucesso.")
 
     except Exception as e:
-        conn
+        conn.rollback()
+        print("Erro ao atualizar tipos:", e)
+    finally:
+        conn.close()
 
 if __name__ == "__main__":
     atualizar_tipos(DB_FILE)

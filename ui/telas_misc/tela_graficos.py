@@ -88,13 +88,14 @@ def plot_envios_por_mes(cv, plot_res):
 
     fig = Figure(figsize=plot_res, facecolor="#FDFCF8")
     ax = fig.add_subplot(111, facecolor="#FDFCF8")
-    df_plot.plot(kind="bar", ax=ax, zorder=3)
+    df_plot.plot(kind="bar", ax=ax, zorder=3, color="#3B3B3B")
 
     ax.set_xlabel("Ano-Mês")
     ax.set_ylabel("Quantidade de Envios")
     for label in ax.get_xticklabels():
         label.set_rotation(45)
     ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
+    ax.set_yticks(np.arange(0,50,10))
     fig.tight_layout()
     return fig, "Envios para Calibração por Mês"
 

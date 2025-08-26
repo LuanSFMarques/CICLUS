@@ -1,11 +1,10 @@
+from helpers import log_msg, get_connection, DB_FILE
 import tkinter as tk
 from tkinter import ttk, messagebox
 from datetime import datetime
 
 from controllers.equipamento_controller import obter_equipamento_cru, atualizar_equipamento
-from data.tipos import tipos_eq, tipos_setor, tipos_status, tipos_status_calibr
-from helpers import log_msg
-
+from data.tipos import tipos_setor, tipos_status, tipos_status_calibr
 
 class TelaEdicaoEquipamento(tk.Toplevel):
     def __init__(self, equip_id, master=None):
@@ -28,8 +27,18 @@ class TelaEdicaoEquipamento(tk.Toplevel):
             self.geometry("500x600")
 
         self.configure(bg="#F5F1E9")
+        self.tipos_equipamento = self.carregar_tipos_equipamento()
         self.criar_widgets()
         self.preencher_campos()
+
+    def carregar_tipos_equipamento(self):
+        """Busca todos os tipos de equipamento do banco: retorna lista de tuplas (id, nome)"""
+        conn = get_connection(DB_FILE)
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, nome FROM tipos_equipamento ORDER BY id")
+        tipos = cursor.fetchall()
+        conn.close()
+        return tipos  # [(1, 'Microscópio'), (2, 'Centrífuga'), ...]
 
     def criar_widgets(self):
         self.campos = {}
@@ -55,21 +64,24 @@ class TelaEdicaoEquipamento(tk.Toplevel):
         canvas.bind("<Leave>", lambda e: canvas.unbind_all("<MouseWheel>"))
 
         # Campos
+        # Campos
         campos = [
             ("Nome do Equipamento", "nome_eq"),
-            ("Tipo do Equipamento", "tipo_eq_id", tipos_eq),
-            ("Setor", "setor_id", [s[1] for s in tipos_setor]),
-            ("Status", "status_id", [s[1] for s in tipos_status]),
+            # Ordena alfabeticamente os tipos de equipamento
+            ("Tipo do Equipamento", "tipo_eq_id", sorted([nome for _, nome in self.tipos_equipamento])),
+            ("Setor", "setor_id", sorted([s[1] for s in tipos_setor])),
+            ("Status", "status_id", sorted([s[1] for s in tipos_status])),
             ("Data de Aquisição (DD-MM-YYYY)", "data_aquisicao"),
             ("Última Calibração (DD-MM-YYYY)", "ultima_calibracao"),
             ("Periodicidade (meses)", "periodicidade"),
-            ("Status de Calibração", "status_calibracao_id", [s[1] for s in tipos_status_calibr]),
+            ("Status de Calibração", "status_calibracao_id", sorted([s[1] for s in tipos_status_calibr])),
             ("Fabricante", "fabricante"),
             ("Modelo", "modelo"),
             ("Modelo Técnico", "modelo_tecnico"),
             ("Número de Série", "numero_serie"),
             ("Informações Extras", "extra_info")
         ]
+
 
         for texto, chave, *opcoes in campos:
             label(self.scroll_frame, texto).pack(anchor="w", padx=15, pady=(8, 2))
@@ -106,7 +118,8 @@ class TelaEdicaoEquipamento(tk.Toplevel):
             return next((nome for ident, nome in lista if ident == id_), "")
 
         self.campos["nome_eq"].insert(0, e["nome_eq"])
-        self.campos["tipo_eq_id"].set(tipos_eq[e["tipo_eq_id"] - 1] if e["tipo_eq_id"] else "")
+        # Seleciona tipo do equipamento pelo ID
+        self.campos["tipo_eq_id"].set(get_nome_por_id(self.tipos_equipamento, e["tipo_eq_id"]))
         self.campos["setor_id"].set(get_nome_por_id(tipos_setor, e["setor_id"]))
         self.campos["status_id"].set(get_nome_por_id(tipos_status, e["status_id"]))
         self.campos["data_aquisicao"].insert(0, self.formatar_data(e["data_aquisicao"]))
@@ -132,9 +145,13 @@ class TelaEdicaoEquipamento(tk.Toplevel):
             ultima_cal = self.converter_data(self.campos["ultima_calibracao"].get().strip())
             periodicidade = int(self.campos["periodicidade"].get().strip()) if self.campos["periodicidade"].get().strip().isdigit() else None
 
+            # Obtém o ID do tipo selecionado
+            tipo_nome = self.campos["tipo_eq_id"].get()
+            tipo_id = next((id_ for id_, nome in self.tipos_equipamento if nome == tipo_nome), None)
+
             novos_dados = {
                 "nome_eq": nome,
-                "tipo_eq_id": tipos_eq.index(self.campos["tipo_eq_id"].get()) + 1,
+                "tipo_eq_id": tipo_id,
                 "sigla_eq": sigla,
                 "setor_id": next((i for i, nome in tipos_setor if nome == self.campos["setor_id"].get()), None),
                 "status_id": next((i for i, nome in tipos_status if nome == self.campos["status_id"].get()), None),
@@ -153,7 +170,7 @@ class TelaEdicaoEquipamento(tk.Toplevel):
             if not confirmacao:
                 return
 
-            atualizar_equipamento(self.equip_id, novos_dados)  # Agora usa ID, não SOND_ID
+            atualizar_equipamento(self.equip_id, novos_dados)
             messagebox.showinfo("Sucesso", "Equipamento atualizado com sucesso!")
             log_msg(f"Equipamento Editado: '{nome}'")
             self.destroy()
@@ -168,10 +185,3 @@ class TelaEdicaoEquipamento(tk.Toplevel):
             except ValueError:
                 continue
         return None
-
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    root.withdraw()
-    app = TelaEdicaoEquipamento(equip_id=1, master=root)
-    app.mainloop()

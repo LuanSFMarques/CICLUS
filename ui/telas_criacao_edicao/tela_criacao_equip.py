@@ -3,8 +3,8 @@ from tkinter import ttk, messagebox
 from datetime import datetime
 
 from controllers.equipamento_controller import criar_equipamento
-from data.tipos import tipos_eq, tipos_setor, tipos_status, tipos_status_calibr
-from helpers import log_msg
+from data.tipos import tipos_setor, tipos_status, tipos_status_calibr
+from helpers import log_msg, get_connection, DB_FILE
 
 
 class TelaCriacaoEquipamento(tk.Toplevel):
@@ -98,7 +98,14 @@ class TelaCriacaoEquipamento(tk.Toplevel):
             elif nome_atributo.startswith("combo_"):
                 values = []
                 if nome_atributo == "combo_tipo":
-                    values = tipos_eq
+                    # Busca os tipos de equipamento do banco em ordem alfabética
+                    conn = get_connection(DB_FILE)
+                    cursor = conn.cursor()
+                    cursor.execute("SELECT id, nome FROM tipos_equipamento ORDER BY nome COLLATE NOCASE")
+                    self.tipos_equipamento = cursor.fetchall()  # lista de tuplas (id, nome)
+                    conn.close()
+                    values = [nome for _, nome in self.tipos_equipamento]
+
                 elif nome_atributo == "combo_setor":
                     values = [s[1] for s in tipos_setor]
                 elif nome_atributo == "combo_status":
@@ -108,23 +115,18 @@ class TelaCriacaoEquipamento(tk.Toplevel):
 
                 combo = ttk.Combobox(scroll_frame, values=values, state="readonly", font=("Courier New", 11))
                 combo.pack(padx=pad_x, pady=(0, pad_y))
-                combo.current(0)
+                if values:
+                    combo.current(0)
                 setattr(self, nome_atributo, combo)
 
-                # Função para bloquear scroll quando dropdown fechado
                 def bloquear_scroll(event, c=combo):
-                    # popdown é criado quando dropdown abre
                     popdown = c.tk.call('ttk::combobox::PopdownWindow', c)
                     if popdown == '':
-                        return "break"  # bloqueia scroll
-                    # se estiver aberto, deixa scroll funcionar
+                        return "break"
 
-                # Bind do scroll para Windows e Linux/macOS
-                combo.bind("<MouseWheel>", bloquear_scroll)  # Windows
-                combo.bind("<Button-4>", bloquear_scroll)    # Linux scroll up
-                combo.bind("<Button-5>", bloquear_scroll)    # Linux scroll down
-
-
+                combo.bind("<MouseWheel>", bloquear_scroll)
+                combo.bind("<Button-4>", bloquear_scroll)
+                combo.bind("<Button-5>", bloquear_scroll)
 
             elif nome_atributo == "text_extra_info":
                 largura, altura = tamanho
@@ -187,31 +189,24 @@ class TelaCriacaoEquipamento(tk.Toplevel):
         ultima_calibracao_br = self.entry_ultima_cal.get().strip()
         periodicidade_raw = self.entry_periodicidade.get().strip()
 
-
         if not nome:
             messagebox.showerror("Erro", "Nome do equipamento é obrigatório!")
             return
-
         if "-" not in nome:
             messagebox.showerror("Erro", "Nome do equipamento deve conter um '-' para gerar a sigla!")
             return
-
         if not tipo:
             messagebox.showerror("Erro", "Tipo do equipamento é obrigatório!")
             return
-
         if not setor:
             messagebox.showerror("Erro", "Setor é obrigatório!")
             return
-
         if not status:
             messagebox.showerror("Erro", "Status é obrigatório!")
             return
-
         if not sond_id_raw.isdigit():
             messagebox.showerror("Erro", "SOND ID deve ser um número válido!")
             return
-
         if not periodicidade_raw.isdigit():
             messagebox.showerror("Erro", "Periodicidade deve ser um número válido!")
             return
@@ -224,20 +219,14 @@ class TelaCriacaoEquipamento(tk.Toplevel):
                     continue
             return None
 
-        # Data de aquisição agora é OPCIONAL
-        data_aquisicao = None
-        if data_aquisicao_br:
-            data_aquisicao = parse_data(data_aquisicao_br)
-            if not data_aquisicao:
-                messagebox.showerror("Erro", "Data de aquisição inválida! Use o formato DD-MM-YYYY ou DD/MM/YYYY.")
-                return
-
-        ultima_calibracao = None
-        if ultima_calibracao_br:
-            ultima_calibracao = parse_data(ultima_calibracao_br)
-            if not ultima_calibracao:
-                messagebox.showerror("Erro", "Última calibração inválida! Use o formato DD-MM-YYYY ou DD/MM/YYYY.")
-                return
+        data_aquisicao = parse_data(data_aquisicao_br) if data_aquisicao_br else None
+        ultima_calibracao = parse_data(ultima_calibracao_br) if ultima_calibracao_br else None
+        if data_aquisicao_br and not data_aquisicao:
+            messagebox.showerror("Erro", "Data de aquisição inválida! Use o formato DD-MM-YYYY ou DD/MM/YYYY.")
+            return
+        if ultima_calibracao_br and not ultima_calibracao:
+            messagebox.showerror("Erro", "Última calibração inválida! Use o formato DD-MM-YYYY ou DD/MM/YYYY.")
+            return
 
         confirmacao = messagebox.askyesno("Confirmação", "Deseja realmente criar este equipamento?")
         if not confirmacao:
@@ -249,7 +238,7 @@ class TelaCriacaoEquipamento(tk.Toplevel):
 
         equipamento_data = {
             "nome_eq": nome,
-            "tipo_eq_id": tipos_eq.index(tipo) + 1,
+            "tipo_eq_id": next((id_ for id_, nome_ in self.tipos_equipamento if nome_ == tipo), None),
             "sigla_eq": sigla,
             "setor_id": next((s[0] for s in tipos_setor if s[1] == setor), None),
             "status_id": next((s[0] for s in tipos_status if s[1] == status), None),
