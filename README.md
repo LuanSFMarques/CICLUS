@@ -9,6 +9,7 @@ O software adota o mesmo padrão de identificação e categorização utilizado 
 ## Novidades (v1.3)
 - FIX na identificação de metadados na descrição dos itens.
 - FIX geral no scroll.
+- FIX na ordenação de valores na tela de criação e edição de equipamentos
 - Criação da aba de Gráficos.
 
 ## 📖 Sumário
