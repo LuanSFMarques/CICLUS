@@ -3,7 +3,7 @@ from tkinter import ttk
 from controllers.equipamento_controller import quantidade_calibr
 
 class TelaResumoCalibracao(tk.Toplevel):
-    def __init__(self, master=None):
+    def __init__(self, master):
         super().__init__(master)
 
         # Consulta os dados de calibração

@@ -6,13 +6,19 @@ from dateutil.relativedelta import relativedelta
 from controllers.equipamento_controller import info_para_plano_calibr
 
 class TelaPlanoDeCalibracao(tk.Toplevel):
-    def __init__(self, master=None):
+    def __init__(self, master):
         super().__init__(master)
         self.title("Plano de Calibração - Próximos 30 dias")
         self.geometry("800x400")
         self.configure(bg="#F5F1E9")
         self.resizable(True, True)
         
+        if master is not None:
+            master.update_idletasks()
+            x = master.winfo_x() + 50
+            y = master.winfo_y() + 50
+            self.geometry(f"+{x}+{y}")
+
         lbl = tk.Label(
             self,
             text="Equipamentos com calibração vencendo nos próximos 30 dias",

@@ -372,13 +372,13 @@ class TelaPrincipal(tk.Tk):
         webbrowser.open_new_tab("https://www.sond.com.br/ativos-laboratorio-lista/status/1/")
 
     def abrir_graficos(self):
-        TelaGraficosCalibracao()
+        TelaGraficosCalibracao(self)
 
     def abrir_plano_calibr(self):
-        TelaPlanoDeCalibracao()
+        TelaPlanoDeCalibracao(self)
 
     def exibir_pop_up_calibracao(self):
-        TelaResumoCalibracao()
+        TelaResumoCalibracao(self)
         
     def exportar_e_aviso(self):
         try:
