@@ -45,8 +45,8 @@ class TelaCriacaoEquipamento(tk.Toplevel):
             combo.bind("<Button-5>", lambda e: "break")
             setattr(self, atributo, combo)
 
-        def criar_text(parent, atributo, row, column, width=70, height=4):
-            text = tk.Text(parent, width=width, height=height, font=fonte_entry, wrap="word")
+        def criar_text(parent, atributo, row, column, width=50, height=6):
+            text = tk.Text(parent, width=width, height=height, font=fonte_entry, wrap="word", bd=2)
             text.grid(row=row, column=column, padx=5, pady=5, columnspan=2, sticky="w")
             setattr(self, atributo, text)
 

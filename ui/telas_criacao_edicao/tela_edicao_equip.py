@@ -49,13 +49,14 @@ class TelaEdicaoEquipamento(tk.Toplevel):
         def criar_combo(parent, atributo, values, row, column):
             combo = ttk.Combobox(parent, values=values, state="readonly", font=fonte_entry, width=28)
             combo.grid(row=row, column=column, padx=5, pady=5, sticky="w")
+            # Desabilita mudança pelo scroll do mouse
             combo.bind("<MouseWheel>", lambda e: "break")
-            combo.bind("<Button-4>", lambda e: "break")
-            combo.bind("<Button-5>", lambda e: "break")
+            combo.bind("<Button-4>", lambda e: "break")  # Linux
+            combo.bind("<Button-5>", lambda e: "break")  # Linux
             setattr(self, atributo, combo)
 
-        def criar_text(parent, atributo, row, column, width=70, height=4):
-            text = tk.Text(parent, width=width, height=height, font=fonte_entry, wrap="word")
+        def criar_text(parent, atributo, row, column, width=50, height=6):
+            text = tk.Text(parent, width=width, height=height, font=fonte_entry, wrap="word", bd=2)
             text.grid(row=row, column=column, padx=5, pady=5, columnspan=2, sticky="w")
             setattr(self, atributo, text)
 
@@ -68,7 +69,7 @@ class TelaEdicaoEquipamento(tk.Toplevel):
             font=("Courier New", 16, "bold")
         ).pack(pady=(15, 0))
 
-        # Container
+        # Container principal
         container_frame = tk.Frame(self, bg="#F2EEE6", relief="sunken", bd=2)
         container_frame.pack(padx=20, pady=20, fill="both", expand=False)
 
@@ -121,16 +122,19 @@ class TelaEdicaoEquipamento(tk.Toplevel):
         btn_frame = tk.Frame(self, bg="#F5F1E9")
         btn_frame.pack(pady=10)
 
+        btn_width = 15  # mesmo valor para ambos
+        btn_height = 1
+
         tk.Button(
-            btn_frame, text="SALVAR ALTERAÇÕES", command=self.salvar_equipamento,
+            btn_frame, text="SALVAR", command=self.salvar_equipamento,
             bg="#C85A17", fg="white", font=("Courier New", 12, "bold"),
-            width=20, height=2, activebackground="#E38B2B"
+            width=btn_width, height=btn_height, activebackground="#E38B2B"
         ).pack(side="left", padx=40)
 
         tk.Button(
             btn_frame, text="CANCELAR", command=self.destroy,
             bg="#8B8B8B", fg="white", font=("Courier New", 12, "bold"),
-            width=14, height=2, activebackground="#A9A9A9"
+            width=btn_width, height=btn_height, activebackground="#A9A9A9"
         ).pack(side="left", padx=40)
 
     def preencher_campos(self):
