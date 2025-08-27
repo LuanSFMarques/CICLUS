@@ -10,7 +10,9 @@ O software adota o mesmo padrão de identificação e categorização utilizado 
 - FIX na identificação de metadados na descrição dos itens.
 - FIX geral no scroll.
 - FIX na ordenação de valores na tela de criação e edição de equipamentos
+- UPDATE no design das abas de criação e edição de equipamentos (melhor UX)
 - Criação da aba de Gráficos.
+- Outras pequenas melhorias...
 
 ## 📖 Sumário
 
@@ -43,6 +45,7 @@ O software adota o mesmo padrão de identificação e categorização utilizado 
 - **Python**: Linguagem principal do software
 - **TKinter**: Criação da interface gráfica.
 - **SQLite3**: Banco de dados local para armazenamento rápido e leve.
+- **Matplotlib**: Criação de gráficos para análise.
 
 ## Como Usar
 
