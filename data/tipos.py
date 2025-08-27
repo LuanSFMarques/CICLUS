@@ -26,19 +26,22 @@ tipos_item = [
     (6, "Volta de Calibração"),
     (7, "Volta de Conserto"),
     (8, "Descarte"),
-    (9, "Adquirido")
+    (9, "Adquirido"),
+    (10, "Enviado para Campo"),
+    (11, "Volta do Campo"),
 ]
 
 tipos_setor = [
-    (0, "EE1"),
-    (1, "EE2"),
-    (2, "SED"),
-    (3, "DOS"),
-    (4, "PRE"),
-    (5, "EST"),
-    (6, "COM"),
-    (7, "UFA"),
-    (8, "NEN") # NENHUM
+    (0, "EE1"), # ESPECIAIS 1
+    (1, "EE2"), # ESPECIAIS 2
+    (2, "SED"), # SEDIMENTAÇÃO
+    (3, "DOS"), # DOSAGEM
+    (4, "PRE"), # PREPARAÇÃO
+    (5, "EST"), # ESTOQUE
+    (6, "COM"), # COMPACTAÇÃO
+    (7, "UFA"), # ESTUFA
+    (8, "NEN"), # NENHUM
+    (9, "CAM") # CAMPO
 ]
 
 tipos_status_calibr = [
