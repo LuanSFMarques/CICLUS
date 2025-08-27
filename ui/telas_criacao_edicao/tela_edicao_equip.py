@@ -8,12 +8,19 @@ from helpers import log_msg, get_connection, DB_FILE
 
 
 class TelaEdicaoEquipamento(tk.Toplevel):
-    def __init__(self, equip_id, master=None):
+    def __init__(self, equip_id, master):
         super().__init__(master)
         self.title(f"Editar Equipamento - ID {equip_id}")
         self.geometry("1200x560")
         self.resizable(False, False)
         self.configure(bg="#F5F1E9")
+
+        if master is not None:
+            pos_x = master.winfo_x() + 50
+            pos_y = master.winfo_y() + 50
+            self.geometry(f"{1200}x{560}+{pos_x}+{pos_y}")
+        else:
+            self.geometry(f"{1200}x{560}")
 
         self.equip_id = equip_id
         self.equipamento = obter_equipamento_cru(equip_id)

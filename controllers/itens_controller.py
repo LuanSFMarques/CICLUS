@@ -72,14 +72,49 @@ def obter_itens_ciclo_vida_por_equipamento(equip_id):
         
         colunas = [desc[0] for desc in cursor.description]
         itens = [dict(zip(colunas, linha)) for linha in cursor.fetchall()]
+
+        # 🔥 Tratamento da info_especial
+        for item in itens:
+            info = item.get("info_especial")
+            if not info:
+                continue
+
+            if info.startswith("Setor:"):
+                partes = info.replace("Setor:", "").strip().split("->")
+                novos_valores = []
+                for p in partes:
+                    idx = p.strip().replace("Index", "").strip()
+                    if idx.isdigit():
+                        cursor.execute("SELECT nome FROM tipos_setor WHERE id = ?", (idx,))
+                        row = cursor.fetchone()
+                        novos_valores.append(row[0] if row else f"Index {idx}")
+                    else:
+                        novos_valores.append(p.strip())
+                item["info_especial"] = "Setor: " + " -> ".join(novos_valores)
+
+            elif info.startswith("Status:"):
+                partes = info.replace("Status:", "").strip().split("->")
+                novos_valores = []
+                for p in partes:
+                    idx = p.strip().replace("Index", "").strip()
+                    if idx.isdigit():
+                        cursor.execute("SELECT nome FROM tipos_status WHERE id = ?", (idx,))
+                        row = cursor.fetchone()
+                        novos_valores.append(row[0] if row else f"Index {idx}")
+                    else:
+                        novos_valores.append(p.strip())
+                item["info_especial"] = "Status: " + " -> ".join(novos_valores)
+
+            # Caso não seja "Setor" ou "Status", mantém o valor original
+
         return itens
+
     except Exception as e:
         print(f"Erro ao obter itens do ciclo de vida: {e}")
         return []
     finally:
         conn.close()
 
-obter_itens_ciclo_vida_por_equipamento(1)
 
 def criar_item_ciclo_vida(dados):
     """

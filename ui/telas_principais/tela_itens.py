@@ -335,6 +335,3 @@ class TelaCicloVida(tk.Toplevel):
         if resposta:
             excluir_item(item_id)
             self.carregar_itens_ciclo()
-
-    def sqlite_para_excel(self):
-        print("teste")

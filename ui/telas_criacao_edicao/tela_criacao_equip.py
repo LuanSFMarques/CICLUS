@@ -8,7 +8,7 @@ from helpers import log_msg, get_connection, DB_FILE
 
 
 class TelaCriacaoEquipamento(tk.Toplevel):
-    def __init__(self, master=None):
+    def __init__(self, master):
         super().__init__(master)
         self.title("Criar Novo Equipamento")
         self.geometry("1200x560")
@@ -16,6 +16,13 @@ class TelaCriacaoEquipamento(tk.Toplevel):
         self.configure(bg="#F5F1E9")
         self.carregar_tipos_equipamento()
         self.criar_widgets()
+
+        if master is not None:
+            pos_x = master.winfo_x() + 50
+            pos_y = master.winfo_y() + 50
+            self.geometry(f"{1200}x{560}+{pos_x}+{pos_y}")
+        else:
+            self.geometry(f"{1200}x{560}")
 
     def carregar_tipos_equipamento(self):
         conn = get_connection(DB_FILE)
