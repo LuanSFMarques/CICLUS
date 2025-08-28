@@ -95,7 +95,7 @@ def plot_envios_por_mes(cv, plot_res):
     for label in ax.get_xticklabels():
         label.set_rotation(45)
     ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
-    ax.set_yticks(np.arange(0,50,10))
+    ax.set_yticks(np.arange(0,40,5))
     fig.tight_layout()
     return fig, "Envios para Calibração por Mês"
 
