@@ -22,6 +22,7 @@ def plot_calibracao_por_tipo(eq, t_eq, plot_res):
 
     ax.set_xlabel("Tipo de Equipamento")
     ax.set_ylabel("Quantidade")
+    ax.set_yticks(np.arange(0,75,5))
     ax.legend(["Calibrado", "Não Calibrado", "Incerto", "Especial"])
     ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
     fig.tight_layout()
