@@ -298,11 +298,13 @@ data\
         PlanilhaDeEquipamentosAtualizada_5.xlsx
     excel_output\
         equipamentos_itens.xlsx
+    csv_output\
+        equipamentos.csv
+        itens_ciclo_vida.csv
     atualizar_calibracao.py
     atualizar_tipos.py
-    excel_para_sqlite.py
+    exportar.py
     init_db.py
-    sqlite_para_excel.py
     tipos.py
 ui\
     telas_criacao_edicao\
@@ -312,12 +314,18 @@ ui\
         tela_edicao_equip.py
     telas_misc\
         tela_plano_calibr.py
+        tela_graficos.py
+        tela_resumo_calibracao.py
     telas_principais\
         tela_desc_item.py
         tela_equipamentos.py
         tela_itens.py
+config.py
 helpers.py
 main.py
+README.md
+requirements.txt
+roadmap.md
 ```
 
 ## Armazenamento de Dados
