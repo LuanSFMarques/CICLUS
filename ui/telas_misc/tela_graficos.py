@@ -100,6 +100,46 @@ def plot_envios_por_mes(cv, plot_res):
     fig.tight_layout()
     return fig, "Envios para Calibração por Mês"
 
+def plot_equipamentos_por_fabricante(eq, plot_res):
+    """
+    Gera um gráfico de barras mostrando a quantidade de equipamentos por fabricante.
+    Apenas equipamentos ativos (status_id == 0) devem ser considerados.
+    """
+    eq = eq[eq["fabricante"].notna() & (eq["fabricante"].str.strip() != "")]
+    df_grouped = eq.groupby('fabricante').size().sort_values(ascending=False)
+
+    fig = Figure(figsize=plot_res, facecolor="#FDFCF8")
+    ax = fig.add_subplot(111, facecolor="#FDFCF8")
+    df_grouped.plot(kind="bar", ax=ax, color="#B9D6FF", zorder=3)
+
+    ax.set_xlabel("Fabricante")
+    ax.set_ylabel("Quantidade de Equipamentos")
+    ax.set_yticks(np.arange(0,55,5))
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")
+    ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
+    fig.tight_layout()
+    return fig, "Quantidade de Equipamentos por Fabricante"
+
+def plot_quebras_por_equipamento(eq, cv, plot_res):
+
+    merged = pd.merge(eq, cv, left_on="id", right_on="equipamento_id", how="right")
+    merged = merged[merged['tipo_item_id'] == 3]
+    grouped = merged.groupby('sigla_eq')['tipo_item_id'].count()
+
+    fig = Figure(figsize=plot_res, facecolor="#FDFCF8")
+    ax = fig.add_subplot(111, facecolor="#FDFCF8")
+    
+    # Plot de barras
+    grouped.plot(kind="bar", ax=ax, color="#FFB3B3", zorder=3)
+    
+    ax.set_xlabel("Tipo de Equipamento")
+    ax.set_ylabel("Número de Quebras")
+    ax.set_yticks(np.arange(0, grouped.max()+2, 1))
+    ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
+    fig.tight_layout()
+
+    return fig, "Quebras por Equipamento"
+
 
 # ---------------- TELA TKINTER COM CARROSSEL ---------------- #
 
@@ -140,18 +180,21 @@ class TelaGraficosCalibracao(tk.Toplevel):
 
         dados = carregar_tabelas()
         eq = dados["equipamentos"]
-        eq = eq[eq['status_id'] == 0]
+        eq_ativos = eq[eq['status_id'] == 0]
         t_eq = dados["tipos_eq"]
         t_setor = dados["tipos_setor"]
         cv = dados["ciclo_vida"]
 
         # Lista de figuras + títulos (agora com pizza por setor)
         self.figs = [
-            plot_calibracao_por_tipo(eq, t_eq, PLOT_RES),
-            plot_calibracao_pizza_por_setor(eq, t_setor, (PLOT_RES)),
-            plot_calibracao_por_setor(eq, t_setor, PLOT_RES),
-            plot_envios_por_mes(cv, PLOT_RES)
+            plot_calibracao_por_tipo(eq_ativos, t_eq, PLOT_RES),
+            plot_calibracao_pizza_por_setor(eq_ativos, t_setor, (PLOT_RES)),
+            plot_calibracao_por_setor(eq_ativos, t_setor, PLOT_RES),
+            plot_envios_por_mes(cv, PLOT_RES),
+            plot_equipamentos_por_fabricante(eq_ativos, PLOT_RES),
+            plot_quebras_por_equipamento(eq, cv, PLOT_RES)
         ]
+
 
         self.current_index = 0
         self.canvas = None
