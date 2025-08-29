@@ -100,6 +100,7 @@ def plot_envios_por_mes(cv, plot_res):
     fig.tight_layout()
     return fig, "Envios para Calibração por Mês"
 
+
 def plot_equipamentos_por_fabricante(eq, plot_res):
     """
     Gera um gráfico de barras mostrando a quantidade de equipamentos por fabricante.
@@ -120,6 +121,7 @@ def plot_equipamentos_por_fabricante(eq, plot_res):
     fig.tight_layout()
     return fig, "Quantidade de Equipamentos por Fabricante"
 
+
 def plot_quebras_por_equipamento(eq, cv, plot_res):
 
     merged = pd.merge(eq, cv, left_on="id", right_on="equipamento_id", how="right")
@@ -139,6 +141,37 @@ def plot_quebras_por_equipamento(eq, cv, plot_res):
     fig.tight_layout()
 
     return fig, "Quebras por Equipamento"
+
+
+def plot_quebras_por_fabricante(eq, cv, plot_res):
+    # Merge dos equipamentos com o ciclo de vida
+    merged = pd.merge(eq, cv, left_on="id", right_on="equipamento_id", how="right")
+    
+    # Considera apenas quebras (tipo_item_id == 3)
+    merged = merged[merged['tipo_item_id'] == 3]
+    
+    # Remove fabricantes nulos ou vazios
+    merged = merged[merged["fabricante"].notna() & (merged["fabricante"].str.strip() != "")]
+    
+    # Conta quebras por fabricante
+    grouped = merged.groupby('fabricante')['tipo_item_id'].count().sort_values(ascending=False)
+    
+    # Criação da figura
+    fig = Figure(figsize=plot_res, facecolor="#FDFCF8")
+    ax = fig.add_subplot(111, facecolor="#FDFCF8")
+    
+    # Plot de barras
+    grouped.plot(kind="bar", ax=ax, color="#FFB3B3", zorder=3)
+    
+    ax.set_xlabel("Fabricante")
+    ax.set_ylabel("Número de Quebras")
+    ax.set_yticks(np.arange(0, grouped.max()+2, 1))
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")
+    ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
+    fig.tight_layout()
+    
+    return fig, "Quebras por Fabricante"
+
 
 
 # ---------------- TELA TKINTER COM CARROSSEL ---------------- #
@@ -188,12 +221,15 @@ class TelaGraficosCalibracao(tk.Toplevel):
         # Lista de figuras + títulos (agora com pizza por setor)
         self.figs = [
             plot_calibracao_por_tipo(eq_ativos, t_eq, PLOT_RES),
-            plot_calibracao_pizza_por_setor(eq_ativos, t_setor, (PLOT_RES)),
             plot_calibracao_por_setor(eq_ativos, t_setor, PLOT_RES),
+            plot_calibracao_pizza_por_setor(eq_ativos, t_setor, PLOT_RES),
             plot_envios_por_mes(cv, PLOT_RES),
             plot_equipamentos_por_fabricante(eq_ativos, PLOT_RES),
-            plot_quebras_por_equipamento(eq, cv, PLOT_RES)
+            plot_quebras_por_fabricante(eq, cv, PLOT_RES),
+            plot_quebras_por_equipamento(eq, cv, PLOT_RES),
         ]
+
+
 
 
         self.current_index = 0
