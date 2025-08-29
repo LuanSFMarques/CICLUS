@@ -8,6 +8,7 @@ O software adota o mesmo padrão de identificação e categorização utilizado 
 
 ## Novidades (v1.4)
 - Novos gráficos criados para demonstrar relações de equipamentos quebrados por fabricante e categoria de equipamento.
+- Organização de código
 
 ## 📖 Sumário
 

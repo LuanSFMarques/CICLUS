@@ -16,6 +16,7 @@
 - Criação da aba de Gráficos
 
 ## Atualizações (v1.4)
+- Novos gráficos
 - Tornar o código mais organizados, tirar as queries em códigos de tela e coloca-los apenas nos controllers. Melhorar workflow geral.
 
 ## Atualizações (v2.0)
