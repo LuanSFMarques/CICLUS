@@ -1,11 +1,15 @@
 import tkinter as tk
 from tkinter import ttk
+
 import pandas as pd
+import numpy as np
+
+from pandas.tseries.offsets import DateOffset
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
 from controllers.equipamento_controller import carregar_tabelas
 from config import PLOT_RES
-import numpy as np
 
 # Paleta fixa para consistência
 COLORS = ["#DFF2BB", "#FFB3B3", "#D6D6D6", "#B9D6FF"]
@@ -172,6 +176,49 @@ def plot_quebras_por_fabricante(eq, cv, plot_res):
     
     return fig, "Quebras por Fabricante"
 
+def plot_proximas_calibracoes(eq, plot_res):
+    """
+    Plota, por mês a partir de agora, a quantidade de equipamentos que vão precisar calibrar novamente.
+    Considera que cada equipamento deve ser calibrado 12 meses após a última calibração.
+    """
+    import pandas as pd
+    from pandas.tseries.offsets import DateOffset
+
+    # Copiar apenas equipamentos ativos com data de última calibração válida
+    eq = eq[eq['status_id'] == 0].copy()
+    eq = eq[pd.notna(eq['ultima_calibracao'])]
+
+    # Converter para datetime
+    eq['ultima_calibracao'] = pd.to_datetime(eq['ultima_calibracao'])
+
+    # Próxima calibração = última + 12 meses
+    eq['proxima_calibracao'] = eq['ultima_calibracao'] + DateOffset(months=12)
+
+    # Considerar apenas datas futuras a partir de hoje
+    hoje = pd.Timestamp.today()
+    eq = eq[eq['proxima_calibracao'] >= hoje]
+
+    # Agrupar por ano-mês
+    eq['ano_mes'] = eq['proxima_calibracao'].dt.to_period('M')
+    df_plot = eq.groupby('ano_mes').size()
+
+    # Criar figura
+    fig = Figure(figsize=plot_res, facecolor="#FDFCF8")
+    ax = fig.add_subplot(111, facecolor="#FDFCF8")
+
+    df_plot.plot(kind='bar', ax=ax, color="#B9D6FF", zorder=3)
+
+    # Formatar labels como mm-yyyy
+    ax.set_xticklabels([p.strftime('%m-%Y') for p in df_plot.index.to_timestamp()], rotation=45, ha="right")
+
+    ax.set_xlabel("Mês de Recalibração")
+    ax.set_ylabel("Quantidade de Equipamentos")
+    ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
+    fig.tight_layout()
+
+    return fig, "Próximas Calibrações por Mês"
+
+
 
 
 # ---------------- TELA TKINTER COM CARROSSEL ---------------- #
@@ -227,6 +274,7 @@ class TelaGraficosCalibracao(tk.Toplevel):
             plot_equipamentos_por_fabricante(eq_ativos, PLOT_RES),
             plot_quebras_por_fabricante(eq, cv, PLOT_RES),
             plot_quebras_por_equipamento(eq, cv, PLOT_RES),
+            plot_proximas_calibracoes(eq, PLOT_RES),
         ]
 
 
