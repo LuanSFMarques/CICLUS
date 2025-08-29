@@ -1,14 +1,14 @@
 ![Logo Ciclus](assets/logos/ciclus_logo_laranja.png)
 
 ![Logo Ciclus](assets/images/ciclus_banner.png)
-# CICLUS v1.4 *Protótipo*
+# CICLUS v2.0
 *CICLUS* é um software local desenvolvido para o acompanhamento do ciclo de vida de equipamentos laboratoriais na empresa **Suporte**, proporcionando acesso rápido e fácil às informações e oferecendo total visibilidade do histórico e do status de cada equipamento. Seu principal objetivo é permitir pesquisas ágeis e precisas sobre qualquer equipamento.
 
 O software adota o mesmo padrão de identificação e categorização utilizado na aplicação principal da empresa, [**Sond**](https://www.sond.com.br), garantindo consistência e integração com os processos já existentes.
 
-## Novidades (v1.4)
-- Novos gráficos criados para demonstrar relações de equipamentos quebrados por fabricante e categoria de equipamento.
-- Organização de código
+## Novidades (v2.0)
+- Código Executável
+- Novo README.
 
 ## 📖 Sumário
 
@@ -43,7 +43,9 @@ O software adota o mesmo padrão de identificação e categorização utilizado 
 - **SQLite3**: Banco de dados local para armazenamento rápido e leve.
 - **Matplotlib**: Criação de gráficos para análise.
 
-## Como Usar
+## Como transportar o projeto para seu computador local.
+
+Você pode tanto seguir os seguintes passos utilizando GIT quanto baixar diretamente os arquivos e transportar para o local desejado.
 
 1. Clone o repositório:
 ```bash
@@ -68,6 +70,67 @@ ou
 ```bash
 py main.py
 ```
+
+## Como Usar o Software Ciclus
+O Ciclus é um software de gerenciamento de equipamentos, estruturado em duas abas principais:
+- Tela de Equipamentos
+- Tela de itens de Ciclo de Vida
+
+O objetivo do sistema é fornecer informações sobre os equipamentos de maneira rápida e prática, priorizando velocidade de acesso e facilidade de visualização em vez de detalhamento inicial extenso.
+
+---
+
+### Tela de Equipamentos
+
+Ao iniciar o programa, a Tela de Equipamentos é exibida. Nela, cada equipamento apresenta as seguintes informações:
+- Nome do equipamento: Nome principal exibido na SOND.
+- Tipo de equipamento
+- Modelo do equipamento: Identificação simplificada (não técnico) para fácil referência.
+- Sigla do setor
+- Status ativo/inativo
+- Status de calibração
+
+#### Representação Visual dos Status
+Os dois últimos atributos são representados graficamente por cores, para rápida interpretação:
+- Status de atividade
+    - Quadrado menor à esquerda do item
+    - Verde: ativo
+    - Vermelho: inativo
+- Status de calibração:
+    - Retângulo maior à direita do item
+    - Verde: calibrado
+    - Vermelho: não calibrado
+    - Azul: especial (não necessita calibração convencional)
+    - Cinza: incerto (informação de calibração não disponível)
+
+*Nota*:
+- *Equipamentos com status “incerto” não possuem informações suficientes para determinar a calibração.*
+- *Equipamentos “especiais” não seguem o procedimento de calibração tradicional (ex.: casagrande, peneiras de fundo).*
+- *As cores permitem que o usuário identifique rapidamente o status sem necessidade de leitura detalhada.*
+
+#### Interações por Equipamento
+Cada equipamento inclui:
+- ID (identificação na SOND)
+- Botão Editar: Permite alterar todas as informações, exceto o ID
+- Botão Excluir: Remove o equipamento e todos os itens relacionados no ciclo de vida
+
+A lista exibe até 20 equipamentos por página. Itens adicionais são distribuídos em páginas subsequentes, acessíveis pelos botões de navegação na parte inferior.
+
+#### Botões de Funções Principais
+- *Atualizar*: Sincroniza os dados exibidos com o banco de dados, garantindo que alterações recentes sejam refletidas na tela.
+- *Resumo de Calibração*: Exibe um resumo geral dos equipamentos ativos, incluindo contagem de calibrados, não calibrados, incertos e especiais.
+- *Criar Equipamento*: Abre um formulário para cadastrar um novo equipamento.
+
+**Atenção ao cadastrar novos equipamentos:**
+- **O ID deve ser único; o sistema não permite duplicações.**
+- **Equipamentos devem ter periodicidade definida; caso não haja, utilize o valor padrão de 12 meses.**
+
+#### Campo “Modelo” vs. “Modelo Técnico”
+- *Modelo Técnico*: Valor completo presente na SOND, contendo informações detalhadas do equipamento.
+- *Modelo (simplificado)*: Identificação direta e fácil de utilizar.
+    - *Ex.: Uma peneira com modelo técnico "abert 1,18mm malha 16" pode ter o modelo simplificado "16" para referência rápida.*
+- O modelo simplificado é exibido na lista de equipamentos, facilitando a visualização e identificação.
+
 
 ## Estrutura do Projeto
 
