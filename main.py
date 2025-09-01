@@ -5,12 +5,9 @@ import tkinter as tk
 from tkinter import messagebox
 
 from ui.telas_principais.tela_equipamentos import TelaPrincipal
-from helpers import log_msg
 
 def main():
     try:
-        log_msg("Aplicativo iniciado")
-
         app = TelaPrincipal()
         app.mainloop()
 
