@@ -137,8 +137,6 @@ A lista exibe até 20 equipamentos por página. Itens adicionais são distribuí
 - *Resumo de Calibração*: Exibe um resumo geral dos equipamentos ativos, incluindo contagem de calibrados, não calibrados, incertos e especiais.
 - *Criar Equipamento*: Abre um formulário para cadastrar um novo equipamento.
 
-<img src="assets/images/readme_images/tela_equipamentos.png" width="70%">
-
 **Atenção ao cadastrar novos equipamentos:**
 - **O ID deve ser único; o sistema não permite duplicações.**
 - **Equipamentos devem ter periodicidade definida; caso não haja, utilize o valor padrão de 12 meses.**
@@ -172,7 +170,7 @@ Cada equipamento listado na Tela de Equipamentos é clicável. Ao selecionar um 
 
 ### Tela de Itens (Ciclo de Vida)
 
-<img src="assets/images/readme_images/tela_itens.png" width="70%">
+<img src="assets/images/readme_images/tela_itens.png" width="100%">
 
 Nesta tela, o usuário encontra:
 - Detalhes do equipamento selecionado: Informações como fabricante, descrição, última data de calibração, entre outros.
