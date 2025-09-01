@@ -96,6 +96,8 @@ O objetivo do sistema é fornecer informações sobre os equipamentos de maneira
 
 ### Tela de Equipamentos
 
+![Logo Ciclus](assets/images/readme_images/tela_equipamentos.png)
+
 Ao iniciar o programa, a Tela de Equipamentos é exibida. Nela, cada equipamento apresenta as seguintes informações:
 - Nome do equipamento: Nome principal exibido na SOND.
 - Tipo de equipamento
@@ -135,6 +137,8 @@ A lista exibe até 20 equipamentos por página. Itens adicionais são distribuí
 - *Resumo de Calibração*: Exibe um resumo geral dos equipamentos ativos, incluindo contagem de calibrados, não calibrados, incertos e especiais.
 - *Criar Equipamento*: Abre um formulário para cadastrar um novo equipamento.
 
+<img src="assets/images/readme_images/tela_equipamentos.png" width="70%">
+
 **Atenção ao cadastrar novos equipamentos:**
 - **O ID deve ser único; o sistema não permite duplicações.**
 - **Equipamentos devem ter periodicidade definida; caso não haja, utilize o valor padrão de 12 meses.**
@@ -167,6 +171,9 @@ Cada equipamento listado na Tela de Equipamentos é clicável. Ao selecionar um 
 ---
 
 ### Tela de Itens (Ciclo de Vida)
+
+<img src="assets/images/readme_images/tela_itens.png" width="70%">
+
 Nesta tela, o usuário encontra:
 - Detalhes do equipamento selecionado: Informações como fabricante, descrição, última data de calibração, entre outros.
 - Itens do Ciclo de Vida: Registro de todos os acontecimentos relevantes associados ao equipamento.
@@ -190,6 +197,9 @@ Cada evento registrado exibe:
 - Botões de ação: Editar ou excluir o evento, permitindo gerenciamento completo da lista.
 
 #### Criação de Itens do Ciclo de Vida
+
+<img src="assets/images/readme_images/tela_cad_item.png" width="70%">
+
 Para registrar um novo evento no Ciclo de Vida de um equipamento, clique em “Adicionar Item ao Ciclo de Vida”. Isso abrirá um formulário que permite cadastrar um acontecimento específico relacionado ao equipamento selecionado.
 
 Ao abrir o formulário, os seguintes campos estarão disponíveis:
@@ -232,6 +242,9 @@ Ao criar um item do tipo Mudança de Status ou Troca de Setor, uma janela adicio
 ---
 
 ### Exportação (EXCEL e CSV)
+
+<img src="assets/images/readme_images/tela_exportacao.png" width="70%">
+
 O Ciclus permite a exportação de dados armazenados no banco de dados para Excel ou CSV. Para isso, acesse a aba Equipamentos e clique no botão “Exportar”.
 
 As opções disponíveis são:
@@ -254,39 +267,66 @@ Observações Importante:
 A aba Gráficos, localizada na tela de Equipamentos, oferece visualizações que facilitam o entendimento de informações específicas sobre todos os equipamentos cadastrados.
 
 Os gráficos disponíveis são:
-1. Calibração por Tipo de Equipamento
+
+<img src="assets/images/readme_images/graf_1.png" width="70%">
+
+1. **Calibração por Tipo de Equipamento**
     - Tipo: Coluna
     - Cada coluna representa um tipo de equipamento (eixo X) e sua quantidade (eixo Y).
     - As cores indicam diferentes status de calibração.
-2. Status de Calibração por Setor
+
+<img src="assets/images/readme_images/graf_2.png" width="70%">
+
+2. **Status de Calibração por Setor**
     - Tipo: Coluna
     - Cada coluna representa um setor e a quantidade de equipamentos nele.
     - As cores indicam os status de calibração dos equipamentos.
-3. Distribuição de Calibração por Setor
+
+<img src="assets/images/readme_images/graf_3.png" width="70%">
+
+3. **Distribuição de Calibração por Setor**
     - Tipo: Pizza
     - Cada gráfico de pizza representa um setor, mostrando a porcentagem de equipamentos em cada status de calibração.
-4. Envios para Calibração por Mês
+
+<img src="assets/images/readme_images/graf_4.png" width="70%">
+
+4. **Envios para Calibração por Mês**
     - Tipo: Coluna
     - Cada coluna representa um mês e o eixo Y indica a quantidade de equipamentos enviados para calibração nesse período.
-5. Quantidade de Equipamentos por Fabricante
+
+<img src="assets/images/readme_images/graf_5.png" width="70%">
+
+5. **Quantidade de Equipamentos por Fabricante**
     - Tipo: Coluna
     - Cada coluna representa um fabricante único e o eixo Y mostra a quantidade de equipamentos cadastrados.
     - *Atenção: divergências na grafia dos nomes de fabricantes podem gerar múltiplas entradas para o mesmo fabricante.*
-6. Quebras por Fabricante
+
+<img src="assets/images/readme_images/graf_6.png" width="70%">
+
+6. **Quebras por Fabricante**
     - Tipo: Coluna
     - Cada coluna representa um fabricante e a quantidade de equipamentos que apresentaram falhas.
     - *Fabricantes sem registros de quebra não são exibidos.*
-7. Quebras por Equipamento
+
+<img src="assets/images/readme_images/graf_8.png" width="70%">
+
+7. **Quebras por Equipamento**
     - Tipo: Coluna
     - Cada coluna representa um tipo de equipamento e a quantidade de quebras registradas.
     - *Categorias sem equipamentos quebrados não aparecem.*
-8. Próximas Calibrações por Mês
+
+<img src="assets/images/readme_images/graf_7.png" width="70%">
+
+
+8. **Próximas Calibrações por Mês**
     - Tipo: Coluna
     - Cada coluna representa um mês, a partir do mês atual, mostrando a quantidade de equipamentos cuja calibração expirará nesse período.
-
 ---
 
 ### Plano de Calibração
+
+<img src="assets/images/readme_images/tela_plano_calibr.png" width="70%">
+
 O *Plano de Calibração* oferece uma visão visual detalhada de quais equipamentos precisarão ser calibrados ao longo de um período de um mês.
 
 Para acessar esta funcionalidade, clique no botão “Plano de Calibr.” na janela principal da lista de equipamentos.
