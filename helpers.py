@@ -1,6 +1,8 @@
 import sqlite3
 import logging
 import os
+import sys
+from pathlib import Path
 
 DB_FILE = "data/database/ciclus.db"
 LOG_FILE = "app.log"
@@ -36,3 +38,15 @@ def data_calibrado(data_str, periodicidade):
         return 0
     else:
         return 1
+    
+def resource_path(relative_path: str) -> str:
+    """
+    Retorna o caminho absoluto de um recurso (imagem, db, etc),
+    compatível com execução normal e com PyInstaller .exe
+    """
+    if hasattr(sys, "_MEIPASS"):
+        # Quando rodando como .exe
+        return Path(sys._MEIPASS) / relative_path
+    else:
+        # Quando rodando como script normal
+        return Path(relative_path)

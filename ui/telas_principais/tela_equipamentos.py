@@ -4,8 +4,8 @@ from PIL import Image, ImageTk
 import unicodedata
 import re
 import webbrowser
-from pathlib import Path
 
+from helpers import resource_path
 from controllers.equipamento_controller import listar_equipamentos_resumido, excluir_equipamento, quantidade_calibr
 from data.exportar import exportar_para_excel, exportar_eq_csv, exportar_item_csv
 
@@ -20,8 +20,8 @@ from data.atualizar_calibracao import atualizar_status_calibr_todos
 from helpers import DB_FILE
 from config import CICLUS_VERSION
 
-CAMINHO_LOGO_SUPORTE = Path(__file__).resolve().parent.parent.parent / "assets" / "logos" / "suporte_logo_laranja.png"
-CAMINHO_LOGO_CICLUS = Path(__file__).resolve().parent.parent.parent / "assets" / "logos" / "ciclus_logo_laranja.png"
+CAMINHO_LOGO_SUPORTE = resource_path("Assets/logos/suporte_logo_laranja.png")
+CAMINHO_LOGO_CICLUS = resource_path("Assets/logos/ciclus_logo_laranja.png")
 
 STATUS_COR = {
     "ATIVO": "#A8D5BA",
@@ -43,7 +43,7 @@ class TelaPrincipal(tk.Tk):
         super().__init__()
 
         try:
-            self.logo_icon = tk.PhotoImage(file="assets/logos/teste.png")
+            self.logo_icon = tk.PhotoImage(file="assets/logos/icone.png")
             self.iconphoto(True, self.logo_icon)
         except Exception as e:
             print(f"Erro ao carregar ícone: {e}")
@@ -473,6 +473,7 @@ class TelaPrincipal(tk.Tk):
             messagebox.showerror("Erro", f"Ocorreu um erro durante a exportação:\n{e}")
         finally:
             popup.destroy()
+
 
 
 
