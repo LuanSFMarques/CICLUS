@@ -21,6 +21,7 @@ O software adota o mesmo padrão de identificação e categorização utilizado 
     - [Interações por Equipamento](#interações-por-equipamento)  
     - [Botões de Funções Principais](#botões-de-funções-principais)  
     - [Campo “Modelo” vs. “Modelo Técnico”](#campo-modelo-vs-modelo-técnico)  
+    - [Barra de Pesquisa por Múltiplos Fatores](#barra-de-pesquisa)
     - [Direcionamento para o Ciclo de Vida](#direcionamento-para-o-ciclo-de-vida)  
   - [Tela de Itens (Ciclo de Vida)](#tela-de-itens-ciclo-de-vida)  
     - [Estrutura da Lista de Itens](#estrutura-da-lista-de-itens)  
@@ -143,6 +144,22 @@ A lista exibe até 20 equipamentos por página. Itens adicionais são distribuí
 - *Modelo (simplificado)*: Identificação direta e fácil de utilizar.
     - *Ex.: Uma peneira com modelo técnico "abert 1,18mm malha 16" pode ter o modelo simplificado "16" para referência rápida.*
 - O modelo simplificado é exibido na lista de equipamentos, facilitando a visualização e identificação.
+
+#### Barra de Pesquisa
+Na barra de pesquisa dos equipamentos é utilizado um algoritmo que permite buscas por múltiplos fatores. Isso significa que você pode localizar um equipamento utilizando qualquer parâmetro presente na descrição da lista de equipamentos e até mesmo combinar diferentes critérios.
+
+Os possíveis parâmetros de pesquisa são:
+- Nome
+- Tipo de Equipamento
+- modelo (simples)
+- Setor
+- Ativo ou Inativo
+- Status de Calibração
+
+*Por exemplo:* ao pesquisar "peneira sed", o sistema exibirá todas as peneiras do setor de Sedimentação. Já ao digitar "BAL ativo calibrado", serão listadas todas as balanças que estejam ativas e calibradas.
+
+*Atenção*: Para localizar especificamente equipamentos não calibrados, utilize o termo "não_calibrado" (com o caractere _ entre as palavras).
+Não há diferença entre letras maiúsculas e minúsculas, e o acento em "não" também não é obrigatório.
 
 #### Direcionamento para o Ciclo de Vida
 Cada equipamento listado na Tela de Equipamentos é clicável. Ao selecionar um equipamento, o usuário é automaticamente direcionado para a Tela de Itens (Ciclo de Vida), onde todos os eventos registrados relacionados àquele equipamento são exibidos.
