@@ -137,6 +137,8 @@ A lista exibe até 20 equipamentos por página. Itens adicionais são distribuí
 - *Resumo de Calibração*: Exibe um resumo geral dos equipamentos ativos, incluindo contagem de calibrados, não calibrados, incertos e especiais.
 - *Criar Equipamento*: Abre um formulário para cadastrar um novo equipamento.
 
+<img src="assets/images/readme_images/tela_cad_equip.png" width="80%">
+
 **Atenção ao cadastrar novos equipamentos:**
 - **O ID deve ser único; o sistema não permite duplicações.**
 - **Equipamentos devem ter periodicidade definida; caso não haja, utilize o valor padrão de 12 meses.**
@@ -196,7 +198,7 @@ Cada evento registrado exibe:
 
 #### Criação de Itens do Ciclo de Vida
 
-<img src="assets/images/readme_images/tela_cad_item.png" width="70%">
+<img src="assets/images/readme_images/tela_cad_item.png" width="60%">
 
 Para registrar um novo evento no Ciclo de Vida de um equipamento, clique em “Adicionar Item ao Ciclo de Vida”. Isso abrirá um formulário que permite cadastrar um acontecimento específico relacionado ao equipamento selecionado.
 
@@ -241,7 +243,7 @@ Ao criar um item do tipo Mudança de Status ou Troca de Setor, uma janela adicio
 
 ### Exportação (EXCEL e CSV)
 
-<img src="assets/images/readme_images/tela_exportacao.png" width="70%">
+<img src="assets/images/readme_images/tela_exportacao.png" width="50%">
 
 O Ciclus permite a exportação de dados armazenados no banco de dados para Excel ou CSV. Para isso, acesse a aba Equipamentos e clique no botão “Exportar”.
 
