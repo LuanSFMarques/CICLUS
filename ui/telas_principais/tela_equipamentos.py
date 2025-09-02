@@ -111,45 +111,45 @@ class TelaPrincipal(tk.Tk):
 
         tk.Button(self, text="Documentação", font=("Lucida Console", 10, "bold"),
           bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
-          padx=44, pady=2, activebackground="#DDD0C8",
-          activeforeground="#5C4033", command=self.abrir_documentacao
+          padx=44, pady=2, activebackground="#C85A17",
+          activeforeground="#DDD0C8", command=self.abrir_documentacao
         ).place(relx=1.0, x=-12, y=19, anchor="ne")
 
         tk.Button(self, text="Sond", font=("Lucida Console", 10, "bold"),
                 bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
-                padx=80, pady=2, activebackground="#DDD0C8",
-                activeforeground="#5C4033", command=self.abrir_sond
+                padx=80, pady=2, activebackground="#C85A17",
+                activeforeground="#DDD0C8", command=self.abrir_sond
         ).place(relx=1.0, x=-12, y=49, anchor="ne")
 
         tk.Button(self, text="Exportar", font=("Lucida Console", 10, "bold"),
           bg="#3B3B3B", fg="#EEE6D9", relief="raised", bd=3,
-          padx=62, pady=2, activebackground="#DDD0C8",
-          activeforeground="#5C4033", command=self.exportar  # agora chama a nova função
+          padx=62, pady=2, activebackground="#1F1F1F",
+          activeforeground="#DDD0C8", command=self.exportar  # agora chama a nova função
         ).place(relx=1.0, x=-12, y=139, anchor="ne")
 
         tk.Button(self, text="Plano de Calibr.", font=("Lucida Console", 10, "bold"),
                 bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
-                padx=26, pady=2, activebackground="#DDD0C8",
-                activeforeground="#5C4033", command=self.abrir_plano_calibr
+                padx=26, pady=2, activebackground="#C85A17",
+                activeforeground="#DDD0C8", command=self.abrir_plano_calibr
         ).place(relx=1.0, x=-12, y=79, anchor="ne")
 
         # Botão para exibir pop-up de resumo de calibração
         tk.Button(self, text="Atualizar", font=("Lucida Console", 10, "bold"),
           bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
-          padx=80, pady=2, activebackground="#DDD0C8",
-          activeforeground="#5C4033", command=self.atualizar_status_e_recarregar
+          padx=80, pady=2, activebackground="#C85A17",
+          activeforeground="#DDD0C8", command=self.atualizar_status_e_recarregar
         ).place(relx=1.0, x=-934, y=628, anchor="ne")
 
         tk.Button(self, text="Gráficos", font=("Lucida Console", 10, "bold"),
           bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
-          padx=62, pady=2, activebackground="#DDD0C8",
-          activeforeground="#5C4033", command=self.abrir_graficos
+          padx=62, pady=2, activebackground="#C85A17",
+          activeforeground="#DDD0C8", command=self.abrir_graficos
         ).place(relx=1.0, x=-12, y=109, anchor="ne")
 
         tk.Button(self, text="Resumo de Calibração", font=("Lucida Console", 10, "bold"),
                 bg="#E6A47B", fg="#EEE6D9", relief="raised", bd=3,
                 padx=31, pady=2,  # igual ao botão Atualizar
-                activebackground="#87B6E2", activeforeground="white",
+                activebackground="#C85A17", activeforeground="#DDD0C8",
                 command=self.exibir_pop_up_calibracao
         ).place(relx=1.0, x=-934, y=658, anchor="ne")  # mesma coordenada y ajustada
 
@@ -235,7 +235,7 @@ class TelaPrincipal(tk.Tk):
 
         tk.Button(frame_lateral, text="Editar", font=("Lucida Console", 10, "bold"),
                   bg="#C85A17", fg="white", bd=2, relief="raised",
-                  activebackground="#C85A17", activeforeground="white",
+                  activebackground="#A1511F", activeforeground="white",
                   command=lambda eq=item: self.abrir_edicao(eq)).pack(side="left", padx=5, pady=10)
 
         tk.Button(frame_lateral, text="X", font=("Lucida Console", 12, "bold"),
