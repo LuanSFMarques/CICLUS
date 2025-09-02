@@ -274,7 +274,7 @@ class TelaGraficosCalibracao(tk.Toplevel):
             plot_equipamentos_por_fabricante(eq_ativos, PLOT_RES),
             plot_quebras_por_fabricante(eq, cv, PLOT_RES),
             plot_quebras_por_equipamento(eq, cv, PLOT_RES),
-            plot_proximas_calibracoes(eq, PLOT_RES),
+            plot_proximas_calibracoes(eq_ativos, PLOT_RES),
         ]
 
 
