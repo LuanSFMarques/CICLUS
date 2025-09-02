@@ -57,7 +57,7 @@ def plot_calibracao_pizza_por_setor(eq, t_setor, plot_res):
             labels=None,  # sem nomes nas fatias
             autopct=lambda p: f"{p:.0f}%" if p > 0 else "",
             colors=COLORS,
-            startangle=90,
+            startangle=0,
             textprops={"fontsize": 8}
         )
         ax.set_title(setor, fontsize=9, fontweight="bold")
@@ -77,7 +77,7 @@ def plot_calibracao_por_setor(eq, t_setor, plot_res):
 
     ax.set_xlabel("Setor")
     ax.set_xticklabels(ax.get_xticklabels(), rotation=0)
-    ax.set_yticks(np.arange(0, 100, 10))
+    ax.set_yticks(np.arange(0, 105, 5))
     ax.set_ylabel("Quantidade de Equipamentos")
     ax.legend(["Calibrado", "Não Calibrado", "Incerto", "Especial"])
     ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
@@ -100,7 +100,7 @@ def plot_envios_por_mes(cv, plot_res):
     for label in ax.get_xticklabels():
         label.set_rotation(45)
     ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
-    ax.set_yticks(np.arange(0,40,5))
+    ax.set_yticks(np.arange(0,48,3))
     fig.tight_layout()
     return fig, "Envios para Calibração por Mês"
 
@@ -119,7 +119,7 @@ def plot_equipamentos_por_fabricante(eq, plot_res):
 
     ax.set_xlabel("Fabricante")
     ax.set_ylabel("Quantidade de Equipamentos")
-    ax.set_yticks(np.arange(0,55,5))
+    ax.set_yticks(np.arange(0,56,5))
     ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")
     ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
     fig.tight_layout()
@@ -211,6 +211,8 @@ def plot_proximas_calibracoes(eq, plot_res):
     # Formatar labels como mm-yyyy
     ax.set_xticklabels([p.strftime('%m-%Y') for p in df_plot.index.to_timestamp()], rotation=45, ha="right")
 
+    ax.set_yticks(np.arange(0,26,2))
+
     ax.set_xlabel("Mês de Recalibração")
     ax.set_ylabel("Quantidade de Equipamentos")
     ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
@@ -299,7 +301,7 @@ class TelaGraficosCalibracao(tk.Toplevel):
             "font": ("Courier New", 10, "bold"),
             "bg": "#C85A17",          # cor de fundo pastel retrô
             "fg": "#E8E8E8",          # cor do texto
-            "activebackground": "#D6D6D6",  # efeito ao clicar
+            "activebackground": "#A04812",  # efeito ao clicar
             "activeforeground": "#111111",
             "relief": "raised",
             "bd": 3,                  # borda mais grossa estilo antigo
