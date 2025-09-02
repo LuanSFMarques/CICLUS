@@ -231,10 +231,9 @@ class TelaGraficosCalibracao(tk.Toplevel):
 
         self.title("Gráficos de Calibração")
         self.configure(bg="#F5F1E9")
+        self.geometry("1400x700")
         self.resizable(False, False)
 
-        # Adiar posicionamento até que a janela master esteja pronta
-        # Centralizar em relação ao master, 50px à direita e para baixo
         if master is not None:
             def abrir_no_local_correto():
                 master.update_idletasks()
@@ -245,21 +244,38 @@ class TelaGraficosCalibracao(tk.Toplevel):
                 self.wait_window(self)
             self.after(0, abrir_no_local_correto)
 
-        # Frame principal
-        frame_principal = tk.Frame(self, bg="#FDFCF8", bd=2, relief="groove", padx=20, pady=20)
-        frame_principal.pack(padx=40, pady=20)
+        # ---------------- FRAME PRINCIPAL ---------------- #
+        frame_principal = tk.Frame(self, bg="#F5F1E9", bd=2, relief="groove")
+        frame_principal.pack(fill="both", expand=True, padx=20, pady=20)
 
+        # ---------------- MENU LATERAL ---------------- #
+        frame_menu = tk.Frame(frame_principal, bg="#F5F1E9", bd=2, relief="ridge", width=250)
+        frame_menu.pack(side="left", fill="y", padx=(20, 20), pady=20)
 
-        # Título dinâmico
-        self.label_titulo = tk.Label(frame_principal, text="Relatórios de Calibração",
-                                     font=("Courier New", 16, "bold"),
-                                     bg="#FDFCF8", fg="#333333")
-        self.label_titulo.pack(pady=(0, 15))
+        # ---------------- ÁREA DE DISPLAY ---------------- #
+        frame_display = tk.Frame(frame_principal, bg="#F5F1E9", bd=2, relief="ridge")
+        frame_display.pack(side="right", fill="both", expand=True, padx=(20, 20), pady=20)
 
-        # Área para exibir o gráfico
-        self.frame_grafico = tk.Frame(frame_principal, bg="#FDFCF8")
-        self.frame_grafico.pack()
+        # ---------------- ÁREA DO GRÁFICO ---------------- #
+        self.frame_grafico = tk.Frame(frame_display, bg="#FBF2EA", bd=2, relief="ridge")
+        self.frame_grafico.pack(fill="both", expand=True, padx=10, pady=10)
 
+        # ---------------- BOTÃO DE SAIR ---------------- #
+        btn_sair = tk.Button(
+            frame_display,
+            text="Voltar",
+            command=self.close_window,
+            font=("Courier New", 12),
+            bg="#C85A17",
+            fg="white",
+            relief="raised",
+            bd=4,
+            padx=20,
+            pady=5
+        )
+        btn_sair.pack(side="bottom", anchor="se", pady=10, padx=15)
+
+        # ---------------- CARREGAR DADOS ---------------- #
         dados = carregar_tabelas()
         eq = dados["equipamentos"]
         eq_ativos = eq[eq['status_id'] == 0]
@@ -267,97 +283,57 @@ class TelaGraficosCalibracao(tk.Toplevel):
         t_setor = dados["tipos_setor"]
         cv = dados["ciclo_vida"]
 
-        # Lista de figuras + títulos (agora com pizza por setor)
+        # ---------------- LISTA DE GRÁFICOS ---------------- #
         self.figs = [
-            plot_calibracao_por_tipo(eq_ativos, t_eq, PLOT_RES),
-            plot_calibracao_por_setor(eq_ativos, t_setor, PLOT_RES),
-            plot_calibracao_pizza_por_setor(eq_ativos, t_setor, PLOT_RES),
-            plot_envios_por_mes(cv, PLOT_RES),
-            plot_equipamentos_por_fabricante(eq_ativos, PLOT_RES),
-            plot_quebras_por_fabricante(eq, cv, PLOT_RES),
-            plot_quebras_por_equipamento(eq, cv, PLOT_RES),
-            plot_proximas_calibracoes(eq_ativos, PLOT_RES),
+            ("Calibração por Tipo", lambda: plot_calibracao_por_tipo(eq_ativos, t_eq, PLOT_RES)),
+            ("'Q' Status por Setor", lambda: plot_calibracao_por_setor(eq_ativos, t_setor, PLOT_RES)),
+            ("'%' Status por Setor", lambda: plot_calibracao_pizza_por_setor(eq_ativos, t_setor, PLOT_RES)),
+            ("Envios por Mês", lambda: plot_envios_por_mes(cv, PLOT_RES)),
+            ("Equipamentos por Fabricante", lambda: plot_equipamentos_por_fabricante(eq_ativos, PLOT_RES)),
+            ("Quebras por Fabricante", lambda: plot_quebras_por_fabricante(eq, cv, PLOT_RES)),
+            ("Quebras por Equipamento", lambda: plot_quebras_por_equipamento(eq, cv, PLOT_RES)),
+            ("Próximas Calibrações", lambda: plot_proximas_calibracoes(eq_ativos, PLOT_RES)),
         ]
 
-
-
-
-        self.current_index = 0
         self.canvas = None
 
-         # Indicador de índice (ex: 1/4)
-        self.label_index = tk.Label(frame_principal,
-                                    text=f"{self.current_index+1}/{len(self.figs)}",
-                                    font=("Courier New", 10, "bold"),
-                                    bg="#FDFCF8",
-                                    fg="#555555")
-        self.label_index.pack(anchor="ne")  # canto superior direito do frame
+        # ---------------- BOTÕES DO MENU LATERAL ---------------- #
+        for nome, func in self.figs:
+            btn = tk.Button(
+                frame_menu,
+                text=nome,
+                command=lambda f=func: self.show_plot(f),
+                font=("Courier New", 10, "bold"),
+                bg="#E6A47B",
+                activebackground="#B88668",
+                activeforeground="#D8D8D8",
+                fg="white",
+                relief="raised",
+                bd=3,
+                pady=7,
+                padx=12,
+                anchor="w",
+                justify="left"
+            )
+            btn.pack(fill="x", pady=5, padx=10)
 
-        # Navegação estilo carrossel
-        nav_frame = tk.Frame(frame_principal, bg="#FDFCF8")
-        nav_frame.pack(pady=10)
+        # ---------------- MOSTRAR PRIMEIRO GRÁFICO ---------------- #
+        self.show_plot(self.figs[0][1])
 
-        btn_style = {
-            "font": ("Courier New", 10, "bold"),
-            "bg": "#C85A17",          # cor de fundo pastel retrô
-            "fg": "#E8E8E8",          # cor do texto
-            "activebackground": "#A04812",  # efeito ao clicar
-            "activeforeground": "#111111",
-            "relief": "raised",
-            "bd": 3,                  # borda mais grossa estilo antigo
-            "padx": 13,
-            "pady": 4
-        }
-
-        tk.Button(nav_frame, text="⬅️ Anterior", command=self.prev_plot, **btn_style).grid(row=0, column=0, padx=10)
-        tk.Button(nav_frame, text="Próximo ➡️", command=self.next_plot, **btn_style).grid(row=0, column=1, padx=10)
-
-
-        # Separador
-        ttk.Separator(frame_principal, orient="horizontal").pack(fill="x", pady=10)
-
-        # Botão de voltar
-        tk.Button(frame_principal, text="Voltar", command=self.close_window,
-                  font=("Courier New", 12), bg="#C85A17", fg="white",
-                  activebackground="#E38B2B", activeforeground="white",
-                  relief="raised", bd=3, padx=20, pady=5).pack(pady=(10, 0))
-
-        # Mostra o primeiro gráfico
-        self.show_plot(self.current_index)
-
-        # Modal
-        self.grab_set()
-        self.wait_window(self)
-
-    def show_plot(self, index):
-        """Mostra o gráfico no índice dado."""
+    def show_plot(self, func_plot):
+        """Renderiza o gráfico selecionado."""
         if self.canvas:
             self.canvas.get_tk_widget().destroy()
 
-        fig, titulo = self.figs[index]
-        self.label_titulo.config(text=titulo)
-
-        # Atualiza indicador de índice
-        self.label_index.config(text=f"{self.current_index+1}/{len(self.figs)}")
+        fig, titulo = func_plot()
+        self.title(titulo)
 
         self.canvas = FigureCanvasTkAgg(fig, master=self.frame_grafico)
         self.canvas.draw()
-        self.canvas.get_tk_widget().pack()
-
-        
-
-    def next_plot(self):
-        """Vai para o próximo gráfico."""
-        self.current_index = (self.current_index + 1) % len(self.figs)
-        self.show_plot(self.current_index)
-
-    def prev_plot(self):
-        """Volta para o gráfico anterior."""
-        self.current_index = (self.current_index - 1) % len(self.figs)
-        self.show_plot(self.current_index)
+        self.canvas.get_tk_widget().pack(fill="both", expand=True)
 
     def close_window(self):
-        """Fecha janela e libera memória."""
         if self.canvas:
             self.canvas.get_tk_widget().destroy()
         self.destroy()
+
