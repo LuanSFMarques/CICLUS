@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 from datetime import datetime
+import re
 
 from controllers.equipamento_controller import criar_equipamento
 from data.tipos import tipos_setor, tipos_status, tipos_status_calibr
@@ -47,6 +48,7 @@ class TelaCriacaoEquipamento(tk.Toplevel):
         def criar_combo(parent, atributo, values, row, column):
             combo = ttk.Combobox(parent, values=values, state="readonly", font=fonte_entry, width=28)
             combo.grid(row=row, column=column, padx=5, pady=5, sticky="w")
+            # evitar scroll acidental
             combo.bind("<MouseWheel>", lambda e: "break")
             combo.bind("<Button-4>", lambda e: "break")
             combo.bind("<Button-5>", lambda e: "break")
@@ -57,22 +59,20 @@ class TelaCriacaoEquipamento(tk.Toplevel):
             text.grid(row=row, column=column, padx=5, pady=5, columnspan=2, sticky="w")
             setattr(self, atributo, text)
 
-                # Título acima do container
-        titulo_label = tk.Label(
+        # Título
+        tk.Label(
             self,
             text="Cadastro de Equipamento",
             bg="#F5F1E9",
             fg="#2F4F4F",
             font=("Courier New", 16, "bold")
-        )
-        titulo_label.pack(pady=(15, 0))
+        ).pack(pady=(15, 0))
 
-
-        # Container principal com borda e fundo escurecido
+        # Container
         container_frame = tk.Frame(self, bg="#F2EEE6", relief="sunken", bd=2)
         container_frame.pack(padx=20, pady=20, fill="both", expand=False)
 
-        # Frame do formulário dentro do container
+        # Formulário
         form_frame = tk.Frame(container_frame, bg="#F2EEE6")
         form_frame.pack(padx=20, pady=20)
 
@@ -92,10 +92,10 @@ class TelaCriacaoEquipamento(tk.Toplevel):
         criar_label(form_frame, "SOND ID (Número único):", 4, 0)
         criar_entry(form_frame, "entry_sond", 4, 1, width=20)
 
-        criar_label(form_frame, "Data de Aquisição (DD-MM-YYYY):", 5, 0)
+        criar_label(form_frame, "Data de Aquisição (DD-MM-YYYY ou DD/MM/YYYY):", 5, 0)
         criar_entry(form_frame, "entry_data_aq", 5, 1, width=20)
 
-        criar_label(form_frame, "Última Calibração (DD-MM-YYYY):", 6, 0)
+        criar_label(form_frame, "Última Calibração (DD-MM-YYYY ou DD/MM/YYYY):", 6, 0)
         criar_entry(form_frame, "entry_ultima_cal", 6, 1, width=20)
 
         criar_label(form_frame, "Periodicidade (meses):", 7, 0)
@@ -120,7 +120,7 @@ class TelaCriacaoEquipamento(tk.Toplevel):
         criar_label(form_frame, "Informações Extras:", 4, 2)
         criar_text(form_frame, "text_extra_info", 5, 2)
 
-        # Frame de botões
+        # Botões
         btn_frame = tk.Frame(self, bg="#F5F1E9")
         btn_frame.pack(pady=10)
 
@@ -136,9 +136,48 @@ class TelaCriacaoEquipamento(tk.Toplevel):
             width=14, height=2, activebackground="#A9A9A9"
         ).pack(side="left", padx=40)
 
+    # ---------- Utilidades de validação ----------
+    @staticmethod
+    def _parse_data_br(data_str: str):
+        """Retorna string no formato ISO '%Y-%m-%d' se válido, senão None."""
+        if not data_str:
+            return None
+        for fmt in ("%d-%m-%Y", "%d/%m/%Y"):
+            try:
+                return datetime.strptime(data_str, fmt).strftime("%Y-%m-%d")
+            except ValueError:
+                continue
+        return None
 
+    @staticmethod
+    def _regex_nome_ok(nome: str) -> bool:
+        """
+        Regras:
+        - Deve conter pelo menos 1 hífen '-'
+        - Parte antes do primeiro hífen: apenas letras (A-Z/a-z), sem números
+        - Parte após o primeiro hífen: pode conter números, letras ou hífens
+        Exemplos válidos: PEN-001, ABC-12-XYZ
+        Exemplos inválidos: P3N-001, 123-ABC
+        """
+        return bool(re.fullmatch(r"[A-Za-z]+-.+", nome))
 
+    @staticmethod
+    def _fabricante_letras_len_ok(fab: str, limite: int = 20) -> bool:
+        """Conta apenas letras (A-Z/a-z); não permite mais que 'limite' letras."""
+        somente_letras = re.sub(r"[^A-Za-z]", "", fab or "")
+        return len(somente_letras) <= limite
+
+    @staticmethod
+    def _capitalize_fabricante(fab: str) -> str:
+        """
+        Tratamento: Capitalize (primeira letra maiúscula, restante minúscula).
+        MARTES -> Martes; SoloTest -> Solotest; teste -> Teste
+        """
+        return (fab or "").strip().capitalize()
+
+    # ---------- Fluxo principal ----------
     def salvar_equipamento(self):
+        # Coleta bruta (sem transformar ainda)
         nome = self.entry_nome.get().strip()
         tipo = self.combo_tipo.get().strip()
         setor = self.combo_setor.get().strip()
@@ -147,39 +186,114 @@ class TelaCriacaoEquipamento(tk.Toplevel):
         data_aquisicao_br = self.entry_data_aq.get().strip()
         ultima_calibracao_br = self.entry_ultima_cal.get().strip()
         periodicidade_raw = self.entry_periodicidade.get().strip()
+        fabricante_raw = self.entry_fabricante.get().strip()
+        modelo = self.entry_modelo.get().strip()
+        modelo_tecnico = self.entry_modelo_tecnico.get().strip()
+        numero_serie = self.entry_num_serie.get().strip()
+        extra_info = self.text_extra_info.get("1.0", "end").strip()
+        status_calibracao = self.combo_status_calibr.get().strip()
 
-        if not nome or "-" not in nome:
-            messagebox.showerror("Erro", "Informe um nome válido (com '-').")
+        # ---- Validações exigidas ----
+
+        # Nome do equipamento: padrão exato "SIGLA-NUMERO"
+        if not nome or not self._regex_nome_ok(nome):
+            messagebox.showerror(
+                "Nome de Equipamento Inválido",
+                (
+                    "O nome do equipamento é inválido.\n\n"
+                    "Condições para um nome válido:\n"
+                    "• Deve conter exatamente 1 hífen '-'.\n"
+                    "• Antes do hífen: apenas letras (sem números).\n"
+                    "• Depois do hífen: apenas números (sem letras).\n"
+                    "Exemplos válidos: PEN-001, ABC-12, X-9"
+                )
+            )
             return
+
+        # Obrigatoriedade dos combos (não aceitar vazio/nulo)
+        if not tipo:
+            messagebox.showerror("Erro", "Selecione um Tipo do Equipamento (não pode ficar vazio).")
+            return
+        if not setor:
+            messagebox.showerror("Erro", "Selecione um Setor (não pode ficar vazio).")
+            return
+        if not status:
+            messagebox.showerror("Erro", "Selecione um Status (não pode ficar vazio).")
+            return
+        if not status_calibracao:
+            messagebox.showerror("Erro", "Selecione um Status de Calibração (não pode ficar vazio).")
+            return
+
+        # SOND ID inteiro
         if not sond_id_raw.isdigit():
-            messagebox.showerror("Erro", "SOND ID deve ser um número válido!")
+            messagebox.showerror("Erro", "SOND ID deve ser um número inteiro válido.")
             return
+
+        # Periodicidade em meses: inteiro
         if not periodicidade_raw.isdigit():
-            messagebox.showerror("Erro", "Periodicidade deve ser um número válido!")
+            messagebox.showerror("Erro", "Periodicidade (meses) deve ser um número inteiro.")
             return
 
-        def parse_data(data_str):
-            for fmt in ("%d-%m-%Y", "%d/%m/%Y"):
-                try:
-                    return datetime.strptime(data_str, fmt).strftime("%Y-%m-%d")
-                except ValueError:
-                    continue
-            return None
-
-        data_aquisicao = parse_data(data_aquisicao_br) if data_aquisicao_br else None
-        ultima_calibracao = parse_data(ultima_calibracao_br) if ultima_calibracao_br else None
-
-        if data_aquisicao_br and not data_aquisicao:
-            messagebox.showerror("Erro", "Data de aquisição inválida!")
-            return
-        if ultima_calibracao_br and not ultima_calibracao:
-            messagebox.showerror("Erro", "Data de calibração inválida!")
+        # Datas: formatos aceitos e relação entre datas
+        data_aquisicao_iso = self._parse_data_br(data_aquisicao_br) if data_aquisicao_br else None
+        if data_aquisicao_br and not data_aquisicao_iso:
+            messagebox.showerror(
+                "Data de Aquisição Inválida",
+                "Formato inválido. Use: DD-MM-YYYY ou DD/MM/YYYY."
+            )
             return
 
+        ultima_calibracao_iso = self._parse_data_br(ultima_calibracao_br) if ultima_calibracao_br else None
+        if ultima_calibracao_br and not ultima_calibracao_iso:
+            messagebox.showerror(
+                "Data de Última Calibração Inválida",
+                "Formato inválido. Use: DD-MM-YYYY ou DD/MM/YYYY."
+            )
+            return
+
+        # Regra: última calibração deve ser >= data de aquisição (se ambas existirem)
+        if data_aquisicao_iso and ultima_calibracao_iso:
+            try:
+                dt_aq = datetime.strptime(data_aquisicao_iso, "%Y-%m-%d")
+                dt_uc = datetime.strptime(ultima_calibracao_iso, "%Y-%m-%d")
+                if dt_uc < dt_aq:
+                    messagebox.showerror(
+                        "Inconsistência de Datas",
+                        "A data de última calibração deve ser no mínimo igual à data de aquisição."
+                    )
+                    return
+            except Exception:
+                # segurança (não deve ocorrer pois já validamos)
+                messagebox.showerror("Erro", "Falha ao validar as datas fornecidas.")
+                return
+
+        # Fabricante: não permitir mais que 20 letras (contando só letras A-Z)
+        if fabricante_raw and not self._fabricante_letras_len_ok(fabricante_raw, limite=20):
+            messagebox.showerror(
+                "Fabricante Inválido",
+                "O nome do fabricante não pode conter mais que 20 letras (A-Z)."
+            )
+            return
+
+        # Confirmação antes dos TRATAMENTOS
         confirmacao = messagebox.askyesno("Confirmação", "Deseja realmente criar este equipamento?")
         if not confirmacao:
             return
 
+        # ---- TRATAMENTOS (aplicados somente após confirmação) ----
+
+        # Capitalize do fabricante (MARTES->Martes; SoloTest->Solotest; teste->Teste)
+        fabricante_tratado = self._capitalize_fabricante(fabricante_raw)
+
+        # Revalidar o limite de letras após tratamento (por segurança)
+        if fabricante_tratado and not self._fabricante_letras_len_ok(fabricante_tratado, limite=20):
+            messagebox.showerror(
+                "Fabricante Inválido",
+                "O nome do fabricante não pode conter mais que 20 letras (A-Z)."
+            )
+            return
+
+        # Conversões finais
         sigla = nome.split("-")[0].strip()
         sond_id = int(sond_id_raw)
         periodicidade = int(periodicidade_raw)
@@ -191,15 +305,15 @@ class TelaCriacaoEquipamento(tk.Toplevel):
             "setor_id": next((s[0] for s in tipos_setor if s[1] == setor), None),
             "status_id": next((s[0] for s in tipos_status if s[1] == status), None),
             "sond_id": sond_id,
-            "data_aquisicao": data_aquisicao,
-            "ultima_calibracao": ultima_calibracao,
+            "data_aquisicao": data_aquisicao_iso,          # ISO YYYY-MM-DD ou None
+            "ultima_calibracao": ultima_calibracao_iso,    # ISO YYYY-MM-DD ou None
             "periodicidade": periodicidade,
-            "status_calibracao_id": next((s[0] for s in tipos_status_calibr if s[1] == self.combo_status_calibr.get()), None),
-            "fabricante": self.entry_fabricante.get().strip(),
-            "modelo": self.entry_modelo.get().strip(),
-            "modelo_tecnico": self.entry_modelo_tecnico.get().strip(),
-            "numero_serie": self.entry_num_serie.get().strip(),
-            "extra_info": self.text_extra_info.get("1.0", "end").strip()
+            "status_calibracao_id": next((s[0] for s in tipos_status_calibr if s[1] == status_calibracao), None),
+            "fabricante": fabricante_tratado,
+            "modelo": modelo,
+            "modelo_tecnico": modelo_tecnico,
+            "numero_serie": numero_serie,
+            "extra_info": extra_info
         }
 
         try:

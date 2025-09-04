@@ -25,7 +25,8 @@
 
 ## Atualizações (v2.1)
 - Tratamento de dados ao introduzir valores
-- Correção de visualização do metadado "info_extra"
+- Correção na visualização do metadado "info_extra"
+- Correção na visualização do metadado "valor" nos itens de ciclo de vida
 
 # Atualizações (v2.2)
 - Novo Gráfico: Valor de custo de ativos em cada categoria de equipamento (aquisição + concerto)

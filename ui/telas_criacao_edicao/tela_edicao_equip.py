@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 from datetime import datetime
+import re  # <-- necessário para regex
 
 from controllers.equipamento_controller import obter_equipamento_cru, atualizar_equipamento
 from data.tipos import tipos_setor, tipos_status, tipos_status_calibr
@@ -56,7 +57,6 @@ class TelaEdicaoEquipamento(tk.Toplevel):
         def criar_combo(parent, atributo, values, row, column):
             combo = ttk.Combobox(parent, values=values, state="readonly", font=fonte_entry, width=28)
             combo.grid(row=row, column=column, padx=5, pady=5, sticky="w")
-            # Desabilita mudança pelo scroll do mouse
             combo.bind("<MouseWheel>", lambda e: "break")
             combo.bind("<Button-4>", lambda e: "break")  # Linux
             combo.bind("<Button-5>", lambda e: "break")  # Linux
@@ -67,7 +67,6 @@ class TelaEdicaoEquipamento(tk.Toplevel):
             text.grid(row=row, column=column, padx=5, pady=5, columnspan=2, sticky="w")
             setattr(self, atributo, text)
 
-        # Título
         tk.Label(
             self,
             text="Edição de Equipamento",
@@ -76,11 +75,9 @@ class TelaEdicaoEquipamento(tk.Toplevel):
             font=("Courier New", 16, "bold")
         ).pack(pady=(15, 0))
 
-        # Container principal
         container_frame = tk.Frame(self, bg="#F2EEE6", relief="sunken", bd=2)
         container_frame.pack(padx=20, pady=20, fill="both", expand=False)
 
-        # Formulário
         form_frame = tk.Frame(container_frame, bg="#F2EEE6")
         form_frame.pack(padx=20, pady=20)
 
@@ -125,11 +122,10 @@ class TelaEdicaoEquipamento(tk.Toplevel):
         criar_label(form_frame, "Informações Extras:", 4, 2)
         criar_text(form_frame, "text_extra_info", 5, 2)
 
-        # Botões
         btn_frame = tk.Frame(self, bg="#F5F1E9")
         btn_frame.pack(pady=10)
 
-        btn_width = 15  # mesmo valor para ambos
+        btn_width = 15
         btn_height = 1
 
         tk.Button(
@@ -177,13 +173,53 @@ class TelaEdicaoEquipamento(tk.Toplevel):
                 continue
         return None
 
+    @staticmethod
+    def _regex_nome_ok(nome: str) -> bool:
+        """
+        Regras:
+        - Deve conter pelo menos 1 hífen '-'
+        - Parte antes do primeiro hífen: apenas letras (A-Z/a-z), sem números
+        - Parte após o primeiro hífen: pode conter números, letras ou hífens
+        """
+        return bool(re.fullmatch(r"[A-Za-z]+-.+", nome))
+
     def salvar_equipamento(self):
         try:
             nome = self.entry_nome.get().strip()
-            sigla = nome.split("-")[0] if "-" in nome else ""
-            data_aq = self.converter_data(self.entry_data_aq.get().strip())
-            ultima_cal = self.converter_data(self.entry_ultima_cal.get().strip())
-            periodicidade = int(self.entry_periodicidade.get().strip()) if self.entry_periodicidade.get().strip().isdigit() else None
+            if not nome:
+                messagebox.showerror("Erro", "O campo 'Nome do Equipamento' é obrigatório.")
+                return
+
+            if not self._regex_nome_ok(nome):
+                messagebox.showerror(
+                    "Erro",
+                    "Nome inválido.\n\nRegras:\n"
+                    "- Deve conter pelo menos 1 hífen '-'\n"
+                    "- Primeira parte só pode conter letras (sem números)\n"
+                    "- Após o hífen pode haver letras, números ou outros hífens"
+                )
+                return
+
+            data_aq_raw = self.entry_data_aq.get().strip()
+            ultima_cal_raw = self.entry_ultima_cal.get().strip()
+
+            data_aq = self.converter_data(data_aq_raw) if data_aq_raw else None
+            ultima_cal = self.converter_data(ultima_cal_raw) if ultima_cal_raw else None
+
+            if data_aq_raw and not data_aq:
+                messagebox.showerror("Erro", "Data de Aquisição inválida. Use DD-MM-YYYY.")
+                return
+            if ultima_cal_raw and not ultima_cal:
+                messagebox.showerror("Erro", "Data de Última Calibração inválida. Use DD-MM-YYYY.")
+                return
+
+            periodicidade_raw = self.entry_periodicidade.get().strip()
+            if periodicidade_raw and not periodicidade_raw.isdigit():
+                messagebox.showerror("Erro", "Periodicidade deve ser um número inteiro.")
+                return
+            periodicidade = int(periodicidade_raw) if periodicidade_raw else None
+
+            sigla = nome.split("-")[0]
 
             tipo_nome = self.combo_tipo.get()
             tipo_id = next((id_ for id_, nome in self.tipos_equipamento if nome == tipo_nome), None)
