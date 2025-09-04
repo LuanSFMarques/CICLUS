@@ -78,5 +78,18 @@ class TelaDescricaoItem(tk.Toplevel):
         valor_frame = tk.Frame(info_frame, bg="#DDE6D6", bd=1, relief="sunken")
         valor_frame.pack(side="left", expand=True, fill=tk.BOTH, padx=(10,0))
         tk.Label(valor_frame, text="Valor (R$):", font=("Courier New", 11, "bold"), bg="#DDE6D6").pack(anchor="w", padx=5, pady=(5,0))
-        valor_texto = f"{item['valor']:.2f}" if item.get("valor") is not None else "-"
-        tk.Label(valor_frame, text=valor_texto, font=("Courier New", 11), bg="#DDE6D6").pack(anchor="w", padx=5, pady=(0,5))
+
+        # Formatação BRL
+        raw_valor = item.get("valor")
+        if raw_valor not in [None, ""]:
+            try:
+                numero = float(raw_valor)
+                valor_formatado = f"R${numero:,.2f}"  # Ex.: 150,000.00
+                valor_formatado = valor_formatado.replace(",", "X").replace(".", ",").replace("X", ".")  # R$150.000,00
+            except ValueError:
+                valor_formatado = f"R${raw_valor}"
+        else:
+            valor_formatado = "-"
+
+        tk.Label(valor_frame, text=valor_formatado, font=("Courier New", 11), bg="#DDE6D6").pack(anchor="w", padx=5, pady=(0,5))
+

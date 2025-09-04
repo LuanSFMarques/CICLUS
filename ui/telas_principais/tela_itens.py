@@ -1,5 +1,6 @@
 import tkinter as tk
 import webbrowser
+import textwrap
 from tkinter import messagebox, ttk
 from datetime import datetime
 from controllers.itens_controller import obter_equipamento_por_id, obter_itens_ciclo_vida_por_equipamento, excluir_item
@@ -212,11 +213,12 @@ class TelaCicloVida(tk.Toplevel):
                 text=str(valor),
                 font=("Courier New", 10),
                 bg="#EDE6D6",
-                anchor="w",
+                anchor="nw",
                 justify="left",
-                wraplength=500,
+                wraplength=360  # Ajuste conforme necessário
             )
-            lbl_valor.pack(fill=tk.X, anchor="w")
+            lbl_valor.pack(fill=tk.X, anchor="w", padx=2, pady=2)
+
 
     def exibir_lista_itens(self):
         for widget in self.frame_direito.winfo_children():
@@ -266,8 +268,24 @@ class TelaCicloVida(tk.Toplevel):
             def ao_clicar(event, item=item):
                 TelaDescricaoItem(self, self.equipamento["nome_eq"], item)
 
-            valor = f"R${item.get('valor', '')}" if item.get('valor') else f"{item.get('valor', '')}"
-            texto_tipo = f"{item.get('tipo_item', '')}\n{item.get('fornecedor', '')}\n{valor}"
+            raw_valor = item.get("valor", "")
+
+            if raw_valor not in [None, ""]:
+                try:
+                    # garante float e formata com padrão BR
+                    numero = float(raw_valor)
+                    valor_formatado = f"R${numero:,.2f}"  # gera 150,000.00
+                    # agora converte para pt-BR
+                    valor_formatado = valor_formatado.replace(",", "X").replace(".", ",").replace("X", ".")
+                except ValueError:
+                    valor_formatado = f"R${raw_valor}"
+            else:
+                valor_formatado = ""
+
+            texto_tipo = f"{item.get('tipo_item', '')}\n{item.get('fornecedor', '')}\n{valor_formatado}"
+
+
+
 
             # Tipo + fornecedor + valor
             frame_tipo = tk.Frame(frame_item, bg="#C7C1A1", bd=1, relief="ridge")
