@@ -22,3 +22,11 @@
 ## Atualizações (v2.0)
 - Executável
 - Atualização do README para versão 2.0 (incluir novos visuais)
+
+## Atualizações (v2.1)
+- Tratamento de dados ao introduzir valores
+- Correção de visualização do metadado "info_extra"
+
+# Atualizações (v2.2)
+- Novo Gráfico: Valor de custo de ativos em cada categoria de equipamento (aquisição + concerto)
+- Novo Gráfico: Media e Mediana de tempo de vida (data de aquisição até data de primeiro estrago)
