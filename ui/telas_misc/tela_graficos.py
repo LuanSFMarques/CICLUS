@@ -34,34 +34,31 @@ def plot_calibracao_por_tipo(eq, t_eq, plot_res):
 
 
 def plot_calibracao_pizza_por_setor(eq, t_setor, plot_res):
-    """Gera múltiplos gráficos de pizza (um por setor) em até 3 colunas por linha, compacto."""
-    df_merged = eq.merge(t_setor, left_on='setor_id', right_on='id')
-    df_grouped = df_merged.groupby(['nome', 'status_calibracao_id']).size().unstack(fill_value=0)
+    df_merged = eq.merge(t_setor, left_on="setor_id", right_on="id")
+    df_grouped = df_merged.groupby(["nome", "status_calibracao_id"]).size().unstack(fill_value=0)
 
     setores = df_grouped.index
     n_setores = len(setores)
-
-    # Ajustar layout: no máximo 3 colunas
     cols = 3
     rows = (n_setores + cols - 1) // cols
 
-    # Figura mais compacta (2.5 polegadas por linha de setores)
     fig_height = rows * 2.5
-    fig = Figure(figsize=PLOT_RES,facecolor="#FDFCF8")
+    fig = Figure(figsize=plot_res, facecolor="#FDFCF8")
 
     for i, setor in enumerate(setores):
         ax = fig.add_subplot(rows, cols, i + 1)
         valores = df_grouped.loc[setor].values
         wedges, texts, autotexts = ax.pie(
             valores,
-            labels=None,  # sem nomes nas fatias
+            labels=None,
             autopct=lambda p: f"{p:.0f}%" if p > 0 else "",
             colors=COLORS,
-            startangle=0,
+            startangle=90,
             textprops={"fontsize": 8}
         )
         ax.set_title(setor, fontsize=9, fontweight="bold")
         ax.axis("equal")
+
     fig.tight_layout(rect=[0, 0, 1, 0.95])
     return fig, "Distribuição de Calibração por Setor"
 
@@ -269,7 +266,7 @@ class TelaGraficosCalibracao(tk.Toplevel):
             bg="#C85A17",
             fg="white",
             relief="raised",
-            bd=4,
+            bd=3,
             padx=20,
             pady=5
         )
@@ -298,24 +295,26 @@ class TelaGraficosCalibracao(tk.Toplevel):
         self.canvas = None
 
         # ---------------- BOTÕES DO MENU LATERAL ---------------- #
+        # ---------------- BOTÕES DO MENU LATERAL ---------------- #
         for nome, func in self.figs:
             btn = tk.Button(
                 frame_menu,
                 text=nome,
                 command=lambda f=func: self.show_plot(f),
-                font=("Courier New", 10, "bold"),
-                bg="#E6A47B",
-                activebackground="#B88668",
-                activeforeground="#D8D8D8",
-                fg="white",
+                font=("Courier New", 11, "bold"),
+                bg="#CF631B",                # Fundo normal (laranja vivo)
+                activebackground="#A04000",  # Fundo ao clicar (marrom queimado)
+                activeforeground="#FFE5C2",  # Texto quando ativo (amarelo retrô)
+                fg="white",                  # Texto normal
                 relief="raised",
                 bd=3,
-                pady=7,
-                padx=12,
+                pady=8,
+                padx=14,
                 anchor="w",
                 justify="left"
             )
-            btn.pack(fill="x", pady=5, padx=10)
+            btn.pack(fill="x", pady=6, padx=12)
+
 
         # ---------------- MOSTRAR PRIMEIRO GRÁFICO ---------------- #
         self.show_plot(self.figs[0][1])
