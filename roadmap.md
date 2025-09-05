@@ -31,3 +31,4 @@
 # Atualizações (v2.2)
 - Novo Gráfico: Valor de custo de ativos em cada categoria de equipamento (aquisição + concerto)
 - Novo Gráfico: Media e Mediana de tempo de vida (data de aquisição até data de primeiro estrago)
+- Troca Gráfico: Gráfico de colunas de itens enviados para calibrar por mês será trocado por grafico de linha
