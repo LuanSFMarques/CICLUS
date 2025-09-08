@@ -30,6 +30,7 @@ def plot_calibracao_por_tipo(eq, t_eq, plot_res):
     ax.legend(["Calibrado", "Não Calibrado", "Incerto", "Especial"])
     ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
     fig.tight_layout()
+    fig.subplots_adjust(left=0.06, bottom=0.34, right=0.98, top=0.95)
     return fig, "Calibração por Tipo de Equipamento"
 
 
@@ -79,6 +80,7 @@ def plot_calibracao_por_setor(eq, t_setor, plot_res):
     ax.legend(["Calibrado", "Não Calibrado", "Incerto", "Especial"])
     ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
     fig.tight_layout()
+    fig.subplots_adjust(left=0.08, bottom=0.12, right=0.98, top=0.95)
     return fig, "Status de Calibração por Setor"
 
 
@@ -99,6 +101,7 @@ def plot_envios_por_mes(cv, plot_res):
     ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
     ax.set_yticks(np.arange(0,48,3))
     fig.tight_layout()
+    fig.subplots_adjust(left=0.08, bottom=0.18, right=0.98, top=0.95)
     return fig, "Envios para Calibração por Mês"
 
 
@@ -120,6 +123,7 @@ def plot_equipamentos_por_fabricante(eq, plot_res):
     ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")
     ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
     fig.tight_layout()
+    fig.subplots_adjust(left=0.08, bottom=0.26, right=0.98, top=0.95)
     return fig, "Quantidade de Equipamentos por Fabricante"
 
 
@@ -140,7 +144,7 @@ def plot_quebras_por_equipamento(eq, cv, plot_res):
     ax.set_yticks(np.arange(0, grouped.max()+2, 1))
     ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
     fig.tight_layout()
-
+    fig.subplots_adjust(left=0.08, bottom=0.22, right=0.98, top=0.95)
     return fig, "Quebras por Equipamento"
 
 
@@ -170,7 +174,7 @@ def plot_quebras_por_fabricante(eq, cv, plot_res):
     ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")
     ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
     fig.tight_layout()
-    
+    fig.subplots_adjust(left=0.12, bottom=0.27, right=0.98, top=0.95)
     return fig, "Quebras por Fabricante"
 
 def plot_proximas_calibracoes(eq, plot_res):
@@ -214,10 +218,80 @@ def plot_proximas_calibracoes(eq, plot_res):
     ax.set_ylabel("Quantidade de Equipamentos")
     ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
     fig.tight_layout()
-
+    fig.subplots_adjust(left=0.08, bottom=0.22, right=0.98, top=0.95)
     return fig, "Próximas Calibrações por Mês"
 
+def plot_custo_por_tipo_menor(eq, t_eq, cv, plot_res):
+    """
+    Mostra os tipos de equipamento cujo custo total de ciclo de vida é até 100.000
+    """
+    custo_ciclo = cv.groupby("equipamento_id")["valor"].sum().reset_index()
+    eq_cv = eq.merge(custo_ciclo, how="left", left_on="id", right_on="equipamento_id")
+    eq_cv["valor"] = eq_cv["valor"].fillna(0)
 
+    custos_por_tipo = eq_cv.groupby("tipo_eq_id")["valor"].sum().reset_index()
+    custos_por_tipo = custos_por_tipo.merge(t_eq[["id", "nome"]], left_on="tipo_eq_id", right_on="id")
+
+    custos_por_tipo = custos_por_tipo[custos_por_tipo["valor"] <= 100000].sort_values("valor", ascending=False)
+
+    fig = Figure(figsize=plot_res, facecolor="#FDFCF8")
+    ax = fig.add_subplot(111, facecolor="#FDFCF8")
+    ax.bar(custos_por_tipo["nome"], custos_por_tipo["valor"], color="#8B5E3C", zorder=3)
+    ax.set_xticks(range(len(custos_por_tipo)))
+    ax.set_xticklabels(custos_por_tipo["nome"], rotation=45, ha="right")
+
+
+    ax.set_xlabel("Tipo de Equipamento")
+    ax.set_ylabel("Custo Total (Ciclo de Vida)")
+    ax.set_xticklabels(custos_por_tipo["nome"], rotation=45, ha="right")
+    ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
+
+    fig.tight_layout()
+    fig.subplots_adjust(left=0.12, bottom=0.28, right=0.98, top=0.95)
+    return fig, "Custo de Ciclo de Vida (≤ 100.000)"
+
+def plot_media_mediana_quebra_por_tipo(eq, t_eq, cv, plot_res):
+    """
+    Plota gráfico de colunas: cada tipo de equipamento (tipo_eq_id) tem duas barras,
+    uma para a média e outra para a mediana dos meses até a primeira quebra.
+    """
+    # Filtra apenas quebras únicas por equipamento
+    itens_queb = cv[cv["tipo_item_id"] == 3].drop_duplicates(subset=["id"], keep="first")
+    # Junta tipo do equipamento
+    eq_tipo = eq.merge(t_eq[['id', 'nome']], left_on="tipo_eq_id", right_on="id", how="left")
+    eq_tipo = eq_tipo.rename(columns={"id_x": "id"})
+    # Junta data da primeira quebra
+    eq_tipo = eq_tipo.merge(itens_queb[["data", "equipamento_id"]], left_on="id", right_on="equipamento_id", how="left")
+    eq_tipo = eq_tipo.loc[:, ["id", "nome_eq", "tipo_eq_id", "nome", "data_aquisicao", "data"]].dropna(subset=["data"])
+    eq_tipo["data_aquisicao"] = pd.to_datetime(eq_tipo["data_aquisicao"])
+    eq_tipo["data_p_quebra"] = pd.to_datetime(eq_tipo["data"])
+    eq_tipo["meses_diff"] = (eq_tipo["data_p_quebra"].dt.year - eq_tipo["data_aquisicao"].dt.year) * 12 + \
+                            (eq_tipo["data_p_quebra"].dt.month - eq_tipo["data_aquisicao"].dt.month)
+    # Agrupa por tipo de equipamento
+    agrupado = eq_tipo.groupby("nome")["meses_diff"].agg(["mean", "median"]).reset_index()
+    # Ordena por média decrescente
+    agrupado = agrupado.sort_values("mean", ascending=False)
+    # Gráfico
+    fig = Figure(figsize=plot_res, facecolor="#FDFCF8")
+    ax = fig.add_subplot(111, facecolor="#FDFCF8")
+    x = np.arange(len(agrupado["nome"]))
+    width = 0.35  # largura das barras
+
+    # Barras lado a lado
+    ax.bar(x - width/2, agrupado["mean"], width=width, color=COLORS[1], label="Média", zorder=3)
+    ax.bar(x + width/2, agrupado["median"], width=width, color=COLORS[3], label="Mediana", zorder=3)
+
+    ax.set_xticks(x)
+    ax.set_yticks(np.arange(0, 171, 10))
+    ax.set_ylim(0, 170)
+    ax.set_xticklabels(agrupado["nome"], rotation=45, ha="right")
+    ax.set_xlabel("Tipo de Equipamento")
+    ax.set_ylabel("Meses até 1ª Quebra")
+    ax.legend()
+    ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
+    fig.tight_layout()
+    fig.subplots_adjust(left=0.08, bottom=0.25, right=0.98, top=0.95)
+    return fig, "Tempo de Vida até 1ª Quebra por Tipo"
 
 
 # ---------------- TELA TKINTER COM CARROSSEL ---------------- #
@@ -283,18 +357,26 @@ class TelaGraficosCalibracao(tk.Toplevel):
         # ---------------- LISTA DE GRÁFICOS ---------------- #
         self.figs = [
             ("Calibração por Tipo", lambda: plot_calibracao_por_tipo(eq_ativos, t_eq, PLOT_RES)),
+            
             ("'Q' Status por Setor", lambda: plot_calibracao_por_setor(eq_ativos, t_setor, PLOT_RES)),
             ("'%' Status por Setor", lambda: plot_calibracao_pizza_por_setor(eq_ativos, t_setor, PLOT_RES)),
+
             ("Envios por Mês", lambda: plot_envios_por_mes(cv, PLOT_RES)),
+
             ("Equipamentos por Fabricante", lambda: plot_equipamentos_por_fabricante(eq_ativos, PLOT_RES)),
+
             ("Quebras por Fabricante", lambda: plot_quebras_por_fabricante(eq, cv, PLOT_RES)),
             ("Quebras por Equipamento", lambda: plot_quebras_por_equipamento(eq, cv, PLOT_RES)),
+
+            ("Custo ≤ 100.000", lambda: plot_custo_por_tipo_menor(eq, t_eq, cv, PLOT_RES)),
+
             ("Próximas Calibrações", lambda: plot_proximas_calibracoes(eq_ativos, PLOT_RES)),
+
+            ("Tempo de Vida até 1ª Quebra (por Tipo)", lambda: plot_media_mediana_quebra_por_tipo(eq, t_eq, cv, PLOT_RES)),
         ]
 
         self.canvas = None
 
-        # ---------------- BOTÕES DO MENU LATERAL ---------------- #
         # ---------------- BOTÕES DO MENU LATERAL ---------------- #
         for nome, func in self.figs:
             btn = tk.Button(
