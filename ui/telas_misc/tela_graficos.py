@@ -223,8 +223,9 @@ def plot_proximas_calibracoes(eq, plot_res):
 
 def plot_custo_por_tipo_menor(eq, t_eq, cv, plot_res):
     """
-    Mostra os tipos de equipamento cujo custo total de ciclo de vida é até 100.000
+    Mostra os tipos de equipamento cujo custo total de ciclo de vida está entre 1.000 e 100.000
     """
+
     custo_ciclo = cv.groupby("equipamento_id")["valor"].sum().reset_index()
     eq_cv = eq.merge(custo_ciclo, how="left", left_on="id", right_on="equipamento_id")
     eq_cv["valor"] = eq_cv["valor"].fillna(0)
@@ -232,23 +233,25 @@ def plot_custo_por_tipo_menor(eq, t_eq, cv, plot_res):
     custos_por_tipo = eq_cv.groupby("tipo_eq_id")["valor"].sum().reset_index()
     custos_por_tipo = custos_por_tipo.merge(t_eq[["id", "nome"]], left_on="tipo_eq_id", right_on="id")
 
-    custos_por_tipo = custos_por_tipo[custos_por_tipo["valor"] <= 100000].sort_values("valor", ascending=False)
+    # 🔥 aplica filtro entre 1.000 e 100.000
+    custos_por_tipo = custos_por_tipo[
+        (custos_por_tipo["valor"] >= 1000) & (custos_por_tipo["valor"] <= 100000)
+    ].sort_values("valor", ascending=False)
 
     fig = Figure(figsize=plot_res, facecolor="#FDFCF8")
     ax = fig.add_subplot(111, facecolor="#FDFCF8")
     ax.bar(custos_por_tipo["nome"], custos_por_tipo["valor"], color="#8B5E3C", zorder=3)
+
     ax.set_xticks(range(len(custos_por_tipo)))
     ax.set_xticklabels(custos_por_tipo["nome"], rotation=45, ha="right")
-
-
     ax.set_xlabel("Tipo de Equipamento")
     ax.set_ylabel("Custo Total (Ciclo de Vida)")
-    ax.set_xticklabels(custos_por_tipo["nome"], rotation=45, ha="right")
     ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
 
     fig.tight_layout()
     fig.subplots_adjust(left=0.12, bottom=0.28, right=0.98, top=0.95)
-    return fig, "Custo de Ciclo de Vida (≤ 100.000)"
+    return fig, "Custo de Ciclo de Vida (entre 1.000 e 100.000)"
+
 
 def plot_media_mediana_quebra_por_tipo(eq, t_eq, cv, plot_res):
     """
@@ -361,23 +364,23 @@ class TelaGraficosCalibracao(tk.Toplevel):
 
         # ---------------- LISTA DE GRÁFICOS ---------------- #
         self.figs = [
-            ("Calibração por Tipo", lambda: plot_calibracao_por_tipo(eq_ativos, t_eq, PLOT_RES)),
+            ("1 - Calibração por Tipo", lambda: plot_calibracao_por_tipo(eq_ativos, t_eq, PLOT_RES)),
             
-            ("'Q' Status por Setor", lambda: plot_calibracao_por_setor(eq_ativos, t_setor, PLOT_RES)),
-            ("'%' Status por Setor", lambda: plot_calibracao_pizza_por_setor(eq_ativos, t_setor, PLOT_RES)),
+            ("2 - 'Q' Status por Setor", lambda: plot_calibracao_por_setor(eq_ativos, t_setor, PLOT_RES)),
+            ("3 - '%' Status por Setor", lambda: plot_calibracao_pizza_por_setor(eq_ativos, t_setor, PLOT_RES)),
 
-            ("Envios por Mês", lambda: plot_envios_por_mes(cv, PLOT_RES)),
+            ("4 - Envios por Mês", lambda: plot_envios_por_mes(cv, PLOT_RES)),
 
-            ("Equipamentos por Fabricante", lambda: plot_equipamentos_por_fabricante(eq_ativos, PLOT_RES)),
+            ("5 - Equipamentos por Fabricante", lambda: plot_equipamentos_por_fabricante(eq_ativos, PLOT_RES)),
 
-            ("Quebras por Fabricante", lambda: plot_quebras_por_fabricante(eq, cv, PLOT_RES)),
-            ("Quebras por Equipamento", lambda: plot_quebras_por_equipamento(eq, cv, PLOT_RES)),
+            ("6 - Quebras por Fabricante", lambda: plot_quebras_por_fabricante(eq, cv, PLOT_RES)),
+            ("7 - Quebras por Equipamento", lambda: plot_quebras_por_equipamento(eq, cv, PLOT_RES)),
 
-            ("Custo ≤ 100.000", lambda: plot_custo_por_tipo_menor(eq, t_eq, cv, PLOT_RES)),
+            ("8 - Custo ≤ 100.000", lambda: plot_custo_por_tipo_menor(eq, t_eq, cv, PLOT_RES)),
 
-            ("Próximas Calibrações", lambda: plot_proximas_calibracoes(eq_ativos, PLOT_RES)),
+            ("9 - Próximas Calibrações", lambda: plot_proximas_calibracoes(eq_ativos, PLOT_RES)),
 
-            ("Tempo de Vida até 1ª Quebra (por Tipo)", lambda: plot_media_mediana_quebra_por_tipo(eq, t_eq, cv, PLOT_RES)),
+            ("10 - Tempo de Vida até 1ª Quebra (por Tipo)", lambda: plot_media_mediana_quebra_por_tipo(eq, t_eq, cv, PLOT_RES)),
         ]
 
         self.canvas = None
@@ -388,14 +391,14 @@ class TelaGraficosCalibracao(tk.Toplevel):
                 frame_menu,
                 text=nome,
                 command=lambda f=func: self.show_plot(f),
-                font=("Courier New", 11, "bold"),
+                font=("Courier New", 10, "bold"),
                 bg="#CF631B",                # Fundo normal (laranja vivo)
                 activebackground="#A04000",  # Fundo ao clicar (marrom queimado)
                 activeforeground="#FFE5C2",  # Texto quando ativo (amarelo retrô)
-                fg="white",                  # Texto normal
+                fg="#FFF7EE",                  # Texto normal
                 relief="raised",
                 bd=3,
-                pady=8,
+                pady=4,
                 padx=14,
                 anchor="w",
                 justify="left"
