@@ -278,8 +278,8 @@ def plot_media_mediana_quebra_por_tipo(eq, t_eq, cv, plot_res):
     width = 0.35  # largura das barras
 
     # Barras lado a lado
-    ax.bar(x - width/2, agrupado["mean"], width=width, color=COLORS[1], label="Média", zorder=3)
-    ax.bar(x + width/2, agrupado["median"], width=width, color=COLORS[3], label="Mediana", zorder=3)
+    ax.bar(x - width/2, agrupado["mean"], width=width, color="#ADD3C0", label="Média", zorder=3)
+    ax.bar(x + width/2, agrupado["median"], width=width, color="#A3B1D1", label="Mediana", zorder=3)
 
     ax.set_xticks(x)
     ax.set_yticks(np.arange(0, 171, 10))
