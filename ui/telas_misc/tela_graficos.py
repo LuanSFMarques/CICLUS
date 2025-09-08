@@ -269,6 +269,11 @@ def plot_media_mediana_quebra_por_tipo(eq, t_eq, cv, plot_res):
                             (eq_tipo["data_p_quebra"].dt.month - eq_tipo["data_aquisicao"].dt.month)
     # Agrupa por tipo de equipamento
     agrupado = eq_tipo.groupby("nome")["meses_diff"].agg(["mean", "median"]).reset_index()
+
+    # Limita os valores em no máximo 100
+    agrupado["mean"] = agrupado["mean"].clip(upper=100)
+    agrupado["median"] = agrupado["median"].clip(upper=100)
+
     # Ordena por média decrescente
     agrupado = agrupado.sort_values("mean", ascending=False)
     # Gráfico
@@ -282,8 +287,8 @@ def plot_media_mediana_quebra_por_tipo(eq, t_eq, cv, plot_res):
     ax.bar(x + width/2, agrupado["median"], width=width, color="#A3B1D1", label="Mediana", zorder=3)
 
     ax.set_xticks(x)
-    ax.set_yticks(np.arange(0, 171, 10))
-    ax.set_ylim(0, 170)
+    ax.set_yticks(np.arange(0, 120, 10))
+    ax.set_ylim(0, 110)
     ax.set_xticklabels(agrupado["nome"], rotation=45, ha="right")
     ax.set_xlabel("Tipo de Equipamento")
     ax.set_ylabel("Meses até 1ª Quebra")
