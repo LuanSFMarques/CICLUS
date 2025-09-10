@@ -1,4 +1,0 @@
-﻿ID;Equipamento;Equipamento ID;Tipo Item;Descrição;Info Especial;Data;Fornecedor;Valor
-8;PAQ-003;151;Mudança de Status;"Inativo por estar inadequado ao uso: ""Encontra-se perdendo referência de zero"" - Trescal";Status: 0 -> 1;14-08-2025;;
-9;BAL-008;234;Enviado para Conserto;Enviado para Reparo;-;06-08-2025;TopLab;450.0
-10;BAL-025;235;Enviado para Conserto;Enviado para Reparo;-;06-08-2025;TopLab;390.0
