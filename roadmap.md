@@ -33,3 +33,7 @@
 - Novo Gráfico: Media e Mediana de tempo de vida (data de aquisição até data de primeiro estrago)
 - Troca Gráfico: Gráfico de colunas de itens enviados para calibrar por mês será trocado por grafico de linha
 - Ajuste geral em gráficos: Ajuste em tamanho do fig de cada gráfico para expor todas as informações sem cortes.
+
+# Atualizações (v2.3)
+- Novo Gráfico: Quantidade de Equipamentos Laboratoriais no Estoque (por tipo_eq e modelo).
+- Ajustes Gerais

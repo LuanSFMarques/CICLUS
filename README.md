@@ -1,15 +1,13 @@
 ![Logo Ciclus](assets/logos/ciclus_logo_laranja.png)
 
 ![Logo Ciclus](assets/images/ciclus_banner.png)
-# CICLUS v2.2
+# CICLUS v2.3 - Protótipo
 *CICLUS* é um software local desenvolvido para o acompanhamento do ciclo de vida de equipamentos laboratoriais na empresa **Suporte**, proporcionando acesso rápido e fácil às informações e oferecendo total visibilidade do histórico e do status de cada equipamento. Seu principal objetivo é permitir pesquisas ágeis e precisas sobre qualquer equipamento.
 
 O software adota o mesmo padrão de identificação e categorização utilizado na aplicação principal da empresa, [**Sond**](https://www.sond.com.br), garantindo consistência e integração com os processos já existentes.
 
-## Novidades (v2.2)
-- Tratamento de dados ao introduzir valores
-- Correção na visualização do metadado "info_extra"
-- Correção na visualização do metadado "valor" nos itens de ciclo de vida
+## Novidades (v2.3)
+- Novo Gráfico: Quantidade de Equipamentos Laboratoriais no Estoque (por tipo de equipamento e modelo).
 
 ## 📖 Sumário
 
