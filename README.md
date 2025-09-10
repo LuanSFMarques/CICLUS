@@ -7,7 +7,8 @@
 O software adota o mesmo padrão de identificação e categorização utilizado na aplicação principal da empresa, [**Sond**](https://www.sond.com.br), garantindo consistência e integração com os processos já existentes.
 
 ## Novidades (v2.3)
-- Novo Gráfico: Quantidade de Equipamentos Laboratoriais no Estoque (por tipo de equipamento e modelo).
+- Novo Gráfico: Quantidade de Equipamentos Laboratoriais no Estoque (por tipo_eq e modelo).
+- Ajustes Gerais
 
 ## 📖 Sumário
 
@@ -344,6 +345,14 @@ Os gráficos disponíveis são:
 
 
 <img src="assets/images/readme_images/graf_10.png" width="70%">
+
+---
+
+10. **Quantidade de Equipamentos no Estoque**
+    - Tipo: Tabela
+    - Há 3 colunas: Tipo de Equipamento, modelo e quantidade. Cada valor se refere ao total especifico daquela categoria/modelo.
+
+<img src="assets/images/readme_images/graf_11.png" width="70%"> 
 
 ---
 
