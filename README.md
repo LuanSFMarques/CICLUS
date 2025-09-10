@@ -442,8 +442,8 @@ O fluxo segue o padrão MVC:
 
 Exemplo: ao criar um equipamento, o equipamento_controller.py recebe os dados, conecta-se ao banco e executa a query correspondente.
 
-## Atualizações
-Atualizações pendentes para as próximas versões do software podem ser encontradas a baixo:
+## Histórico de Atualizações
+Atualizações passadas e pendentes para as próximas versões do software podem ser encontradas a baixo:
 
 [ROADMAP](roadmap.md)
 
