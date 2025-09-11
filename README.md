@@ -270,72 +270,50 @@ A aba Gráficos, localizada na tela de Equipamentos, oferece visualizações que
 
 Os gráficos disponíveis são:
 
----
-
 1. **Calibração por Tipo de Equipamento**
     - Tipo: Coluna
     - Cada coluna representa um tipo de equipamento (eixo X) e sua quantidade (eixo Y).
     - As cores indicam diferentes status de calibração.
-
----
 
 2. **Status de Calibração por Setor**
     - Tipo: Coluna
     - Cada coluna representa um setor e a quantidade de equipamentos nele.
     - As cores indicam os status de calibração dos equipamentos.
 
----
-
 3. **Distribuição de Calibração por Setor**
     - Tipo: Pizza
     - Cada gráfico de pizza representa um setor, mostrando a porcentagem de equipamentos em cada status de calibração.
 
----
-
 4. **Envios para Calibração por Mês**
     - Tipo: Coluna
     - Cada coluna representa um mês e o eixo Y indica a quantidade de equipamentos enviados para calibração nesse período.
-
----
 
 5. **Quantidade de Equipamentos por Fabricante**
     - Tipo: Coluna
     - Cada coluna representa um fabricante único e o eixo Y mostra a quantidade de equipamentos cadastrados.
     - *Atenção: divergências na grafia dos nomes de fabricantes podem gerar múltiplas entradas para o mesmo fabricante.*
 
----
-
 6. **Quebras por Fabricante**
     - Tipo: Coluna
     - Cada coluna representa um fabricante e a quantidade de equipamentos que apresentaram falhas.
     - *Fabricantes sem registros de quebra não são exibidos.*
-
----
 
 7. **Quebras por Equipamento**
     - Tipo: Coluna
     - Cada coluna representa um tipo de equipamento e a quantidade de quebras registradas.
     - *Categorias sem equipamentos quebrados não aparecem.*
 
----
-
 8. **Próximas Calibrações por Mês**
     - Tipo: Coluna
     - Cada coluna representa um mês, a partir do mês atual, mostrando a quantidade de equipamentos cuja calibração expirará nesse período.
-
----
 
 9. **Média e Mediana de tempo de vida (Por tipo de Equipamento)**
     - Tipo: Coluna
     - Cada coluna representa uma categoria de equipamento, sendo a média indicada pela verde e a mediana indicada pela azul. A coluna Y demonstra o número de meses.
 
----
-
 10. **Quantidade de Equipamentos no Estoque**
     - Tipo: Tabela
     - Há 3 colunas: Tipo de Equipamento, modelo e quantidade. Cada valor se refere ao total especifico daquela categoria/modelo.
-
----
 
 ### Plano de Calibração
 
