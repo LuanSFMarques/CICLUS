@@ -315,6 +315,8 @@ Os gráficos disponíveis são:
     - Tipo: Tabela
     - Há 3 colunas: Tipo de Equipamento, modelo e quantidade. Cada valor se refere ao total especifico daquela categoria/modelo.
 
+---
+
 ### Plano de Calibração
 
 <img src="assets/images/readme_images/tela_plano_calibr.png" width="70%">
