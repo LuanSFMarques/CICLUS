@@ -214,11 +214,13 @@ def info_para_plano_calibr():
     try:
         cursor.execute("""
             SELECT 
-                nome_eq,
-                ultima_calibracao,
-                periodicidade
-            FROM equipamentos
-            WHERE ultima_calibracao IS NOT NULL AND periodicidade IS NOT NULL
+                e.nome_eq,
+                e.ultima_calibracao,
+                e.periodicidade,
+                ts.nome as setor
+            FROM equipamentos e
+            LEFT JOIN tipos_setor ts ON e.setor_id = ts.id
+            WHERE e.ultima_calibracao IS NOT NULL AND e.periodicidade IS NOT NULL
         """)
         
         dados = []
@@ -226,7 +228,8 @@ def info_para_plano_calibr():
             dados.append({
                 "nome_eq": row[0],
                 "ultima_calibracao": row[1],
-                "periodicidade": row[2]
+                "periodicidade": row[2],
+                "setor": row[3] or ""
             })
 
         return dados

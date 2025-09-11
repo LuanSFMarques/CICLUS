@@ -42,6 +42,43 @@ class TelaPrincipal(tk.Tk):
     def __init__(self):
         super().__init__()
 
+        # Aplica o estilo retro para barras de scroll e Treeview globalmente
+        from tkinter import ttk
+        style = ttk.Style()
+        style.theme_use('default')
+        style.configure("Retro.Treeview",
+            background="#FDFCF8",
+            fieldbackground="#FDFCF8",
+            foreground="#3B3B3B",
+            rowheight=28,
+            font=("Courier New", 12)
+        )
+        style.configure("Retro.Treeview.Heading",
+            background="#E6A47B",
+            foreground="#333333",
+            font=("Courier New", 13, "bold")
+        )
+        style.map("Retro.Treeview",
+            background=[('selected', '#CF631B')],
+            foreground=[('selected', '#FFF7EE')]
+        )
+        style.layout("Retro.Treeview", [
+            ('Treeview.treearea', {'sticky': 'nswe'})
+        ])
+        style.configure("Retro.Vertical.TScrollbar",
+            gripcount=0,
+            background="#E6A47B",
+            darkcolor="#C85A17",
+            lightcolor="#FDFCF8",
+            troughcolor="#F5F1E9",
+            bordercolor="#E6A47B",
+            arrowcolor="#333333"
+        )
+        style.map("Retro.Vertical.TScrollbar",
+            background=[('active', '#CF631B'), ('!active', '#E6A47B')],
+            arrowcolor=[('active', '#FFF7EE'), ('!active', '#333333')]
+        )
+
         try:
             self.logo_icon = tk.PhotoImage(file="assets/logos/icone.png")
             self.iconphoto(True, self.logo_icon)

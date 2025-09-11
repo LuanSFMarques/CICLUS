@@ -1,14 +1,14 @@
 ![Logo Ciclus](assets/logos/ciclus_logo_laranja.png)
 
 ![Logo Ciclus](assets/images/ciclus_banner.png)
-# CICLUS v1.0
+# CICLUS v1.1
 *CICLUS* é um software local desenvolvido para o acompanhamento do ciclo de vida de equipamentos laboratoriais na empresa **Suporte**, proporcionando acesso rápido e fácil às informações e oferecendo total visibilidade do histórico e do status de cada equipamento. Seu principal objetivo é permitir pesquisas ágeis e precisas sobre qualquer equipamento.
 
 O software adota o mesmo padrão de identificação e categorização utilizado na aplicação principal da empresa, [**Sond**](https://www.sond.com.br), garantindo consistência e integração com os processos já existentes.
 
-## Novidades (v1.0)
-- Novo Gráfico: Quantidade de Equipamentos Laboratoriais no Estoque (por tipo_eq e modelo).
-- Ajustes Gerais
+## Novidades (v1.1)
+- Atualização da tela de Plano de Calibração, agora são expostos todos os itens (nome, setor e data) para calibrar em cada mês.
+- Redesign da barra de scroll para seguir a estética retrô do programa.
 
 ## 📖 Sumário
 
@@ -445,7 +445,7 @@ Exemplo: ao criar um equipamento, o equipamento_controller.py recebe os dados, c
 ## Histórico de Atualizações
 Atualizações passadas e pendentes para as próximas versões do software podem ser encontradas a baixo:
 
-[ROADMAP](roadmap.md)
+[ROADMAP](CHANGELOG.md)
 
 ## Licença
 ...
