@@ -178,7 +178,7 @@ class TelaCriacaoEquipamento(tk.Toplevel):
     # ---------- Fluxo principal ----------
     def salvar_equipamento(self):
         # Coleta bruta (sem transformar ainda)
-        nome = self.entry_nome.get().strip()
+        nome = self.entry_nome.get().strip().upper()
         tipo = self.combo_tipo.get().strip()
         setor = self.combo_setor.get().strip()
         status = self.combo_status.get().strip()

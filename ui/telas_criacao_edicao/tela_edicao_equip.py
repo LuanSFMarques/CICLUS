@@ -185,7 +185,7 @@ class TelaEdicaoEquipamento(tk.Toplevel):
 
     def salvar_equipamento(self):
         try:
-            nome = self.entry_nome.get().strip()
+            nome = self.entry_nome.get().strip().upper()
             if not nome:
                 messagebox.showerror("Erro", "O campo 'Nome do Equipamento' é obrigatório.")
                 return

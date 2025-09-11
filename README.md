@@ -10,6 +10,7 @@ O software adota o mesmo padrão de identificação e categorização utilizado 
 - Atualização da tela de Plano de Calibração, agora são expostos todos os itens (nome, setor e data) para calibrar em cada mês.
 - Redesign da barra de scroll para seguir a estética retrô do programa.
 - Fix geral de informações do README.
+- Tratamento de dados para sempre manter em "UPPER" o nome do equipamento após input do usuário.
 
 ## 📖 Sumário
 
