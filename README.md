@@ -9,6 +9,7 @@ O software adota o mesmo padrão de identificação e categorização utilizado 
 ## Novidades (v1.1)
 - Atualização da tela de Plano de Calibração, agora são expostos todos os itens (nome, setor e data) para calibrar em cada mês.
 - Redesign da barra de scroll para seguir a estética retrô do programa.
+- Fix geral de informações do README.
 
 ## 📖 Sumário
 
@@ -445,7 +446,7 @@ Exemplo: ao criar um equipamento, o equipamento_controller.py recebe os dados, c
 ## Histórico de Atualizações
 Atualizações passadas e pendentes para as próximas versões do software podem ser encontradas a baixo:
 
-[ROADMAP](CHANGELOG.md)
+[CHANGELOG](CHANGELOG.md)
 
 ## Licença
 ...
