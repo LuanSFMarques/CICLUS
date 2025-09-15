@@ -2,6 +2,10 @@
 
 Todas as mudanças significativas neste projeto serão documentadas neste arquivo.
 
+## [1.2] - 2025-09-15
+### Adicionado
+- ...
+
 ## [1.1] - 2025-09-11
 ### Adicionado
 - UPDATE tela_plano_calibr: atualização da tela de Plano de Calibração, agora são expostos todos os itens (nome, setor e data) para calibrar em cada mês.
