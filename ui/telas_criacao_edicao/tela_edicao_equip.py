@@ -175,13 +175,16 @@ class TelaEdicaoEquipamento(tk.Toplevel):
 
     @staticmethod
     def _regex_nome_ok(nome: str) -> bool:
-        """
-        Regras:
-        - Deve conter pelo menos 1 hífen '-'
-        - Parte antes do primeiro hífen: apenas letras (A-Z/a-z), sem números
-        - Parte após o primeiro hífen: pode conter números, letras ou hífens
-        """
         return bool(re.fullmatch(r"[A-Za-z]+-.+", nome))
+
+    @staticmethod
+    def _capitalize_fabricante(fab: str) -> str:
+        return " ".join([p.capitalize() for p in (fab or "").strip().split()])
+
+    @staticmethod
+    def _fabricante_letras_len_ok(fab: str, limite: int = 20) -> bool:
+        somente_letras = re.sub(r"[^A-Za-z]", "", fab or "")
+        return len(somente_letras) <= limite
 
     def salvar_equipamento(self):
         try:
@@ -224,6 +227,17 @@ class TelaEdicaoEquipamento(tk.Toplevel):
             tipo_nome = self.combo_tipo.get()
             tipo_id = next((id_ for id_, nome in self.tipos_equipamento if nome == tipo_nome), None)
 
+            # --- tratamento do fabricante ---
+            fabricante_raw = self.entry_fabricante.get().strip()
+            fabricante_tratado = self._capitalize_fabricante(fabricante_raw)
+
+            if fabricante_tratado and not self._fabricante_letras_len_ok(fabricante_tratado, limite=20):
+                messagebox.showerror(
+                    "Fabricante Inválido",
+                    "O nome do fabricante não pode conter mais que 20 letras (A-Z)."
+                )
+                return
+
             novos_dados = {
                 "nome_eq": nome,
                 "tipo_eq_id": tipo_id,
@@ -234,7 +248,7 @@ class TelaEdicaoEquipamento(tk.Toplevel):
                 "ultima_calibracao": ultima_cal,
                 "periodicidade": periodicidade,
                 "status_calibracao_id": next((i for i, nome in tipos_status_calibr if nome == self.combo_status_calibr.get()), None),
-                "fabricante": self.entry_fabricante.get().strip(),
+                "fabricante": fabricante_tratado,
                 "modelo": self.entry_modelo.get().strip(),
                 "modelo_tecnico": self.entry_modelo_tecnico.get().strip(),
                 "numero_serie": self.entry_num_serie.get().strip(),

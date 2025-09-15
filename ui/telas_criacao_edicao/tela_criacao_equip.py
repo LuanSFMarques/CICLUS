@@ -170,10 +170,10 @@ class TelaCriacaoEquipamento(tk.Toplevel):
     @staticmethod
     def _capitalize_fabricante(fab: str) -> str:
         """
-        Tratamento: Capitalize (primeira letra maiúscula, restante minúscula).
-        MARTES -> Martes; SoloTest -> Solotest; teste -> Teste
+        Tratamento: cada palavra com primeira letra maiúscula e o resto minúsculo.
+        SoloTest -> Solotest; teste 123 -> Teste 123; oi oi -> Oi Oi
         """
-        return (fab or "").strip().capitalize()
+        return (fab or "").strip().title()
 
     # ---------- Fluxo principal ----------
     def salvar_equipamento(self):

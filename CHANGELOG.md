@@ -8,7 +8,7 @@ Todas as mudanças significativas neste projeto serão documentadas neste arquiv
 - UPDATE scroll visual: Redesign da barra de scroll para seguir a estética retrô do programa.
 - FIX README.md: fix geral de informações do README.
 - FIX tela-equip: tratamento de dados para sempre manter em "UPPER" o nome do equipamento após input do usuário.
-
+- FIX tela-equip: tratamento de dados para sempre manter "Fabricante" em Capitalize.
 
 ## [1.0] - 2025-08-01
 ### Adicionado
