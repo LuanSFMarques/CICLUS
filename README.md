@@ -7,7 +7,8 @@
 O software adota o mesmo padrão de identificação e categorização utilizado na aplicação principal da empresa, [**Sond**](https://www.sond.com.br), garantindo consistência e integração com os processos já existentes.
 
 ## Novidades (v1.2)
-- .
+- Fix de escala nos gráficos e update de detalhes extras.
+- Manual em pdf que guia o usuário no uso do software.
 
 ## 📖 Sumário
 
