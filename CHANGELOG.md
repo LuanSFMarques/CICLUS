@@ -2,6 +2,11 @@
 
 Todas as mudanças significativas neste projeto serão documentadas neste arquivo.
 
+## [1.2] - 2025-09-15
+### Adicionado
+- FIX tela_graficos.py: fix de escala nos gráficos e update de detalhes extras.
+- ADD Ciclus_manual-do-usuario.pdf: manual em pdf que guia o usuário no uso do software.
+
 ## [1.1] - 2025-09-11
 ### Adicionado
 - UPDATE tela_plano_calibr: atualização da tela de Plano de Calibração, agora são expostos todos os itens (nome, setor e data) para calibrar em cada mês.

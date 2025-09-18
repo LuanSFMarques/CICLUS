@@ -1,53 +1,3 @@
-def plot_proximas_calibracoes(eq, plot_res):
-    import matplotlib.pyplot as plt
-    """
-    Plota, por mês a partir de agora, a quantidade de equipamentos que vão precisar calibrar novamente.
-    Considera que cada equipamento deve ser calibrado 12 meses após a última calibração.
-    """
-    from pandas.tseries.offsets import DateOffset
-
-    # Copiar apenas equipamentos ativos com data de última calibração válida
-    eq = eq[eq['status_id'] == 0].copy()
-    eq = eq[pd.notna(eq['ultima_calibracao'])]
-
-    # Converter para datetime
-    eq['ultima_calibracao'] = pd.to_datetime(eq['ultima_calibracao'])
-
-    # Próxima calibração = última + 12 meses
-    eq['proxima_calibracao'] = eq['ultima_calibracao'] + DateOffset(months=12)
-
-    # Considerar apenas datas futuras a partir de hoje
-    hoje = pd.Timestamp.today()
-    eq = eq[eq['proxima_calibracao'] >= hoje]
-
-    # Agrupar por ano-mês
-    eq['ano_mes'] = eq['proxima_calibracao'].dt.to_period('M')
-    df_plot = eq.groupby('ano_mes').size()
-
-    # Criar figura
-    fig = Figure(figsize=plot_res, facecolor="#FDFCF8")
-    ax = fig.add_subplot(111, facecolor="#FDFCF8")
-
-    df_plot.plot(kind='bar', ax=ax, color="#B9D6FF", zorder=3)
-
-    # Formatar labels como mm-yyyy
-    ax.set_xticklabels([p.strftime('%m-%Y') for p in df_plot.index.to_timestamp()], rotation=45, ha="right")
-
-    # Ticks do eixo y de 2 em 2
-    ax.set_yticks(np.arange(0, max(df_plot.max()+2, 2), 2))
-    # Grid do eixo y de 1 em 1
-    ax.yaxis.set_ticks(np.arange(0, max(df_plot.max()+2, 2), 2))
-    ax.yaxis.set_ticks_position('both')
-    ax.yaxis.set_major_locator(plt.MultipleLocator(2))
-    ax.yaxis.set_minor_locator(plt.MultipleLocator(1))
-    ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0, which='minor')
-    ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.4, zorder=0, which='major')
-
-    ax.set_xlabel("Mês de Recalibração")
-    ax.set_ylabel("Quantidade de Equipamentos")
-    fig.tight_layout()
-    fig.subplots_adjust(left=0.08, bottom=0.22, right=0.98, top=0.95)
-    return fig, "Próximas Calibrações por Mês"
 import tkinter as tk
 from tkinter import ttk
 
@@ -55,8 +5,10 @@ import pandas as pd
 import numpy as np
 
 from pandas.tseries.offsets import DateOffset
+import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from pandas.tseries.offsets import DateOffset
 
 from controllers.equipamento_controller import carregar_tabelas
 from config import PLOT_RES
@@ -155,13 +107,20 @@ def plot_calibracao_por_tipo(eq, t_eq, plot_res):
     df_merged = eq.merge(t_eq, left_on='tipo_eq_id', right_on='id')
     df_grouped = df_merged.groupby(['nome', 'status_calibracao_id']).size().unstack(fill_value=0)
 
+    df_grouped["total"] = df_grouped.sum(axis=1)
+
+    df_grouped = df_grouped.sort_values(by="total", ascending=False)
+    max = df_grouped["total"].max()//5*5 + 5
+    df_grouped = df_grouped.drop(columns=["total"])
+
     fig = Figure(figsize=plot_res, facecolor="#FDFCF8")
     ax = fig.add_subplot(111, facecolor="#FDFCF8")
     df_grouped.plot(kind="bar", stacked=True, color=COLORS, ax=ax, zorder=3)
 
     ax.set_xlabel("Tipo de Equipamento")
     ax.set_ylabel("Quantidade")
-    ax.set_yticks(np.arange(0,75,5))
+    ax.set_yticks(np.arange(0,max+1,5))
+    ax.set_ylim(0, max)
     ax.legend(["Calibrado", "Não Calibrado", "Incerto", "Especial"])
     ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
     fig.tight_layout()
@@ -204,6 +163,11 @@ def plot_calibracao_por_setor(eq, t_setor, plot_res):
     df_merged = eq.merge(t_setor, left_on='setor_id', right_on='id')
     df_grouped = df_merged.groupby(['nome', 'status_calibracao_id']).size().unstack(fill_value=0)
 
+    df_grouped["total"] = df_grouped.sum(axis=1)
+    df_grouped = df_grouped.sort_values(by="total", ascending=False)
+    max = df_grouped["total"].max()//5*5 + 5
+    df_grouped = df_grouped.drop(columns=["total"])
+
     fig = Figure(figsize=plot_res, facecolor="#FDFCF8")
     ax = fig.add_subplot(111, facecolor="#FDFCF8")
     df_grouped.plot(kind="bar", stacked=True, color=COLORS, ax=ax, zorder=3)
@@ -211,9 +175,11 @@ def plot_calibracao_por_setor(eq, t_setor, plot_res):
     ax.set_xlabel("Setor")
     ax.set_xticklabels(ax.get_xticklabels(), rotation=0)
     ax.set_yticks(np.arange(0, 105, 5))
+    ax.set_ylim(0,max)
     ax.set_ylabel("Quantidade de Equipamentos")
     ax.legend(["Calibrado", "Não Calibrado", "Incerto", "Especial"])
     ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
+    
     fig.tight_layout()
     fig.subplots_adjust(left=0.08, bottom=0.12, right=0.98, top=0.95)
     return fig, "Status de Calibração por Setor"
@@ -266,7 +232,7 @@ def plot_quebras_por_equipamento(eq, cv, plot_res):
 
     merged = pd.merge(eq, cv, left_on="id", right_on="equipamento_id", how="right")
     merged = merged[merged['tipo_item_id'] == 3]
-    grouped = merged.groupby('sigla_eq')['tipo_item_id'].count()
+    grouped = merged.groupby('sigla_eq')['tipo_item_id'].count().sort_values(ascending=False)
 
     fig = Figure(figsize=plot_res, facecolor="#FDFCF8")
     ax = fig.add_subplot(111, facecolor="#FDFCF8")
@@ -308,45 +274,9 @@ def plot_quebras_por_fabricante(eq, cv, plot_res):
     ax.set_yticks(np.arange(0, grouped.max()+2, 1))
     ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")
     ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
-
-
-        # Removido bloco de tabela duplicado que estava fora de contexto
-
-    # Copiar apenas equipamentos ativos com data de última calibração válida
-    eq = eq[eq['status_id'] == 0].copy()
-    eq = eq[pd.notna(eq['ultima_calibracao'])]
-
-    # Converter para datetime
-    eq['ultima_calibracao'] = pd.to_datetime(eq['ultima_calibracao'])
-
-    # Próxima calibração = última + 12 meses
-    eq['proxima_calibracao'] = eq['ultima_calibracao'] + DateOffset(months=12)
-
-    # Considerar apenas datas futuras a partir de hoje
-    hoje = pd.Timestamp.today()
-    eq = eq[eq['proxima_calibracao'] >= hoje]
-
-    # Agrupar por ano-mês
-    eq['ano_mes'] = eq['proxima_calibracao'].dt.to_period('M')
-    df_plot = eq.groupby('ano_mes').size()
-
-    # Criar figura
-    fig = Figure(figsize=plot_res, facecolor="#FDFCF8")
-    ax = fig.add_subplot(111, facecolor="#FDFCF8")
-
-    df_plot.plot(kind='bar', ax=ax, color="#B9D6FF", zorder=3)
-
-    # Formatar labels como mm-yyyy
-    ax.set_xticklabels([p.strftime('%m-%Y') for p in df_plot.index.to_timestamp()], rotation=45, ha="right")
-
-    ax.set_yticks(np.arange(0,26,2))
-
-    ax.set_xlabel("Mês de Recalibração")
-    ax.set_ylabel("Quantidade de Equipamentos")
-    ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
     fig.tight_layout()
-    fig.subplots_adjust(left=0.08, bottom=0.22, right=0.98, top=0.95)
-    return fig, "Próximas Calibrações por Mês"
+
+    return fig, "Quebras por Fabricante"
 
 def plot_custo_por_tipo_menor(eq, t_eq, cv, plot_res):
     """
@@ -365,6 +295,9 @@ def plot_custo_por_tipo_menor(eq, t_eq, cv, plot_res):
         (custos_por_tipo["valor"] >= 1000) & (custos_por_tipo["valor"] <= 100000)
     ].sort_values("valor", ascending=False)
 
+    maxx = custos_por_tipo["valor"].max()//5000*5000 + 5000
+    print(maxx)
+
     fig = Figure(figsize=plot_res, facecolor="#FDFCF8")
     ax = fig.add_subplot(111, facecolor="#FDFCF8")
     ax.bar(custos_por_tipo["nome"], custos_por_tipo["valor"], color="#8B5E3C", zorder=3)
@@ -373,6 +306,7 @@ def plot_custo_por_tipo_menor(eq, t_eq, cv, plot_res):
     ax.set_xticklabels(custos_por_tipo["nome"], rotation=45, ha="right")
     ax.set_xlabel("Tipo de Equipamento")
     ax.set_ylabel("Custo Total (Ciclo de Vida)")
+    ax.set_ylim(0, maxx)
     ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
 
     fig.tight_layout()
@@ -428,6 +362,74 @@ def plot_media_mediana_quebra_por_tipo(eq, t_eq, cv, plot_res):
     fig.subplots_adjust(left=0.08, bottom=0.25, right=0.98, top=0.95)
     return fig, "Tempo de Vida até 1ª Quebra por Tipo"
 
+
+
+def plot_proximas_calibracoes(eq, plot_res):
+    """
+    Plota, por mês a partir de agora, a quantidade de equipamentos que vão precisar calibrar novamente.
+    Considera que cada equipamento deve ser calibrado 12 meses após a última calibração.
+    """
+
+    # Copiar apenas equipamentos ativos com data de última calibração válida
+    eq = eq[eq['status_id'] == 0].copy()
+    eq = eq[pd.notna(eq['ultima_calibracao'])]
+
+    # Converter para datetime
+    eq['ultima_calibracao'] = pd.to_datetime(eq['ultima_calibracao'])
+
+    # Próxima calibração = última + 12 meses
+    eq['proxima_calibracao'] = eq['ultima_calibracao'] + DateOffset(months=12)
+
+    # Considerar apenas datas futuras a partir de hoje
+    hoje = pd.Timestamp.today()
+    eq = eq[eq['proxima_calibracao'] >= hoje]
+
+    # Agrupar por ano-mês
+    eq['ano_mes'] = eq['proxima_calibracao'].dt.to_period('M')
+    df_plot = eq.groupby('ano_mes').size()
+    maxx = df_plot.max() // 2 * 2 + 2
+
+    # Criar figura
+    fig = Figure(figsize=plot_res, facecolor="#FDFCF8")
+    ax = fig.add_subplot(111, facecolor="#FDFCF8")
+
+    # Plotar o gráfico de barras
+    df_plot.plot(kind='bar', ax=ax, color="#B9D6FF", zorder=3)
+
+    # Calcular a média
+    media = df_plot.mean()
+    mediana = df_plot.median()
+
+    # Adicionar a linha horizontal indicando a média
+    ax.axhline(y=media, color="#DA9265", linestyle='--', label=f'Média: {media:.2f}', zorder=2, alpha=0.6)
+    ax.axhline(y=mediana, color="#699ADE", linestyle='--', label=f'Mediana: {mediana:.2f}', zorder=2, alpha=0.6)
+
+    # Formatar os labels do eixo x
+    ax.set_xticklabels([p.strftime('%m-%Y') for p in df_plot.index.to_timestamp()], rotation=45, ha="right")
+
+    # Ticks do eixo y de 2 em 2
+    ax.set_yticks(np.arange(0, maxx, 2))
+    # Grid do eixo y de 1 em 1
+    ax.yaxis.set_ticks(np.arange(0, maxx, 2))
+    ax.set_ylim(0, maxx)
+    ax.yaxis.set_ticks_position('both')
+    ax.yaxis.set_major_locator(plt.MultipleLocator(2))
+    ax.yaxis.set_minor_locator(plt.MultipleLocator(1))
+    ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0, which='minor')
+    ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.4, zorder=0, which='major')
+
+    # Labels dos eixos
+    ax.set_xlabel("Mês de Recalibração")
+    ax.set_ylabel("Quantidade de Equipamentos")
+
+    # Exibir a legenda
+    ax.legend()
+
+    # Ajustar layout
+    fig.tight_layout()
+    fig.subplots_adjust(left=0.08, bottom=0.22, right=0.98, top=0.95)
+
+    return fig, "Próximas Calibrações por Mês"
 
 # ---------------- TELA TKINTER COM CARROSSEL ---------------- #
 
