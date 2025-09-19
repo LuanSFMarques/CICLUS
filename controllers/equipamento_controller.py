@@ -32,7 +32,7 @@ def criar_equipamento(equipamento_data: dict):
             equipamento_data["extra_info"]
         ))
         conn.commit()
-        log_msg(f"Equipamento Cadastrado: {equipamento_data["nome_eq"]}")
+        log_msg(f"Equipamento Cadastrado: {equipamento_data['nome_eq']}")
     except Exception as e:
         conn.rollback()
         raise e

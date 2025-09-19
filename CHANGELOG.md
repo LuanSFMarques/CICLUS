@@ -6,6 +6,7 @@ Todas as mudanças significativas neste projeto serão documentadas neste arquiv
 ### Adicionado
 - FIX tela_graficos.py: fix de escala nos gráficos e update de detalhes extras.
 - ADD Ciclus_manual-do-usuario.pdf: manual em pdf que guia o usuário no uso do software.
+- FIX "Equipamentos por Fabricante" chart yticks: concerto dos pontos de medida no eixo y.
 
 ## [1.1] - 2025-09-11
 ### Adicionado

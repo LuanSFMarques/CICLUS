@@ -214,13 +214,16 @@ def plot_equipamentos_por_fabricante(eq, plot_res):
     eq = eq[eq["fabricante"].notna() & (eq["fabricante"].str.strip() != "")]
     df_grouped = eq.groupby('fabricante').size().sort_values(ascending=False)
 
+    maxx = df_grouped.max()//5*5 + 5
+
     fig = Figure(figsize=plot_res, facecolor="#FDFCF8")
     ax = fig.add_subplot(111, facecolor="#FDFCF8")
     df_grouped.plot(kind="bar", ax=ax, color="#B9D6FF", zorder=3)
 
     ax.set_xlabel("Fabricante")
     ax.set_ylabel("Quantidade de Equipamentos")
-    ax.set_yticks(np.arange(0,56,5))
+    ax.set_yticks(np.arange(0,maxx+1,5))
+    ax.set_ylim(0, maxx)
     ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")
     ax.grid(axis="y", linestyle="--", color="lightgray", alpha=0.7, zorder=0)
     fig.tight_layout()
