@@ -9,6 +9,7 @@ O software adota o mesmo padrão de identificação e categorização utilizado 
 ## Novidades (v1.2)
 - Fix de escala nos gráficos e update de detalhes extras.
 - Manual em pdf que guia o usuboaário no uso do software.
+- Conserto dos pontos de medida no eixo y
 
 ## 📖 Sumário
 
