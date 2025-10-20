@@ -5,6 +5,7 @@ Todas as mudanças significativas neste projeto serão documentadas neste arquiv
 ## [1.3] - 2025-10-20
 ### Adicionado
 - ADD Criação automática de item de cadastro ao criar um equipamento novo.
+- NEW exe_builder.py (criação de executável)
 
 ## [1.2] - 2025-09-15
 ### Adicionado
