@@ -2,6 +2,10 @@
 
 Todas as mudanças significativas neste projeto serão documentadas neste arquivo.
 
+## [1.3] - 2025-10-20
+### Adicionado
+- ADD Criação automática de item de cadastro ao criar um equipamento novo.
+
 ## [1.2] - 2025-09-15
 ### Adicionado
 - FIX tela_graficos.py: fix de escala nos gráficos e update de detalhes extras.
