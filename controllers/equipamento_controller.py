@@ -309,4 +309,24 @@ def carregar_tabelas():
     finally:
         conn.close()
 
-
+def obter_id_por_nome(nome_eq):
+    conn = get_connection(DB_FILE)
+    conn.execute("PRAGMA foreign_keys = ON")
+    cursor = conn.cursor()
+    try:
+        cursor.execute("""
+            SELECT id
+            FROM equipamentos
+            WHERE nome_eq = ?
+        """, (nome_eq,))
+        
+        row = cursor.fetchone()
+        if row:
+            return row[0]
+        else:
+            return None
+    except Exception as e:
+        print(f"Erro ao obter ID do equipamento: {e}")
+        return None
+    finally:
+        conn.close()

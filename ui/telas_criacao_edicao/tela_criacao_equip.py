@@ -3,7 +3,8 @@ from tkinter import ttk, messagebox
 from datetime import datetime
 import re
 
-from controllers.equipamento_controller import criar_equipamento
+from controllers.equipamento_controller import criar_equipamento, obter_id_por_nome
+from controllers.itens_controller import criar_item_ciclo_vida
 from data.tipos import tipos_setor, tipos_status, tipos_status_calibr
 from helpers import log_msg, get_connection, DB_FILE
 
@@ -195,7 +196,6 @@ class TelaCriacaoEquipamento(tk.Toplevel):
 
         # ---- Validações exigidas ----
 
-        # Nome do equipamento: padrão exato "SIGLA-NUMERO"
         if not nome or not self._regex_nome_ok(nome):
             messagebox.showerror(
                 "Nome de Equipamento Inválido",
@@ -318,8 +318,28 @@ class TelaCriacaoEquipamento(tk.Toplevel):
 
         try:
             criar_equipamento(equipamento_data)
+
+            equipamento_id = obter_id_por_nome(nome)
+            if equipamento_id is not None:
+                try:
+                    criar_item_inicial(equipamento_id)
+                except Exception as e:
+                    messagebox.showerror("Erro", f"Equipamento criado, mas falha ao criar item inicial do ciclo de vida:\n{e}")
+
             messagebox.showinfo("Sucesso", "Equipamento criado com sucesso!")
             log_msg(f"Equipamento Criado: '{nome}'")
             self.destroy()
         except Exception as e:
             messagebox.showerror("Erro", f"Falha ao criar equipamento:\n{e}")
+
+def criar_item_inicial(equipamento_id):
+    """Cria um item inicial no ciclo de vida do equipamento recém-criado."""
+    dados_item = {
+        'equipamento_id': equipamento_id,
+        'tipo_item_id': 0,  # Supondo que 6 seja o ID para "Criação"
+        'descricao': 'Cadastro inicial do equipamento (item feito automaticamente pelo sistema)',
+        'data_evento': datetime.now().strftime("%Y-%m-%d"),
+        'fornecedor': None,
+        'valor': None
+    }
+    criar_item_ciclo_vida(dados_item)

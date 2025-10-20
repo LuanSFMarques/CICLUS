@@ -117,6 +117,7 @@ def obter_itens_ciclo_vida_por_equipamento(equip_id):
 
 
 def criar_item_ciclo_vida(dados):
+    print(dados)
     """
     Insere um novo item no ciclo de vida do equipamento.
 
