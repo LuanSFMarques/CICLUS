@@ -1,0 +1,1 @@
+pyinstaller --onedir --noconsole --icon=Assets/logos/ciclus_logo_laranja.ico --add-data "Assets;Assets" --name ciclus main.py
