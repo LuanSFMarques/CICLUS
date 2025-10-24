@@ -71,10 +71,10 @@ class TelaCriacaoCiclo(tk.Toplevel):
         self.text_descricao.pack(padx=pad_x, pady=(0, pad_y))
 
         # Data do Evento
-        label("Data do Evento (DD-MM-YYYY):").pack(anchor="w", padx=pad_x, pady=(pad_y, 2))
+        label("Data do Evento (DD-MM-YYYY ou DD-MM-YYYY HH:MM):").pack(anchor="w", padx=pad_x, pady=(pad_y, 2))
         self.entry_data = tk.Entry(
             self,
-            width=20,
+            width=25,
             font=("Courier New", 11),
             bg="#FFFFFF",
             fg="#333333",
@@ -153,21 +153,30 @@ class TelaCriacaoCiclo(tk.Toplevel):
         descricao = self.text_descricao.get("1.0", "end").strip()
         data_evento = self.entry_data.get().strip()
 
-        # Validação de data
+        # --- Validação e formatação da data ---
         if not data_evento:
-            data_evento_formatada = datetime.today().strftime("%Y-%m-%d")
+            # Se estiver em branco → usa data e hora atuais
+            data_evento_formatada = datetime.now().strftime("%Y-%m-%d %H:%M")
         else:
-            formatos_suportados = ["%d-%m-%Y", "%d/%m/%Y"]
+            formatos_suportados = ["%d-%m-%Y %H:%M", "%d/%m/%Y %H:%M", "%d-%m-%Y", "%d/%m/%Y"]
             data_evento_formatada = None
             for formato in formatos_suportados:
                 try:
-                    data_evento_formatada = datetime.strptime(data_evento, formato).strftime("%Y-%m-%d")
+                    dt = datetime.strptime(data_evento, formato)
+                    # Se o formato não tiver hora e minuto, define 00:00
+                    if "%H:%M" not in formato:
+                        dt = dt.replace(hour=0, minute=0)
+                    data_evento_formatada = dt.strftime("%Y-%m-%d %H:%M")
                     break
                 except ValueError:
                     continue
             if not data_evento_formatada:
-                messagebox.showerror("Erro", "Data inválida! Use o formato DD-MM-YYYY ou DD/MM/YYYY.")
+                messagebox.showerror(
+                    "Erro",
+                    "Data inválida! Use o formato DD-MM-YYYY ou DD/MM/YYYY (com ou sem HH:MM)."
+                )
                 return
+        # --------------------------------------
 
         # Validação de valor monetário
         valor_str = self.entry_valor.get().strip().replace(",", ".")
@@ -221,14 +230,10 @@ class TelaCriacaoCiclo(tk.Toplevel):
         largura = 300
         altura = 150
 
-        # Pega posição da janela pai (self)
         parent_x = self.winfo_x()
         parent_y = self.winfo_y()
-
-        # Define a posição relativa no mesmo monitor
         pos_x = parent_x + 50
         pos_y = parent_y + 50
-
         dialog.geometry(f"{largura}x{altura}+{pos_x}+{pos_y}")
 
         tk.Label(dialog, text=titulo, bg="#F5F1E9", font=("Courier New", 11, "bold")).pack(pady=10)
@@ -249,7 +254,6 @@ class TelaCriacaoCiclo(tk.Toplevel):
 
         dialog.wait_window()
         return escolha["valor"]
-
 
     def finalizar_criacao(self, dados):
         confirmacao = messagebox.askyesno("Confirmação", "Deseja realmente criar este item do ciclo de vida?")
