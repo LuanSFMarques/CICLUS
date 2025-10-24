@@ -6,6 +6,7 @@ Todas as mudanças significativas neste projeto serão documentadas neste arquiv
 ### Adicionado
 - ADD Criação automática de item de cadastro ao criar um equipamento novo.
 - NEW exe_builder.py (criação de executável)
+- UPDATE datetime, adicionando horas e minutos.
 
 ## [1.2] - 2025-09-15
 ### Adicionado
