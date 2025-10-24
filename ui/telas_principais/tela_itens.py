@@ -305,11 +305,11 @@ class TelaCicloVida(tk.Toplevel):
                 data_dt = datetime.strptime(item["data"], "%Y-%m-%d")
                 data_brasil = data_dt.strftime("%d-%m-%Y")
             except Exception:
-                data_brasil = item.get("data", "")
+                data_brasil = item.get("data", "").split(" ")
 
             lbl_data = tk.Label(
                 frame_data,
-                text=data_brasil,
+                text=f"{data_brasil[0]}\n{data_brasil[1]}",
                 font=("Courier New", 12, "bold"),
                 bg="#C7C1A1",
                 anchor="center",
