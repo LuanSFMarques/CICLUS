@@ -22,6 +22,7 @@ def exportar_para_excel(file_path="data/excel_output/equipamentos_itens.xlsx"):
     df_equip['status_calibracao_id'] = df_equip['status_calibracao_id'].map(status_calibr_dict)
     df_equip['setor_id'] = df_equip['setor_id'].map(setor_dict)
     
+    # Apenas dia, mês e ano
     df_equip['data_aquisicao'] = pd.to_datetime(df_equip['data_aquisicao'], errors='coerce').dt.strftime('%d-%m-%Y')
     df_equip['ultima_calibracao'] = pd.to_datetime(df_equip['ultima_calibracao'], errors='coerce').dt.strftime('%d-%m-%Y')
     
@@ -55,7 +56,8 @@ def exportar_para_excel(file_path="data/excel_output/equipamentos_itens.xlsx"):
     tipos_item_dict = dict(tipos_item)
     df_itens['tipo_item_id'] = df_itens['tipo_item_id'].map(tipos_item_dict)
     
-    df_itens['data'] = pd.to_datetime(df_itens['data'], errors='coerce').dt.strftime('%d-%m-%Y')
+    # Aqui sim, inclui hora e minuto
+    df_itens['data'] = pd.to_datetime(df_itens['data'], errors='coerce').dt.strftime('%d-%m-%Y %H:%M')
     
     df_itens.rename(columns={
         'id': 'ID',
@@ -112,7 +114,7 @@ def exportar_eq_csv(file_path="data/csv_output/equipamentos.csv"):
     df_equip['status_calibracao_id'] = df_equip['status_calibracao_id'].map(dict(tipos_status_calibr))
     df_equip['setor_id'] = df_equip['setor_id'].map(dict(tipos_setor))
 
-    # Converter datas
+    # Apenas dia, mês e ano
     df_equip['data_aquisicao'] = pd.to_datetime(df_equip['data_aquisicao'], errors='coerce').dt.strftime('%d-%m-%Y')
     df_equip['ultima_calibracao'] = pd.to_datetime(df_equip['ultima_calibracao'], errors='coerce').dt.strftime('%d-%m-%Y')
 
@@ -155,8 +157,8 @@ def exportar_item_csv(file_path="data/csv_output/itens_ciclo_vida.csv"):
     # Mapear tipo item
     df_itens['tipo_item_id'] = df_itens['tipo_item_id'].map(dict(tipos_item))
 
-    # Converter datas
-    df_itens['data'] = pd.to_datetime(df_itens['data'], errors='coerce').dt.strftime('%d-%m-%Y')
+    # Converter datas com hora e minuto
+    df_itens['data'] = pd.to_datetime(df_itens['data'], errors='coerce').dt.strftime('%d-%m-%Y %H:%M')
 
     # Renomear colunas
     df_itens.rename(columns={
