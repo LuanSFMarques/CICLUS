@@ -307,6 +307,9 @@ class TelaCicloVida(tk.Toplevel):
             except Exception:
                 data_brasil = item.get("data", "").split(" ")
 
+            data_brasil[0] = data_brasil[0].split("-")
+            data_brasil[0] = f"{data_brasil[0][2]}/{data_brasil[0][1]}/{data_brasil[0][0]}"
+
             lbl_data = tk.Label(
                 frame_data,
                 text=f"{data_brasil[0]}\n{data_brasil[1]}",
