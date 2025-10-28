@@ -10,6 +10,7 @@ O software adota o mesmo padrão de identificação e categorização utilizado 
 - Criação automática de item de cadastro ao criar um equipamento novo.
 - Arquivo de criação de executável exe_builder.py
 - Update do datetime, adicionando horas e minutos.
+- FIX ticks de gráficos.
 
 ## 📖 Sumário
 

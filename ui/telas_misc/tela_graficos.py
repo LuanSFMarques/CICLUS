@@ -174,7 +174,7 @@ def plot_calibracao_por_setor(eq, t_setor, plot_res):
 
     ax.set_xlabel("Setor")
     ax.set_xticklabels(ax.get_xticklabels(), rotation=0)
-    ax.set_yticks(np.arange(0, 105, 5))
+    ax.set_yticks(np.arange(0, max+5, 5))
     ax.set_ylim(0,max)
     ax.set_ylabel("Quantidade de Equipamentos")
     ax.legend(["Calibrado", "Não Calibrado", "Incerto", "Especial"])
