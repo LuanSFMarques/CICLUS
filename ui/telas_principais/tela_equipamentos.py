@@ -220,6 +220,7 @@ class TelaPrincipal(tk.Tk):
                   font=("Lucida Console", 12, "bold"), relief="raised", bd=4,
                   activebackground="#E38B2B", activeforeground="white",
                   command=self.abrir_criacao).pack(pady=15)
+        """
         try:
             imagem_original = Image.open(CAMINHO_LOGO_SUPORTE).convert("RGBA")
             imagem_redimensionada = imagem_original.resize((140, 30), Image.Resampling.LANCZOS)
@@ -228,7 +229,8 @@ class TelaPrincipal(tk.Tk):
             logo_label.place(relx=1.0, rely=1.0, anchor="se", x=-10, y=-10)
         except Exception as e:
             print(f"Erro ao carregar logo de suporte: {e}")
-
+        """
+            
     def adicionar_item(self, item):
         bg_status = STATUS_COR.get(item.get("status", "INCERTO").strip().upper(), "#CCCCCC")
 
