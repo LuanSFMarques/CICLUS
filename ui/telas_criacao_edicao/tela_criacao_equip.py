@@ -336,9 +336,9 @@ def criar_item_inicial(equipamento_id):
     """Cria um item inicial no ciclo de vida do equipamento recém-criado."""
     dados_item = {
         'equipamento_id': equipamento_id,
-        'tipo_item_id': 0,  # Supondo que 6 seja o ID para "Criação"
+        'tipo_item_id': 0,  # Supondo que 0 seja o ID para "Criação"
         'descricao': 'Cadastro inicial do equipamento (item feito automaticamente pelo sistema)',
-        'data_evento': datetime.now().strftime("%Y-%m-%d"),
+        'data_evento': datetime.now().strftime("%d-%m-%Y %H:%M"),
         'fornecedor': None,
         'valor': None
     }
