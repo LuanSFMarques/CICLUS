@@ -6,7 +6,7 @@
 
 O software adota o mesmo padrão de identificação e categorização utilizado na aplicação principal da empresa, [**Sond**](https://www.sond.com.br), garantindo consistência e integração com os processos já existentes.
 
-## Novidades (v1.3)
+## Novidades (v1.3) (PROJETO FINALIZADO)
 - Criação automática de item de cadastro ao criar um equipamento novo.
 - Arquivo de criação de executável exe_builder.py
 - Update do datetime, adicionando horas e minutos.
